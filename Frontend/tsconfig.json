@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist/",
+    "noImplicitAny": true,
+    "module": "es6",
+    "target": "es5",
+    "jsx": "react-jsx",
+    "jsxImportSource": "@emotion/react",
+    "allowJs": true,
+    "moduleResolution": "node",
+    "sourceMap": true, 
+    "strict": true, // enable all strict type-checking options
+    "alwaysStrict": true, // 자바스크립트에서 use Strict를 사용하게 해줌
+    "removeComments": true // 컴파일시 주석 제거
+  }
+}
