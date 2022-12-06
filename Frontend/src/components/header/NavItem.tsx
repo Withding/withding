@@ -8,19 +8,22 @@ function NavItem(props: NavItemType) {
     return (
         <Item>
             {!isDeskTop && props.icon}
-            <p>{isDeskTop ? props.deskTopName : props.mobileName}</p>
+            <p>{props.name}</p>
         </Item>
     );
 }
 
 const Item = React.memo(styled.li`
     cursor: pointer;
+    display: flex;
     @media screen and (min-width: 1096px) {
-        padding: 1rem;
+        /* padding: 1rem; */
+        justify-content: center;
+        width: 7rem;
     }
 
     @media screen and (max-width: 1095px) {
-        display: flex;
+        
         flex-direction: column;
         justify-content: center;
         align-items: center;
@@ -28,6 +31,7 @@ const Item = React.memo(styled.li`
         font-weight: 600;
         svg {
             font-size: 1.5rem;
+            margin-bottom: 0.3rem;
         }
 
         .add {

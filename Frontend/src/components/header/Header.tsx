@@ -17,7 +17,8 @@ function Header() {
 
 const defaultStyle = css`
     width: 100%;
-    min-height: 3rem;
+    
+    min-height: 4rem;
     background-color: var(--white);
     display: flex;
     /* justify-content: center; */

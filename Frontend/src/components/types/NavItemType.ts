@@ -1,7 +1,7 @@
 interface NavItemType {
-    deskTopName: string;
-    mobileName: string;
-    link: string;
+    name: string;
+    type: number;
+    route: string;
     icon: any;
 }
 
