@@ -7,9 +7,7 @@ function NavItem(props: NavItemType) {
     const isDeskTop = useMediaQuery({ query: "(min-width: 1096px)" });
     return (
         <Item>
-            <p>
-                {!isDeskTop && props.icon}
-            </p>
+            {!isDeskTop && props.icon}
             <p>{isDeskTop ? props.deskTopName : props.mobileName}</p>
         </Item>
     );
