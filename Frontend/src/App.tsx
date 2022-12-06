@@ -1,24 +1,25 @@
-import * as React from "react";
-import styled from "@emotion/styled";
-import "./default.css";
 import { css } from "@emotion/react";
+import * as React from "react";
+import Header from "./components/header/Header";
+import GlobalStyle from "./GlobalStyle";
 function App() {
     return (
-        <div className="aa"
-            css={style}
+        <div
+            className="container"
+            css={defaultStyle}
         >
-            <P>WA</P>
+            <GlobalStyle />
+            <Header />
+
+
+
         </div>
     );
 }
 
-const style = css`
-    padding: 1rem;
-    background-color: #eee;
-`;
-
-const P = styled.div`
-    font-size: 2rem;
+const defaultStyle = css`
+    width: 100%;
+    min-height: 100vh;
 `;
 
 export default App;
