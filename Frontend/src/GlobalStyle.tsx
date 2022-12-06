@@ -144,7 +144,7 @@ const style = css`
 
     
     :root {
-        -primary-700: #101c4c;
+        --primary-700: #101c4c;
         --primary-600: #182a72;
         --primary-500: #203898;
         --primary-400: #2946be;

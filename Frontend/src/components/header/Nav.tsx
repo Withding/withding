@@ -4,7 +4,7 @@ import NavItemType from "../types/NavItemType";
 import { useMediaQuery } from "react-responsive";
 import Logo from "../common/Logo";
 import NavItem from "./NavItem";
-
+// import { useNavigate } from "react-router-dom";
 import { AiOutlineHome } from "react-icons/ai";
 import { BiDonateBlood } from "react-icons/bi";
 import { AiOutlineHeart } from "react-icons/ai";
@@ -12,8 +12,10 @@ import { AiOutlineUser } from "react-icons/ai";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import { useMemo } from "react";
 
+
 function Nav() {
     const isDesktop = useMediaQuery({ query: "(min-width: 1096px)" });
+    // const navigator = useNavigate();
     const navItems: NavItemType[] = useMemo(() => [
         { name: "홈", type: 2, route: "/", icon: <AiOutlineHome /> },
         { name: "펀딩", type: 3, route: "/funding", icon: <BiDonateBlood /> },
@@ -23,8 +25,8 @@ function Nav() {
         { name: "마이페이지", type: 2, route: "/mypage", icon: <AiOutlineUser /> },
     ], []);
 
-    const deskTopItems = navItems.filter(item => item.type !== 2);
-    const mobileItems = navItems.filter(item => item.type !== 1);
+    const deskTopItems = useMemo(() => navItems.filter(item => item.type !== 2), [navItems]);
+    const mobileItems = useMemo(() => navItems.filter(item => item.type !== 1), [navItems]);
 
     return (
         <nav>
