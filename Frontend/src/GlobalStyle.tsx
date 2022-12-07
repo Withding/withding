@@ -163,6 +163,9 @@ const style = css`
         --white: #ffffff;
         --green-400: #44c46d;
         --green-300: #81C784;
+        --green-200: #A5D6A7;
+        --green-100: #DCEDC8;
+        --green-50: #E0F2F1;
         --yellow: #fede03;
         --orange: #ffa100;
         --coral: #ff5268;

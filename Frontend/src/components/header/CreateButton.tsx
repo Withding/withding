@@ -20,6 +20,10 @@ const style = css`
     margin-left: 1rem;
     border-radius: 8px;
     color: var(--green-300);
+    &:hover {
+        background-color: var(--green-50);
+        transition: 0.5s;
+    }
 `;
 
 export default CreateButton;
