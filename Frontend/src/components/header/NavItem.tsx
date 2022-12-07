@@ -2,14 +2,16 @@ import styled from "@emotion/styled";
 import * as React from "react";
 import { useMediaQuery } from "react-responsive";
 import NavItemType from "../types/NavItemType";
+import { useLocation } from "react-router-dom";
 
 function NavItem(props: NavItemType) {
     const isDeskTop = useMediaQuery({ query: "(min-width: 1096px)" });
-    const isMatch = window.location.pathname.includes(props.route);
-    console.log(isMatch, props.route);
+    const { pathname } = useLocation();
+    const isMatch = pathname.startsWith(props.route);
     return (
         <Item
             isMatch={isMatch}
+            onClick={props.onClick}
         >
             {!isDeskTop && props.icon}
             <p>{props.name}</p>
