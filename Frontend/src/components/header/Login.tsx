@@ -1,9 +1,12 @@
 import React from "react";
 import NoneBorderButton from "../common/NoneBorderButton";
+import BaseProps from "../types/BaseProps";
 
-function Login() {
+function Login(props: BaseProps) {
     return (
-        <React.Fragment>
+        <div
+            className={props.className}
+        >
             <NoneBorderButton
                 value={"로그인"}
                 style={{ marginRight: "1rem" }}
@@ -11,7 +14,7 @@ function Login() {
             <NoneBorderButton
                 value={"회원가입"}
             />
-        </React.Fragment>
+        </div>
     );
 }
 

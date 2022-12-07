@@ -7,6 +7,7 @@ function CreateButton(props: BaseProps) {
         <button
             onClick={props.onClick}
             css={style}
+            className={props.className}
         >
             프로젝트 생성
         </button>

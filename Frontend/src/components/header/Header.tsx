@@ -14,8 +14,8 @@ function Header() {
         <header css={defaultStyle}>
             <Nav />
             <div className="right">
-                <Login />
-                <CreateButton />
+                <Login className="login" />
+                <CreateButton className="create-btn" />
             </div>
         </header>
     );
@@ -23,7 +23,6 @@ function Header() {
 
 const defaultStyle = css`
     width: 100%;
-    
     min-height: 4rem;
     background-color: var(--white);
     display: flex;
@@ -31,12 +30,20 @@ const defaultStyle = css`
     justify-content: space-between;
     align-items: center;
 
+
+    .right {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+
     @media screen and (min-width: 1096px) {
         padding: var(--main-padding);
     }
 
     @media screen and (max-width: 1095px) {
-        & > .right {
+        & > .right > .login, & > .right > .create-btn {
             display: none;
         }
     }
