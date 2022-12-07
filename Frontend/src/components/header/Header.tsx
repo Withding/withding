@@ -1,5 +1,6 @@
 import { css } from "@emotion/react";
 import * as React from "react";
+import CreateButton from "./CreateButton";
 import Login from "./Login";
 import Nav from "./Nav";
 // import { useMediaQuery } from "react-responsive";
@@ -14,6 +15,7 @@ function Header() {
             <Nav />
             <div>
                 <Login />
+                <CreateButton />
             </div>
         </header>
     );
