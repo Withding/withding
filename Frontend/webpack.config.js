@@ -15,6 +15,7 @@ module.exports = (env, argv) => {
             filename: "[name].js",
         },
         devServer: {
+            historyApiFallback: true,
             port: 3000,
             hot: true,
         },
@@ -36,6 +37,7 @@ module.exports = (env, argv) => {
         plugins: [
             new HtmlWebpackPlugin({
                 template: "./public/index.html",
+                filename: "index.html",
                 minify: process.env.NODE_ENV === "production" ? {
                     collapseWhitespace: true, // 빈칸 제거
                     removeComments: true, // 주석 제거
