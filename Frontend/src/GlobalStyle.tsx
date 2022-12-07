@@ -140,7 +140,9 @@ const style = css`
         border-spacing: 0;
     }
 
-
+    button {
+        all: unset;
+    }
 
     
     :root {
