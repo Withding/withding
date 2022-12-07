@@ -13,7 +13,7 @@ function Header() {
     return (
         <header css={defaultStyle}>
             <Nav />
-            <div>
+            <div className="right">
                 <Login />
                 <CreateButton />
             </div>
@@ -31,8 +31,14 @@ const defaultStyle = css`
     justify-content: space-between;
     align-items: center;
 
-    @media (min-width: 1096px) {
+    @media screen and (min-width: 1096px) {
         padding: var(--main-padding);
+    }
+
+    @media screen and (max-width: 1095px) {
+        & > .right {
+            display: none;
+        }
     }
 `;
 
