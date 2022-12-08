@@ -1,6 +1,7 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const ESLintPlugin = require("eslint-webpack-plugin");
 const path = require("path");
 
 module.exports = (env, argv) => {
@@ -26,12 +27,12 @@ module.exports = (env, argv) => {
             rules: [
                 {
                     test: /\.tsx?$/,
-                    use: ["babel-loader", "ts-loader", "eslint-loader"],
+                    use: ["babel-loader", "ts-loader"],
                 },
                 {
                     test: /\.css$/i,
                     use: [MiniCssExtractPlugin.loader, "css-loader"],
-                }
+                },
             ],
         },
         plugins: [
@@ -46,6 +47,9 @@ module.exports = (env, argv) => {
             new CleanWebpackPlugin(),
             new MiniCssExtractPlugin({
                 filename: "[name].css"
+            }),
+            new ESLintPlugin({
+                emitWarning: false
             })
         ],
     };
