@@ -1,6 +1,7 @@
 import { css } from "@emotion/react";
 import * as React from "react";
 import CreateButton from "./CreateButton";
+import SearchHeader from "./PageHeaders/SearchHeader";
 import Login from "./Login";
 import MobileDynamicHeader from "./MobileDynamicHeader";
 import Nav from "./Nav";
@@ -16,6 +17,7 @@ function Header() {
         <header css={defaultStyle}>
             <Nav />
             <div className="right">
+                <SearchHeader />
                 <MobileDynamicHeader />
                 <Login className="login" />
                 <CreateButton className="create-btn" />
@@ -43,9 +45,6 @@ const defaultStyle = css`
 
     @media screen and (min-width: 1096px) {
         padding: var(--main-padding);
-        & > .right > .notice {
-            display: none;
-        }
     }
 
     @media screen and (max-width: 1095px) {
