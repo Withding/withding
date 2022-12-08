@@ -2,9 +2,9 @@ import { css } from "@emotion/react";
 import * as React from "react";
 import CreateButton from "./CreateButton";
 import Login from "./Login";
+import MobileDynamicHeader from "./MobileDynamicHeader";
 import Nav from "./Nav";
-import Notice from "./Notice/Notice";
-import Search from "./Search/Search";
+
 // import { useMediaQuery } from "react-responsive";
 
 
@@ -16,8 +16,7 @@ function Header() {
         <header css={defaultStyle}>
             <Nav />
             <div className="right">
-                <Search className="search" />
-                <Notice className="notice" />
+                <MobileDynamicHeader />
                 <Login className="login" />
                 <CreateButton className="create-btn" />
             </div>
@@ -50,6 +49,7 @@ const defaultStyle = css`
     }
 
     @media screen and (max-width: 1095px) {
+        position: fixed;
         & > .right { // right 사이즈 100%
             width: 100%;
         }
