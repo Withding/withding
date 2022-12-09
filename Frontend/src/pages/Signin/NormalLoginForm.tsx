@@ -64,6 +64,7 @@ function NormalLoginForm(props: NormalLoginFormProps) {
             <input
                 type="submit"
                 value="로그인"
+                className="login-button"
             />
         </form>
     );
@@ -87,15 +88,19 @@ const style = css`
     input[type="submit"] {
         all: unset;
         margin-top: 1.5rem;
+        border-radius: 6px;
         width: 100%;
         height: 48px;
         color: var(--white);
         background-color: var(--green-200);
         text-align: center;
-        cursor: pointer;
+        line-height: 1.75;
+        font-weight: 500;
+        font-size: 1.1rem;
     }
 
     input[type="submit"]:hover {
+        cursor: pointer;
         background-color: var(--green-300);
     }
 
