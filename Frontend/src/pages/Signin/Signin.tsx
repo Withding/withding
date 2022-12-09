@@ -3,6 +3,7 @@ import React from "react";
 import NormalLogin from "./NormalLogin";
 
 import OauthLoginButtons from "./OauthButton/OauthLoginButtons";
+import SignupMent from "./SignupMent";
 
 /**
  * Sign in Main Component 
@@ -14,6 +15,7 @@ function Index() {
             <h1>로그인</h1>
             <NormalLogin />
             <OauthLoginButtons />
+            <SignupMent />
         </div>
     );
 }
@@ -27,7 +29,7 @@ const style = css`
     background-color: var(--white);
     display: flex;
     flex-direction: column;
-
+    
     h1 {
         font-size: 2rem;
         font-weight: 700;
