@@ -1,9 +1,8 @@
 import { css } from "@emotion/react";
 import React from "react";
 import NormalLogin from "./NormalLogin";
-import OauthLoginButton from "../../components/common/OauthLoginButton";
 
-import { RiKakaoTalkFill } from "react-icons/ri";
+import OauthLoginButtons from "./OauthButton/OauthLoginButtons";
 
 /**
  * Sign in Main Component 
@@ -14,12 +13,7 @@ function Index() {
         <div css={style}>
             <h1>로그인</h1>
             <NormalLogin />
-            <OauthLoginButton
-                text={"카카오 로그인"}
-                logo={<RiKakaoTalkFill />}
-                backgroundColor={"#FEE500"}
-                fontColor={"#495057"}
-            />
+            <OauthLoginButtons />
         </div>
     );
 }
