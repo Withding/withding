@@ -18,12 +18,12 @@ interface ValidInputProps {
 }
 function ValidInput(props: ValidInputProps) {
     return (
-        <label css={style}>
+        <div css={style}>
             <Input {...props.input}
                 className={props.valid ? "" : "invalid"}
             />
             <span>{props.valid ? "" : props.msg}</span>
-        </label>
+        </div>
     );
 }
 
