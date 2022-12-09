@@ -190,7 +190,6 @@ const style = css`
         background-color: none;
         font-size: 16px;
         font-family: 'Noto Sans KR', sans-serif;
-        background-color: var(--grey-200);
     }
     input:focus {
         outline: 0 none;
