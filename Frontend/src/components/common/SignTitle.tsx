@@ -1,9 +1,12 @@
 import { css } from "@emotion/react";
 import React from "react";
 
-function SignTitle(props: { title: string }) {
+function SignTitle(props: { title: string; className?: string; }) {
     return (
-        <h1 css={style}>{props.title}</h1>
+        <h1
+            className={props.className}
+            css={style}>{props.title}
+        </h1>
     );
 }
 

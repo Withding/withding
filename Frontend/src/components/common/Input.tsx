@@ -20,7 +20,7 @@ function Input(props: BaseProps & InputProps) {
 const style = css`
     border-radius: 2px;
     width: 100%;
-    border: 1px solid var(--grey-300);
+    border: 1px solid var(--grey-200);
     &:hover {
         border: 1px solid var(--grey-500);
     }
