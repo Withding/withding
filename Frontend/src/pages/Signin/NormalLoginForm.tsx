@@ -1,5 +1,5 @@
 import { css } from "@emotion/react";
-import React, { useCallback, useEffect } from "react";
+import React from "react";
 import ValidInput from "../../components/common/ValidInput";
 
 
