@@ -21,9 +21,6 @@ const style = css`
     border-radius: 2px;
     width: 100%;
     border: 1px solid var(--grey-300);
-    font-size: 1.1rem;
-    font-weight: 300;
-    line-height: 1.2;
     &:hover {
         border: 1px solid var(--grey-500);
     }
@@ -33,4 +30,4 @@ const style = css`
     }
 `;
 
-export default Input;
+export default React.memo(Input);

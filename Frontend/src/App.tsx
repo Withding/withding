@@ -5,7 +5,7 @@ import GlobalStyle from "./GlobalStyle";
 import { Routes, Route, Navigate } from "react-router-dom";
 
 import Main from "./pages/Main/Index";
-
+import Signin from "./pages/Signin/Index";
 function App() {
     return (
         <div
@@ -18,7 +18,7 @@ function App() {
                 <Routes>
                     <Route path="/" element={<Navigate to="/main" />} />
                     <Route path="/main" element={<Main />} />
-                    <Route path="/signin" element={<div>login</div>} />
+                    <Route path="/signin" element={<Signin />} />
                     <Route path="/funding" element={<div>funding</div>} />
                     <Route path="/commingsoon" element={<div>commingsoon</div>} />
                 </Routes>
@@ -30,7 +30,10 @@ function App() {
 const defaultStyle = css`
     width: 100%;
     min-height: 100vh;
-
+    & > .content {
+        display: flex;
+        justify-content: center;
+    }
     @media screen and (max-width: 1095px) {
         & > .content {
             padding-top: 4rem;

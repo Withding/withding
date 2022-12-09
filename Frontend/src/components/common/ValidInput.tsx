@@ -28,6 +28,7 @@ function ValidInput(props: ValidInputProps) {
 }
 
 const style = css`
+    
     & > input.invalid {
         border: 1px solid #f66;
         background: rgba(255,155,155,.06);

@@ -1,7 +1,7 @@
 import { css } from "@emotion/react";
 import React from "react";
 import PreviousButton from "../../common/PreviousButton";
-import Login from "../Login";
+import HomeIconButton from "../../common/HomeIconButton";
 
 function LoginHeader() {
     return (
@@ -11,7 +11,7 @@ function LoginHeader() {
             <PreviousButton
                 className="previous-button"
             />
-            <Login />
+            <HomeIconButton className="home-button" />
         </div>
     );
 }
@@ -23,6 +23,9 @@ const style = css`
 
     @media screen and (min-width: 1096px){
         display: none;
+        & > .home-button {
+            display: none;
+        }
     }
 
     @media screen and (max-width: 1095px) {
@@ -35,6 +38,10 @@ const style = css`
         align-items: center;
         & > .previous-button {
             cursor: pointer;
+        }
+
+        & > .login {
+            display: none;
         }
     }
 `;

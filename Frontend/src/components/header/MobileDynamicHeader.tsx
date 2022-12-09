@@ -1,15 +1,14 @@
 import React from "react";
-// import { useMediaQuery } from "react-responsive";
 import { useLocation } from "react-router-dom";
-
 import LoginHeader from "./PageHeaders/LoginHeader";
-// import MainHeader from "./headers/SearchHeader";
-// import BaseProps from "../types/BaseProps";
 
+/**
+ * Mobile Dynamic Header Component
+ * @returns 
+ */
 function MobileDynamicHeader() {
-    // const isMobile = useMediaQuery({ query: "(max-width: 1095px)" });
     const { pathname } = useLocation();
-    const isLoginPage = pathname.startsWith("/login");
+    const isLoginPage = pathname.startsWith("/signin");
     return (
         <React.Fragment>
             {isLoginPage && <LoginHeader />}
