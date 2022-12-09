@@ -4,6 +4,7 @@ import NormalLogin from "./NormalLogin";
 
 import OauthLoginButtons from "./OauthButton/OauthLoginButtons";
 import SignupMent from "./SignupMent";
+import SignTitle from "../../components/common/SignTitle";
 
 /**
  * Sign in Main Component 
@@ -12,7 +13,7 @@ import SignupMent from "./SignupMent";
 function Index() {
     return (
         <div css={style}>
-            <h1>로그인</h1>
+            <SignTitle title={"로그인"} />
             <NormalLogin />
             <OauthLoginButtons />
             <SignupMent />
@@ -25,27 +26,9 @@ const style = css`
     max-width: 400px;
     min-height: 100vh;
     padding: 1rem;
-    padding-top: 4rem;
     background-color: var(--white);
     display: flex;
     flex-direction: column;
-    
-    h1 {
-        font-size: 2rem;
-        font-weight: 700;
-        margin-bottom: 1.3rem;
-    }
-    
-    @media screen and (min-width: 1096px){
-        
-        
-    }
-
-    @media screen and (max-width: 1095px) {
-        h1 {
-            font-size: 1.8rem;
-        }
-    }
 `;
 
 export default Index;
