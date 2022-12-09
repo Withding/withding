@@ -1,7 +1,7 @@
 import React from "react";
 import NormalLogin from "./NormalLogin";
 
-import OauthLoginButtons from "./OauthButton/OauthLoginButtons";
+import OauthLoginButtons from "../../components/common/OauthButton/OauthLoginButtons";
 import SignupMent from "./SignupMent";
 import SignTitle from "../../components/common/SignTitle";
 import SignWrapper from "../../components/common/SignWrapper";

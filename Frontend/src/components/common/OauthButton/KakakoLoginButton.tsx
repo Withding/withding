@@ -1,6 +1,6 @@
 import React from "react";
 import { RiKakaoTalkFill } from "react-icons/ri";
-import OauthLoginButton from "../../../components/common/OauthLoginButton";
+import OauthLoginButton from "../OauthLoginButton";
 
 function KakakoLoginButton() {
     return (
