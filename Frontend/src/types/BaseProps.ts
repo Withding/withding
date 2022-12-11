@@ -1,7 +1,8 @@
 import React from "react";
+import { SerializedStyles } from "@emotion/react";
 
 interface BaseProps {
-    css?: string;
+    css?: SerializedStyles
     className?: string;
     style?: React.CSSProperties;
     onClick?: () => void;

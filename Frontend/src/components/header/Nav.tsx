@@ -1,5 +1,5 @@
 import { css } from "@emotion/react";
-import NavItemType from "../types/NavItemType";
+import NavItemType from "../../types/NavItemType";
 import { useMediaQuery } from "react-responsive";
 import Logo from "../common/Logo";
 import NavItem from "./NavItem";

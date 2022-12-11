@@ -38,7 +38,7 @@ const defaultStyle = css`
     }
     @media screen and (max-width: 1095px) {
         & > .content {
-            padding-top: 4rem;
+            padding-bottom: 4rem;
         }
     }
 `;

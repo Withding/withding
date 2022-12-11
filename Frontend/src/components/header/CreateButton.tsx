@@ -1,16 +1,16 @@
 import { css } from "@emotion/react";
 import React from "react";
-import BaseProps from "../types/BaseProps";
+import Button from "../common/Button";
+import BaseProps from "../../types/BaseProps";
 
 function CreateButton(props: BaseProps) {
     return (
-        <button
+        <Button
             onClick={props.onClick}
             css={style}
             className={props.className}
-        >
-            프로젝트 생성
-        </button>
+            value={"프로젝트 생성"}
+        />
     );
 }
 

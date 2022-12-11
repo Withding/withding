@@ -1,7 +1,8 @@
 import { css } from "@emotion/react";
 import React from "react";
-import InputProps from "../types/InputProps";
+import InputProps from "../../types/InputProps";
 import Input from "./Input";
+import BaseProps from "../../types/BaseProps";
 
 /**
  * 입력한값의 유효성 결과를 알려주는 Input Label 컴포넌트
@@ -12,15 +13,15 @@ import Input from "./Input";
  */
 
 interface ValidInputProps {
-    input: InputProps;
+    input?: InputProps;
     valid: boolean;
     msg: string;
 }
-function ValidInput(props: ValidInputProps) {
+function ValidInput(props: ValidInputProps & BaseProps) {
     return (
         <div css={style}>
             <Input {...props.input}
-                className={props.valid ? "" : "invalid"}
+                className={`${props.className} ${props.valid ? "" : "invalid"}`}
             />
             <span>{props.valid ? "" : props.msg}</span>
         </div>

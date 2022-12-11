@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-vars */
 import { css } from "@emotion/react";
 import React from "react";
-import BaseProps from "../types/BaseProps";
-import InputProps from "../types/InputProps";
+import BaseProps from "../../types/BaseProps";
+import InputProps from "../../types/InputProps";
 
 /**
  * 공용으로 사용되는 Input 컴포넌트

@@ -2,7 +2,7 @@ import { css } from "@emotion/react";
 import React from "react";
 import { IoIosNotificationsOutline } from "react-icons/io";
 
-import BaseProps from "../../types/BaseProps";
+import BaseProps from "../../../types/BaseProps";
 
 function Notice(props: BaseProps) {
     return (

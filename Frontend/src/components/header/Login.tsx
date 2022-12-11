@@ -1,6 +1,6 @@
 import React from "react";
 import NoneBorderButton from "../common/NoneBorderButton";
-import BaseProps from "../types/BaseProps";
+import BaseProps from "../../types/BaseProps";
 import { useNavigate } from "react-router-dom";
 
 function Login(props: BaseProps) {

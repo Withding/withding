@@ -1,7 +1,7 @@
 import React from "react";
 import { GrPrevious } from "react-icons/gr";
 import { useNavigate } from "react-router-dom";
-import BaseProps from "../types/BaseProps";
+import BaseProps from "../../types/BaseProps";
 
 function PreviousButton(props: BaseProps) {
     const navigator = useNavigate();

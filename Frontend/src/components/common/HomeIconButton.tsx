@@ -2,7 +2,7 @@ import { css } from "@emotion/react";
 import React from "react";
 import { AiOutlineHome } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
-import BaseProps from "../types/BaseProps";
+import BaseProps from "../../types/BaseProps";
 
 function HomeIconButton(props: BaseProps) {
     const navigator = useNavigate();

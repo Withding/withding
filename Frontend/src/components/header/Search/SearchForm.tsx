@@ -1,6 +1,6 @@
 import { css } from "@emotion/react";
 import React from "react";
-import BaseProps from "../../types/BaseProps";
+import BaseProps from "../../../types/BaseProps";
 import { CiSearch } from "react-icons/ci";
 function SearchForm(props: BaseProps) {
     return (

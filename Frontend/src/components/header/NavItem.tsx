@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import * as React from "react";
 import { useMediaQuery } from "react-responsive";
-import NavItemType from "../types/NavItemType";
+import NavItemType from "../../types/NavItemType";
 import { useLocation } from "react-router-dom";
 
 function NavItem(props: NavItemType) {

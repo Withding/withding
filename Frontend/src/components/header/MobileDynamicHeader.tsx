@@ -9,9 +9,11 @@ import LoginHeader from "./PageHeaders/LoginHeader";
 function MobileDynamicHeader() {
     const { pathname } = useLocation();
     const isLoginPage = pathname.startsWith("/signin");
+    const isSignupPage = pathname.startsWith("/signup");
     return (
         <React.Fragment>
             {isLoginPage && <LoginHeader />}
+            {isSignupPage && <LoginHeader />}
         </React.Fragment>
     );
 }

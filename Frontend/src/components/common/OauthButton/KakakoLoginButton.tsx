@@ -6,7 +6,7 @@ function KakakoLoginButton() {
     return (
         <React.Fragment>
             <OauthLoginButton
-                text={"카카오 로그인"}
+                text={"카카오로 시작하기"}
                 logo={<RiKakaoTalkFill />}
                 backgroundColor={"#FEE500"}
                 fontColor={"#495057"}
