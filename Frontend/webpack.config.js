@@ -14,6 +14,7 @@ module.exports = (env, argv) => {
         output: {
             path: path.join(__dirname, "/dist"),
             filename: "[name].js",
+            publicPath: "/",
         },
         devServer: {
             historyApiFallback: true,
