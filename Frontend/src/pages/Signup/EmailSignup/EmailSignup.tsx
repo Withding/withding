@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react";
-import EmailSignupContext from "../../store/EmailSignupContext";
-import EmailSignupType from "../../types/EmailSignupType";
+import EmailSignupContext from "../../../store/EmailSignupContext";
+import EmailSignupType from "../../../types/EmailSignupType";
 import EmailSignupForm from "./EmailSignupForm";
 
 /**

@@ -4,7 +4,7 @@ import DivisionLine from "../../components/common/DivisionLine";
 import OauthLoginButtons from "../../components/common/OauthButton/OauthLoginButtons";
 import SignTitle from "../../components/common/SignTitle";
 import SignWrapper from "../../components/common/SignWrapper";
-import EmailSignup from "./EmailSignup";
+import EmailSignup from "./EmailSignup/EmailSignup";
 
 function Signup() {
     return (
