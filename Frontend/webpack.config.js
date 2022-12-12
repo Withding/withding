@@ -3,6 +3,8 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const ESLintPlugin = require("eslint-webpack-plugin");
 const path = require("path");
+const dotenv = require("dotenv");
+const webpack = require("webpack");
 
 module.exports = (env, argv) => {
     const prod = argv.mode === "production";
@@ -19,7 +21,8 @@ module.exports = (env, argv) => {
         devServer: {
             historyApiFallback: true,
             port: 3000,
-            hot: true,
+            hot: true,  
+            open: true // Browser open  
         },
         resolve: {  
             extensions: [".js", ".jsx", ".ts", ".tsx"],
@@ -51,6 +54,9 @@ module.exports = (env, argv) => {
             }),
             new ESLintPlugin({
                 emitWarning: false
+            }),
+            new webpack.DefinePlugin({
+                "process.env": JSON.stringify(dotenv.config().parsed)
             })
         ],
     };
