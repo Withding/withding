@@ -6,6 +6,7 @@ interface OauthLoginButtonProps {
     logo?: React.ReactChild;
     backgroundColor: string;
     fontColor: string;
+    onClick?: () => void;
 }
 
 function OauthLoginButton(props: OauthLoginButtonProps) {
@@ -14,6 +15,7 @@ function OauthLoginButton(props: OauthLoginButtonProps) {
             backgroundColor={props.backgroundColor}
             fontColor={props.fontColor}
             className="login-button"
+            onClick={props.onClick}
         >
 
             <span>

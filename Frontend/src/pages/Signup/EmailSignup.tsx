@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from "react";
+import EmailSignupContext from "../../store/EmailSignupContext";
 import EmailSignupType from "../../types/EmailSignupType";
 import EmailSignupForm from "./EmailSignupForm";
 
@@ -22,11 +23,11 @@ function EmailSignup() {
             [name]: value,
         });
     }, [values]);
-    const [sendEmail, setSendEmail] = useState<boolean>(false); // 이메일에 인증코드 전송여부
+    const [isSuccessSendMail, setIsSuccessSendMail] = useState<boolean>(false); // 이메일에 인증코드 전송여부
 
     const sendEmailHandler = useCallback(() => {
         console.log("sibal");
-        setSendEmail(true);
+        setIsSuccessSendMail(true);
     }, []);
 
     const onSubmit = useCallback((event: React.FormEvent<HTMLFormElement>) => {
@@ -35,13 +36,16 @@ function EmailSignup() {
     }, []);
 
     return (
-        <EmailSignupForm
-            values={values}
-            onChangeValues={onChangeValues}
-            sendEmail={sendEmail}
-            onSendEmail={sendEmailHandler}
-            onSubmit={onSubmit}
-        />
+        <EmailSignupContext.Provider value={{
+            values,
+            onChangeValues,
+            isSuccessSendMail: isSuccessSendMail,
+            onSendMail: sendEmailHandler,
+            onSubmit: onSubmit,
+        }}>
+            <EmailSignupForm />
+        </EmailSignupContext.Provider>
+
     );
 }
 

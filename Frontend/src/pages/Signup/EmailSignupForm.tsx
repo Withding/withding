@@ -2,15 +2,7 @@ import { css } from "@emotion/react";
 import React from "react";
 import Button from "../../components/common/Button";
 import LabelValidInput from "../../components/common/LabelValidInput";
-import EmailSignupType from "../../types/EmailSignupType";
-
-interface EmailSignupFormProps {
-    values: EmailSignupType
-    onChangeValues: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    sendEmail: boolean;
-    onSendEmail: () => void;
-    onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
-}
+import EmailSignupContext from "../../store/EmailSignupContext";
 
 /**
  * 이메일 회원가입 폼 컴포넌트
@@ -20,10 +12,12 @@ interface EmailSignupFormProps {
  * @param props.onSendEmail - 이메일 인증 버튼 클릭시
  * @returns 
  */
-function EmailSignupForm(props: EmailSignupFormProps) {
+function EmailSignupForm() {
+    const { values, onChangeValues, isSuccessSendMail, onSendMail, onSubmit }
+        = React.useContext(EmailSignupContext);
     return (
         <form
-            onSubmit={props.onSubmit}
+            onSubmit={onSubmit}
             css={style}>
             <div className="email-auth">
                 <div
@@ -36,19 +30,19 @@ function EmailSignupForm(props: EmailSignupFormProps) {
                             type: "email",
                             name: "email",
                             placeholder: "이메일 계정",
-                            value: props.values.email,
-                            onChange: props.onChangeValues,
+                            value: values.email,
+                            onChange: onChangeValues,
                         }}
                         valid={true}
                         msg={"아이디를 입력해주세요"}
                     />
                     <Button
-                        className={`email-auth-button ${props.sendEmail ? "non-btn" : "fill-btn"}`}
-                        onClick={props.onSendEmail}
+                        className={`email-auth-button ${isSuccessSendMail ? "non-btn" : "fill-btn"}`}
+                        onClick={onSendMail}
                         value={"인증하기"}
                     />
                 </div>
-                {props.sendEmail &&
+                {isSuccessSendMail &&
                     <React.Fragment>
                         <div className="field">
                             <LabelValidInput
@@ -59,13 +53,13 @@ function EmailSignupForm(props: EmailSignupFormProps) {
                                     type: "text",
                                     name: "authCode",
                                     placeholder: "인증번호 입력",
-                                    value: props.values.authCode,
-                                    onChange: props.onChangeValues,
+                                    value: values.authCode,
+                                    onChange: onChangeValues,
                                 }}
                                 msg={"인증번호를 입력해주세요"}
                             />
                             <Button
-                                className={`check-auth-button ${props.sendEmail ? "fill-btn" : ""}`}
+                                className={`check-auth-button ${isSuccessSendMail ? "fill-btn" : ""}`}
                                 value={"확인"}
                             />
                         </div>
@@ -82,8 +76,8 @@ function EmailSignupForm(props: EmailSignupFormProps) {
                     type: "text",
                     name: "name",
                     placeholder: "이름 입력",
-                    value: props.values.name,
-                    onChange: props.onChangeValues,
+                    value: values.name,
+                    onChange: onChangeValues,
                 }}
                 valid={true}
                 msg={"이름을 입력해주세요"}
@@ -96,8 +90,8 @@ function EmailSignupForm(props: EmailSignupFormProps) {
                         type: "password",
                         name: "password",
                         placeholder: "비밀번호 입력",
-                        value: props.values.password,
-                        onChange: props.onChangeValues,
+                        value: values.password,
+                        onChange: onChangeValues,
                     }}
                     valid={true}
                     msg={"비밀번호를 입력해주세요"}
@@ -109,8 +103,8 @@ function EmailSignupForm(props: EmailSignupFormProps) {
                         type: "password",
                         name: "password2",
                         placeholder: "비밀번호 재입력",
-                        value: props.values.password2,
-                        onChange: props.onChangeValues,
+                        value: values.password2,
+                        onChange: onChangeValues,
                     }}
                     valid={true}
                     msg={"비밀번호를 입력해주세요"}
