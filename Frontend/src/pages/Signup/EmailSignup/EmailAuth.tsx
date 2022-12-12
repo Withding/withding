@@ -65,6 +65,7 @@ const style = css`
     .field {
         display: inline-flex;
         align-items: flex-end;
+        width: 100%;
     }
     .email-input, .auth-input {
         margin-right: 0.5rem;
