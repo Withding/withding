@@ -28,7 +28,7 @@ public class LoginController {
     private JwtService jwtService;
 
 
-    @RequestMapping(value = "/users", method = RequestMethod.PUT)
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
     public ResponseEntity<Object> login(@RequestBody User user){
 
         
@@ -42,24 +42,29 @@ public class LoginController {
      * @param servletResponse 쿠키를 담을 리스폰스
      * @return 닉네임, 스테이터스 코드
      */
-    @RequestMapping(value = "/auth", method = RequestMethod.GET)
-    public ResponseEntity<Object> getAuth(@RequestParam final String accessToken, HttpServletResponse servletResponse){
+    @RequestMapping(value = "/kakaoauth", method = RequestMethod.POST)
+    public ResponseEntity<Object> kakaoauth(@RequestParam final String accessToken, HttpServletResponse servletResponse){
 
         User user = loginService.kakaoLogin(accessToken);
-        String jwt = jwtService.generateJwtToken(user.getUserId(), user.getName(),new Timestamp(System.currentTimeMillis()));
 
-        Cookie cookie = new Cookie("jwt",jwt); // create a cookie
-        cookie.setMaxAge(7 * 24 * 60 * 60); // expires in 7 days
-        // optional properties
-        //cookie.setSecure(true);
-        cookie.setHttpOnly(true);
-        cookie.setPath("/");
+        if (user.getName() == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        else {
+            String jwt = jwtService.generateJwtToken(user.getUserId(), user.getName(), new Timestamp(System.currentTimeMillis()));
 
-        servletResponse.addCookie(cookie); // add cookie to response
+            Cookie cookie = new Cookie("jwt",jwt); // create a cookie
+            cookie.setMaxAge(7 * 24 * 60 * 60); // expires in 7 days
+            // optional properties
+            //cookie.setSecure(true);
+            cookie.setHttpOnly(true);
+            cookie.setPath("/");
 
-        String name = user.getName();
+            servletResponse.addCookie(cookie); // add cookie to response
 
-        return new ResponseEntity<>(name,HttpStatus.OK);
+            return new ResponseEntity<>(user.getName(), HttpStatus.CREATED);
+        }
+
     }
 
 
