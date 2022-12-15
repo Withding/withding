@@ -1,57 +1,53 @@
 import { css } from "@emotion/react";
 import React from "react";
 import Button from "../../../components/common/Button";
-import LabelValidInput from "../../../components/common/LabelValidInput";
+import Input from "../../../components/common/Input";
 import EmailSignupContext from "../../../store/EmailSignupContext";
 
 function EmailAuth() {
-    const { values, onChangeValues, isSuccessSendMail, onSendMail }
+    const { values, onChangeValues, isSuccessSendMail, onSendMail, errors }
         = React.useContext(EmailSignupContext);
     return (
         <div css={style} className="email-auth">
             <div
                 className="field"
             >
-                <LabelValidInput
-                    className="email-input label-input"
-                    label={"이메일"}
-                    input={{
-                        type: "email",
-                        name: "email",
-                        placeholder: "이메일 계정",
-                        value: values.email,
-                        onChange: onChangeValues,
-                    }}
-                    valid={true}
-                    msg={"아이디를 입력해주세요"}
-                />
+                <label className="input label-input">
+                    이메일
+                    <Input
+                        type="email"
+                        name="email"
+                        placeholder="이메일 계정"
+                        value={values.email}
+                        onChange={onChangeValues}
+                        error={errors.email}
+                    />
+                </label>
                 <Button
                     className={`email-auth-button ${isSuccessSendMail ? "non-btn" : "fill-btn"}`}
                     onClick={onSendMail}
                     value={"인증하기"}
                 />
             </div>
+            {errors.email && <p className="error">{"에러"}</p>}
             {isSuccessSendMail &&
                 <React.Fragment>
                     <div className="field">
-                        <LabelValidInput
-                            valid={true}
-                            label={""}
-                            className="auth-input"
-                            input={{
-                                type: "text",
-                                name: "authCode",
-                                placeholder: "인증번호 입력",
-                                value: values.authCode,
-                                onChange: onChangeValues,
-                            }}
-                            msg={"인증번호를 입력해주세요"}
+                        <Input
+                            className="input"
+                            type="text"
+                            name="authCode"
+                            placeholder="인증번호 입력"
+                            value={values.authCode}
+                            onChange={onChangeValues}
+                            error={errors.authCode}
                         />
                         <Button
                             className={`check-auth-button ${isSuccessSendMail ? "fill-btn" : ""}`}
                             value={"확인"}
                         />
                     </div>
+                    {errors.authCode && <p className="error">{"인증번호를 입력해주세요"}</p>}
                     <p className="auth-help-text">
                         {"인증번호 입력해주세요"}
                     </p>
@@ -63,11 +59,12 @@ function EmailAuth() {
 
 const style = css`
     .field {
-        display: inline-flex;
-        align-items: flex-end;
+        display: flex;
+        flex-direction: row;
+        align-items: end;
         width: 100%;
     }
-    .email-input, .auth-input {
+    .input {
         margin-right: 0.5rem;
         width: 100%;
     }
@@ -84,7 +81,11 @@ const style = css`
         font-weight: 300;
     }
 
-    
+    .error {
+        line-height: 2;
+        color: rgb(242, 85, 85);
+        font-size: 0.9rem;
+    }
 `;
 
 export default EmailAuth;

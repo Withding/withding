@@ -1,10 +1,10 @@
 import { css } from "@emotion/react";
 import React from "react";
 import Button from "../../../components/common/Button";
-import LabelValidInput from "../../../components/common/LabelValidInput";
 import EmailSignupContext from "../../../store/EmailSignupContext";
 import EmailAuth from "./EmailAuth";
 import Password from "./Password";
+import ValidInput from "../../../components/common/ValidInput";
 
 /**
  * 이메일 회원가입 폼 컴포넌트
@@ -18,19 +18,21 @@ function EmailSignupForm() {
             onSubmit={onSubmit}
             css={style}>
             <EmailAuth />
-            <LabelValidInput
-                className="name-input label-input"
-                label={"이름"}
-                input={{
-                    type: "text",
-                    name: "name",
-                    placeholder: "이름 입력",
-                    value: values.name,
-                    onChange: onChangeValues,
-                }}
-                valid={true}
-                msg={"이름을 입력해주세요"}
-            />
+            <label className="label-input">
+                이름
+                <ValidInput
+                    className=""
+                    input={{
+                        type: "text",
+                        name: "name",
+                        placeholder: "이름 입력",
+                        value: values.name,
+                        onChange: onChangeValues,
+                    }}
+                    valid={true}
+                    msg={"이름을 입력해주세요"}
+                />
+            </label>
             <Password />
             <Button
                 className="fill-btn submit"

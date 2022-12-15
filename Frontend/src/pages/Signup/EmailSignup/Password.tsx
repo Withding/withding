@@ -1,8 +1,8 @@
 import React, { useCallback, useState } from "react";
-import LabelValidInput from "../../../components/common/LabelValidInput";
 import EmailSignupContext from "../../../store/EmailSignupContext";
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 import { css } from "@emotion/react";
+import ValidInput from "../../../components/common/ValidInput";
 
 
 interface InputPasswordProps {
@@ -28,19 +28,20 @@ function InputPassword(props: InputPasswordProps) {
     }, []);
     return (
         <div css={style}>
-            <LabelValidInput
-                className={props.className}
-                label={props.label}
-                input={{
-                    type: isPasswordVisible ? "text" : "password",
-                    name: props.name,
-                    placeholder: props.placeholder,
-                    value: props.value,
-                    onChange: props.onChangeValues,
-                }}
-                valid={props.valid}
-                msg={props.msg}
-            />
+            <label className={props.className}>
+                {props.label}
+                <ValidInput
+                    input={{
+                        type: isPasswordVisible ? "text" : "password",
+                        name: props.name,
+                        placeholder: props.placeholder,
+                        value: props.value,
+                        onChange: props.onChangeValues,
+                    }}
+                    valid={props.valid}
+                    msg={props.msg}
+                />
+            </label>
             {
                 !isPasswordVisible
                     ?

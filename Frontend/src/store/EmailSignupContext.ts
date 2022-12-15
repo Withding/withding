@@ -12,7 +12,14 @@ const EmailSignupContext = React.createContext<EmailSignupContextProps>({
     onChangeValues: () => {},
     isSuccessSendMail: false,
     onSendMail: () => {},
-    onSubmit: () => {}
+    onSubmit: () => {},
+    errors: {
+        email: false,
+        authCode: false,
+        name: false,
+        password: false,
+        password2: false,
+    }
 });
 
 export default EmailSignupContext;
