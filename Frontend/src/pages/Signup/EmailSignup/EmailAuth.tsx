@@ -29,7 +29,7 @@ function EmailAuth() {
                     value={"인증하기"}
                 />
             </div>
-            {errors.email && <p className="error">{"에러"}</p>}
+            {errors.email && <p className="error">{errors.email}</p>}
             {isSuccessSendMail &&
                 <React.Fragment>
                     <div className="field">

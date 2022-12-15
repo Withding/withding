@@ -10,7 +10,7 @@ interface InputPasswordProps {
     onChangeValues: (e: React.ChangeEvent<HTMLInputElement>) => void;
     name: string;
     label: string;
-    msg: string;
+    msg: string | boolean;
     valid: boolean;
     placeholder: string;
     className: string;
@@ -37,24 +37,26 @@ function InputPassword(props: InputPasswordProps) {
                         placeholder: props.placeholder,
                         value: props.value,
                         onChange: props.onChangeValues,
+
                     }}
                     valid={props.valid}
                     msg={props.msg}
                 />
+                {
+                    !isPasswordVisible
+                        ?
+                        <MdVisibility
+                            className="password-visibility-on password-icon"
+                            onClick={visiblePasswordHandler}
+                        />
+                        :
+                        <MdVisibilityOff
+                            className="password-visibility-off password-icon"
+                            onClick={visiblePasswordHandler}
+                        />
+                }
             </label>
-            {
-                !isPasswordVisible
-                    ?
-                    <MdVisibility
-                        className="password-visibility-on password-icon"
-                        onClick={visiblePasswordHandler}
-                    />
-                    :
-                    <MdVisibilityOff
-                        className="password-visibility-off password-icon"
-                        onClick={visiblePasswordHandler}
-                    />
-            }
+
         </div>
     );
 }
@@ -63,7 +65,7 @@ function InputPassword(props: InputPasswordProps) {
  * @returns 
  */
 function Password() {
-    const { values, onChangeValues } = React.useContext(EmailSignupContext);
+    const { values, onChangeValues, errors } = React.useContext(EmailSignupContext);
     return (
         <div>
             <InputPassword
@@ -72,8 +74,8 @@ function Password() {
                 onChangeValues={onChangeValues}
                 label={"비밀번호"}
                 name={"password"}
-                msg={"비밀번호를 입력해주세요"}
-                valid={true}
+                msg={errors.password}
+                valid={!errors.password}
                 placeholder={"비밀번호 입력"}
             />
             <InputPassword
@@ -83,7 +85,7 @@ function Password() {
                 label={""}
                 name={"password2"}
                 msg={"비밀번호를 입력해주세요"}
-                valid={true}
+                valid={!errors.password2}
                 placeholder={"비밀번호 입력"}
             />
         </div>
@@ -92,8 +94,7 @@ function Password() {
 
 const style = css`
     position:relative;
-
-    & > .password-icon {
+    .password-icon {
         cursor: pointer;
         position: absolute;
         right: 0;

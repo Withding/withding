@@ -11,7 +11,7 @@ import ValidInput from "../../../components/common/ValidInput";
  * @returns 
  */
 function EmailSignupForm() {
-    const { values, onChangeValues, onSubmit }
+    const { values, onChangeValues, onSubmit, errors }
         = React.useContext(EmailSignupContext);
     return (
         <form
@@ -29,8 +29,8 @@ function EmailSignupForm() {
                         value: values.name,
                         onChange: onChangeValues,
                     }}
-                    valid={true}
-                    msg={"이름을 입력해주세요"}
+                    valid={!errors.name}
+                    msg={errors.name}
                 />
             </label>
             <Password />

@@ -15,7 +15,7 @@ import BaseProps from "../../types/BaseProps";
 interface ValidInputProps {
     input?: InputProps;
     valid: boolean;
-    msg: string;
+    msg: string | boolean;
 }
 function ValidInput(props: ValidInputProps & BaseProps) {
     return (
