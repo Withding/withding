@@ -15,7 +15,7 @@ module.exports = (env, argv) => {
         entry: "./src/Index.tsx",
         output: {
             path: path.join(__dirname, "/dist"),
-            filename: "[name].js",
+            filename: "[name].[contenthash].js", // 파일 content 기반으로 해시값 생성
             publicPath: "/",
         },
         devServer: {
@@ -59,5 +59,10 @@ module.exports = (env, argv) => {
                 "process.env": JSON.stringify(dotenv.config().parsed)
             })
         ],
+        optimization: {
+            splitChunks: {
+                chunks: "all",
+            }
+        }
     };
 }; 
