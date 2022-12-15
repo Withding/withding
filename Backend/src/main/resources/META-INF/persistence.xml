@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence" version="2.1">
+    <persistence-unit name="jpabook">
+
+        <!-- @entity가 달려있는 DTO들 -->
+        <class>com.example.demo.DTO.User</class>
+        <class>com.example.demo.DTO.State</class>
+        <class>com.example.demo.DTO.Funding</class>
+        <class>com.example.demo.DTO.FundingDetails</class>
+        <class>com.example.demo.DTO.FundingCategory</class>
+        <class>com.example.demo.DTO.IdType</class>
+
+        <properties>
+        <!-- 필수 속성 -->
+            <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+            <property name="javax.persistence.jdbc.user" value="root"/>
+            <property name="javax.persistence.jdbc.password" value="0000"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/withding?serverTimezone=Asia/Seoul&amp;characterEncoding=UTF-8"/>
+            <property name="hibernate.dialect"  value="org.hibernate.dialect.MySQL8Dialect"/>
+            <property name="hibernate.show_sql" value="true"/>
+        </properties>
+    </persistence-unit>
+</persistence>
