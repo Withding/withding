@@ -21,7 +21,7 @@ function ValidInput(props: ValidInputProps & BaseProps) {
     return (
         <div css={style}>
             <Input {...props.input}
-                className={`${props.className} ${props.valid ? "" : "invalid"}`}
+                error={!props.valid}
             />
             <span>{props.valid ? "" : props.msg}</span>
         </div>
@@ -29,12 +29,6 @@ function ValidInput(props: ValidInputProps & BaseProps) {
 }
 
 const style = css`
-    
-    & > input.invalid {
-        border: 1px solid #f66;
-        background: rgba(255,155,155,.06);
-    }
-
     & > span {
         line-height: 2;
         color: rgb(242, 85, 85);
