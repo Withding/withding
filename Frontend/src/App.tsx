@@ -6,9 +6,11 @@ import { Routes, Route, Navigate } from "react-router-dom";
 
 const Main = React.lazy(() => import("./pages/Main/Index"));
 // import Main from "./pages/Main/Index";
-import Signin from "./pages/Signin/Signin";
-import Signup from "./pages/Signup/Signup";
-import Oauth from "./pages/Oauth/Index";
+const Signin = React.lazy(() => import("./pages/Signin/Index"));
+const Signup = React.lazy(() => import("./pages/Signup/Signup"));
+// import Signup from "./pages/Signup/Signup";
+const Oauth = React.lazy(() => import("./pages/Oauth/Index"));
+// import Oauth from "./pages/Oauth/Index";
 import { Suspense } from "react";
 function App() {
     return (
