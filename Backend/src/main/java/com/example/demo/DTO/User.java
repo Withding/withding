@@ -17,9 +17,6 @@ import java.util.Date;
 public class User {
 
     @Transient
-    private String jwt;
-
-    @Transient
     private Date loginTime;
 
 
@@ -58,5 +55,39 @@ public class User {
     @ManyToOne
     @JoinColumn(name = "state_code")
     private State state;                // 회원 상태
+
+
+    /**
+     * 이메일 유효성 검사
+     * @return 사용가능시 true
+     */
+    public boolean validateEmail(){
+        boolean result = false;
+        this.getEmail();
+
+        return result;
+    }
+
+    /**
+     * 닉네임(name) 유효성 검사
+     * @return 사용가능시 true
+     */
+    public boolean validateName(){
+        boolean result = false;
+        this.getName();
+
+        return result;
+    }
+
+    /**
+     * 비밀번호 유효성 검사
+     * @return 사용가능시 true
+     */
+    public boolean validatePwd(){
+        boolean result = false;
+        this.getPwd();
+
+        return result;
+    }
 
 }
