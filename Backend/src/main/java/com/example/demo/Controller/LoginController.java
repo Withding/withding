@@ -28,13 +28,14 @@ public class LoginController {
     private JwtService jwtService;
 
 
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public ResponseEntity<Object> login(@RequestBody User user){
+    @RequestMapping(value = "/user", method = RequestMethod.POST)
+    public ResponseEntity<Object> login(@RequestBody final User user){
 
         
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
 
     /**
      * 카카오 로그인
@@ -42,13 +43,13 @@ public class LoginController {
      * @param servletResponse 쿠키를 담을 리스폰스
      * @return 닉네임, 스테이터스 코드
      */
-    @RequestMapping(value = "/kakaoauth", method = RequestMethod.POST)
+    @RequestMapping(value = "/auth/kakao", method = RequestMethod.POST)
     public ResponseEntity<Object> kakaoauth(@RequestParam final String accessToken, HttpServletResponse servletResponse){
 
         User user = loginService.kakaoLogin(accessToken);
 
         if (user.getName() == null){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         else {
             String jwt = jwtService.generateJwtToken(user.getUserId(), user.getName(), new Timestamp(System.currentTimeMillis()));
