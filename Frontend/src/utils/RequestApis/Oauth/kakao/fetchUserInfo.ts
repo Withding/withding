@@ -1,7 +1,12 @@
+import  User  from "@/types/User";
 import customAxios from "@/utils/customAxios";
-import { AxiosResponse } from "axios";
 
-function fetchUserInfo(accessToken: string): Promise<AxiosResponse> {
+/**
+ * 카카오 로그인 이후 유저 정보 가져오는 API
+ * @param accessToken 
+ * @returns 
+ */
+function fetchUserInfo(accessToken: string): Promise<User> {
     const axios = customAxios();
     return axios({
         method: "POST",
