@@ -66,6 +66,7 @@ public class LoginService {
                 user.setIdType(em.find(IdType.class, 1));
                 user.setName(json.kakao_account.profile.nickname);
                 user.setState(em.find(State.class, 0));
+                System.out.println(user);
                 em.persist(user);
                 tr.commit();
             } else {

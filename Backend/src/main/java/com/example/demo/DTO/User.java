@@ -17,6 +17,9 @@ import java.util.Date;
 public class User {
 
     @Transient
+    private String accessToken;       // 카카오 로그인 API에 사용
+
+    @Transient
     private Date loginTime;
 
 

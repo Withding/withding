@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.sql.Timestamp;
+import java.util.Map;
 
 @Controller
 @CrossOrigin("*")
@@ -39,14 +40,15 @@ public class LoginController {
 
     /**
      * 카카오 로그인
-     * @param accessToken 카카오 API에서 받은 엑세스 토큰
+     * @param request 카카오 API에서 받은 엑세스 토큰 (json)
      * @param servletResponse 쿠키를 담을 리스폰스
      * @return 닉네임, 스테이터스 코드
      */
     @RequestMapping(value = "/auth/kakao", method = RequestMethod.POST)
-    public ResponseEntity<Object> kakaoauth(@RequestParam final String accessToken, HttpServletResponse servletResponse){
+    public ResponseEntity<Object> kakaoauth(@RequestBody final User request, HttpServletResponse servletResponse){
 
-        User user = loginService.kakaoLogin(accessToken);
+        System.out.println("accessToken" + request.getAccessToken());
+        User user = loginService.kakaoLogin(request.getAccessToken());
 
         if (user.getName() == null){
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
