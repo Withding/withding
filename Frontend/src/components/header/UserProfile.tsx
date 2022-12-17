@@ -6,10 +6,10 @@ import React, { useContext } from "react";
  * @returns 
  */
 function UserProfile() {
-    const { nickname } = useContext(UserContext);
+    const { nickName } = useContext(UserContext);
     return (
         <div>
-            <p>{nickname}</p>
+            <p>{nickName}</p>
         </div>
     );
 }
