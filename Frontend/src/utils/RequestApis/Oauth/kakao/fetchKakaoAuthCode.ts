@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from "axios";
 
 function fetchKakaoAuthCode(code: string): Promise<AxiosResponse> {
     return axios({
-        url: "https://kauth.kakao.com/oauth/kakao",
+        url: "https://kauth.kakao.com/oauth/token",
         method: "POST",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",

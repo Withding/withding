@@ -4,7 +4,7 @@ import { AxiosResponse } from "axios";
 function fetchUserInfo(accessToken: string): Promise<AxiosResponse> {
     const axios = customAxios();
     return axios({
-        method: "GET",
+        method: "POST",
         url: "/auth/kakao",
         data: {
             accessToken
