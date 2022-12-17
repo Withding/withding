@@ -12,29 +12,34 @@ const Signup = React.lazy(() => import("./pages/Signup/Signup"));
 const Oauth = React.lazy(() => import("./pages/Oauth/Index"));
 // import Oauth from "./pages/Oauth/Index";
 import { Suspense } from "react";
+import Auth from "./components/auth/Auth";
+
+
 function App() {
     return (
-        <div
-            className="container"
-            css={defaultStyle}
-        >
-            <GlobalStyle />
-            <Header />
-            <div className="content">
-                <Suspense fallback={<div>loading</div>}>
-                    <Routes>
-                        <Route path="/" element={<Navigate to="/main" />} />
-                        <Route path="/main" element={<Main />} />
-                        <Route path="/signin/*" element={<Signin />} />
-                        <Route path="/signup/*" element={<Signup />} />
-                        <Route path="/oauth/*" element={<Oauth />} />
-                        <Route path="/funding" element={<div>funding</div>} />
-                        <Route path="/commingsoon" element={<div>commingsoon</div>} />
-                    </Routes>
-                </Suspense>
+        <Auth>
+            <div
+                className="container"
+                css={defaultStyle}
+            >
+                <GlobalStyle />
+                <Header />
+                <div className="content">
+                    <Suspense fallback={<div>loading</div>}>
+                        <Routes>
+                            <Route path="/" element={<Navigate to="/main" />} />
+                            <Route path="/main" element={<Main />} />
+                            <Route path="/signin/*" element={<Signin />} />
+                            <Route path="/signup/*" element={<Signup />} />
+                            <Route path="/oauth/*" element={<Oauth />} />
+                            <Route path="/funding" element={<div>funding</div>} />
+                            <Route path="/commingsoon" element={<div>commingsoon</div>} />
+                        </Routes>
+                    </Suspense>
 
+                </div>
             </div>
-        </div>
+        </Auth>
     );
 }
 
