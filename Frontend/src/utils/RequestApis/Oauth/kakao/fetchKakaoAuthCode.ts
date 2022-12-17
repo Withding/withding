@@ -1,6 +1,7 @@
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
+import KakaoAuthType from "@/types/KakaoAuthType";
 
-function fetchKakaoAuthCode(code: string): Promise<AxiosResponse> {
+function fetchKakaoAuthCode(code: string): Promise<KakaoAuthType> {
     return axios({
         url: "https://kauth.kakao.com/oauth/token",
         method: "POST",

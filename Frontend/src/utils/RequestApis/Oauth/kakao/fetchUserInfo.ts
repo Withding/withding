@@ -6,6 +6,9 @@ function fetchUserInfo(accessToken: string): Promise<AxiosResponse> {
     return axios({
         method: "POST",
         url: "/auth/kakao",
+        headers: {
+            "Content-Type": "application/json"
+        },
         data: {
             accessToken
         }

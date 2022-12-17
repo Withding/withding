@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
-import fetchKakaoAuthCode from "../../utils/RequestApis/Oauth/kakao/fetchKakaoAuthCode";
-import fetchUserInfo from "../../utils/RequestApis/Oauth/kakao/fetchUserInfo";
+import fetchKakaoAuthCode from "@/utils/RequestApis/Oauth/kakao/fetchKakaoAuthCode";
+import fetchUserInfo from "@/utils/RequestApis/Oauth/kakao/fetchUserInfo";
+import KakaoAuthType from "@/types/KakaoAuthType";
 
 function Kakao() {
     useEffect(() => {
@@ -8,8 +9,9 @@ function Kakao() {
     }, []);
     const code = new URLSearchParams(window.location.search).get("code") ?? "";
     fetchKakaoAuthCode(code)
-        .then((res) => {
-            fetchUserInfo(res.data).
+        .then((res: KakaoAuthType) => {
+            console.log("aa", res.access_token);
+            fetchUserInfo(res.access_token).
                 then((res) => console.log(res));
         });
     return (
