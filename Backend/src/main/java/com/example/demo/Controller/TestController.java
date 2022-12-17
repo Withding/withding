@@ -20,6 +20,7 @@ public class TestController {
 
     @RequestMapping(value = "/test", method = RequestMethod.GET)
     public ResponseEntity<Object> test(){
+/*
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
@@ -52,6 +53,7 @@ public class TestController {
         emf.close();
 
 
+*/
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

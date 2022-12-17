@@ -2,11 +2,14 @@ package com.example.demo.DTO;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.regex.Pattern;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -62,35 +65,52 @@ public class User {
 
     /**
      * 이메일 유효성 검사
-     * @return 사용가능시 true
+     * @return 사용 가능시 true
      */
-    public boolean validateEmail(){
-        boolean result = false;
-        this.getEmail();
+    public boolean isEmail()
+    {
+        if (this.email == null)
+            return false;
 
-        return result;
+        String str3 = "^[a-zA-Z0-9+-\\_.]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$"; // 이메일 (2~20자)
+        if (10 <= this.email.length() && this.email.length() <= 20) {
+            return Pattern.matches(str3, this.email);
+        }
+        else {
+            return false;
+        }
     }
 
     /**
      * 닉네임(name) 유효성 검사
-     * @return 사용가능시 true
+     * @return 사용 가능시 true
      */
-    public boolean validateName(){
-        boolean result = false;
-        this.getName();
+    public boolean isName()
+    {
+        if (this.name == null) {
+            return false;
+        }
+        String str4 = "^[a-zA-Z가-힣0-9]$"; // 닉네임 검증식 (2~10자)
 
-        return result;
+        if (2 <= this.name.length() && this.name.length() <= 10)
+        {
+            return Pattern.matches(str4, this.name);
+        }
+        else
+            return false;
     }
 
     /**
      * 비밀번호 유효성 검사
-     * @return 사용가능시 true
+     * @return 사용 가능시 true
      */
-    public boolean validatePwd(){
-        boolean result = false;
-        this.getPwd();
-
-        return result;
+    public boolean isPwd()
+    {
+        if (this.pwd == null)
+            return false;
+        String str2 = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*\\W).{8,25}$"; // 비밀번호(8~25자)
+        boolean res2 = Pattern.matches(str2, this.pwd);
+        return res2;
     }
 
 }

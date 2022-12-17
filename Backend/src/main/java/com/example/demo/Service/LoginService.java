@@ -1,9 +1,8 @@
 package com.example.demo.Service;
 
 import com.example.demo.Config.BeanConfig;
-import com.example.demo.DTO.IdType;
-import com.example.demo.DTO.State;
-import com.example.demo.DTO.User;
+import com.example.demo.DTO.*;
+
 import com.example.demo.Gson.Gson;
 import lombok.Data;
 import lombok.Getter;
@@ -66,12 +65,12 @@ public class LoginService {
                 user.setIdType(em.find(IdType.class, 1));
                 user.setName(json.kakao_account.profile.nickname);
                 user.setState(em.find(State.class, 0));
-                System.out.println(user);
                 em.persist(user);
                 tr.commit();
             } else {
                 //System.out.println("유저가 존재함");
-                user = users.get(0);
+                user.setName(users.get(0).getName());
+                user.setProfileImage(users.get(0).getProfileImage());
             }
 
         }

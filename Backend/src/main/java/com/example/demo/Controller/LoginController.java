@@ -47,7 +47,6 @@ public class LoginController {
     @RequestMapping(value = "/auth/kakao", method = RequestMethod.POST)
     public ResponseEntity<Object> kakaoauth(@RequestBody final User request, HttpServletResponse servletResponse){
 
-        System.out.println("accessToken" + request.getAccessToken());
         User user = loginService.kakaoLogin(request.getAccessToken());
 
         if (user.getName() == null){
@@ -65,7 +64,7 @@ public class LoginController {
 
             servletResponse.addCookie(cookie); // add cookie to response
 
-            return new ResponseEntity<>(user.getName(), HttpStatus.CREATED);
+            return new ResponseEntity<>(user, HttpStatus.CREATED);
         }
 
     }
