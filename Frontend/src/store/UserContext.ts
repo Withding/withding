@@ -6,7 +6,7 @@ import React from "react";
  */
 const UserContext = React.createContext<UserContextProps>({
     isLogin: false,
-    nickname: "",
+    nickName: "",
     profileImage: "",
     onChangeNickname: () => {},
     onChangeProfileImage: () => {},

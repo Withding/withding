@@ -6,9 +6,13 @@ import UserContext from "@/store/UserContext";
 import User from "@/types/User";
 import { useNavigate } from "react-router-dom";
 
+/**
+ * 카카오 로그인 처리하는 컴포넌트
+ * @returns 
+ */
 function Kakao() {
     const navigator = useNavigate();
-    const { onChangeIsLogin, onChangeNickname, onChangeProfileImage, isLogin } = useContext(UserContext);
+    const { onChangeIsLogin, onChangeNickname, onChangeProfileImage } = useContext(UserContext);
     useEffect(() => {
         const code = new URLSearchParams(window.location.search).get("code") ?? "";
         fetchKakaoAuthCode(code)
@@ -16,7 +20,7 @@ function Kakao() {
                 fetchUserInfo(res.access_token).
                     then((res: User) => {
                         onChangeIsLogin(true);
-                        onChangeNickname(res.nickname);
+                        onChangeNickname(res.nickName);
                         onChangeProfileImage(res.profileImage);
                         navigator("/");
                     });

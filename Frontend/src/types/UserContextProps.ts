@@ -3,7 +3,7 @@
  */
 interface UserContextProps {
     isLogin: boolean;
-    nickname: string;
+    nickName: string;
     profileImage: string;
     onChangeNickname: (nickname: string) => void;
     onChangeProfileImage: (profileImage: string) => void;

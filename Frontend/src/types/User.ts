@@ -2,7 +2,7 @@
  * 유저 정보
  */
 interface User {
-    nickname: string;
+    nickName: string;
     profileImage: string;
 }
 
