@@ -29,14 +29,6 @@ public class LoginController {
     private JwtService jwtService;
 
 
-    @RequestMapping(value = "/user", method = RequestMethod.POST)
-    public ResponseEntity<Object> login(@RequestBody final User user){
-
-        
-
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
 
     /**
      * 카카오 로그인
@@ -49,11 +41,11 @@ public class LoginController {
 
         User user = loginService.kakaoLogin(request.getAccessToken());
 
-        if (user.getName() == null){
+        if (user.getNickName() == null){
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         else {
-            String jwt = jwtService.generateJwtToken(user.getUserId(), user.getName(), new Timestamp(System.currentTimeMillis()));
+            String jwt = jwtService.generateJwtToken(user.getUserId(), user.getNickName(), new Timestamp(System.currentTimeMillis()));
 
             Cookie cookie = new Cookie("jwt",jwt); // create a cookie
             cookie.setMaxAge(7 * 24 * 60 * 60); // expires in 7 days

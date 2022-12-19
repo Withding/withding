@@ -2,9 +2,7 @@ package com.example.demo.DTO;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
@@ -39,7 +37,7 @@ public class User {
     private String pwd;                 // 비밀번호
 
     @Column(name = "user")
-    private String name;                // 닉네임
+    private String nickName;                // 닉네임
 
     @Column(name = "profile_image")
     private String profileImage;        // 프로필 이미지
@@ -87,14 +85,14 @@ public class User {
      */
     public boolean isName()
     {
-        if (this.name == null) {
+        if (this.nickName == null) {
             return false;
         }
         String str4 = "^[a-zA-Z가-힣0-9]$"; // 닉네임 검증식 (2~10자)
 
-        if (2 <= this.name.length() && this.name.length() <= 10)
+        if (2 <= this.nickName.length() && this.nickName.length() <= 10)
         {
-            return Pattern.matches(str4, this.name);
+            return Pattern.matches(str4, this.nickName);
         }
         else
             return false;
