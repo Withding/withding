@@ -9,6 +9,7 @@
         <class>com.example.demo.DTO.FundingDetails</class>
         <class>com.example.demo.DTO.FundingCategory</class>
         <class>com.example.demo.DTO.IdType</class>
+        <class>com.example.demo.DTO.EmailAuth</class>
 
         <properties>
         <!-- 필수 속성 -->

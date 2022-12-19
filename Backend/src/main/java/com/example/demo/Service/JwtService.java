@@ -111,7 +111,7 @@ public class JwtService {
             //String userNum = claims.getBody().get("userNum", String.class);
             Claims claims = Jwts.parser().setSigningKey(beanConfig.getJwtKey()).parseClaimsJws(jwt).getBody();
             user.setUserId(claims.get("userNum",Long.class));
-            user.setName(claims.get("name", String.class));
+            user.setNickName(claims.get("name", String.class));
             user.setLoginTime(claims.get("loginTime", Date.class));
 
             return user;

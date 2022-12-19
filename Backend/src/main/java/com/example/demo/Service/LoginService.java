@@ -63,13 +63,13 @@ public class LoginService {
                 user.setEmail(String.valueOf(json.id));
                 user.setCreatedAt(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(json.connected_at));
                 user.setIdType(em.find(IdType.class, 1));
-                user.setName(json.kakao_account.profile.nickname);
+                user.setNickName(json.kakao_account.profile.nickname);
                 user.setState(em.find(State.class, 0));
                 em.persist(user);
                 tr.commit();
             } else {
                 //System.out.println("유저가 존재함");
-                user.setName(users.get(0).getName());
+                user.setNickName(users.get(0).getNickName());
                 user.setProfileImage(users.get(0).getProfileImage());
             }
 
