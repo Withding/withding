@@ -16,7 +16,7 @@ public class TestController {
     @RequestMapping(value = "/test", method = RequestMethod.GET)
     public ResponseEntity<Object> test(){
 
-        mailService.sendSignUpCode("abc50050@naver.com");
+
 /*
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
@@ -52,7 +52,7 @@ public class TestController {
 
 */
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(mailService.getEmailAuthCode(6),HttpStatus.OK);
     }
 
 }

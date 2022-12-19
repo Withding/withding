@@ -21,7 +21,10 @@ public class User {
     private String accessToken;       // 카카오 로그인 API에 사용
 
     @Transient
-    private Date loginTime;
+    private int authCode;               // 인증코드
+
+    @Transient
+    private Date loginTime;             // 로그인 시간
 
 
     @Id
