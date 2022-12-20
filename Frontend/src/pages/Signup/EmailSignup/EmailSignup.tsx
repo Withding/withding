@@ -29,12 +29,11 @@ function EmailSignup() {
             suspense: false
         });
 
-    // 이메일 인증번호 클릭
+    // 이메일 인증 클릭
     const sendEmailHandler = useCallback(() => {
-        console.log(values.email);
-        if (errors.emaill) return;
+        if (errors.email || values.email.length === 0) return;
         requestCode();
-    }, [errors.emaill, requestCode, values.email]);
+    }, [errors.email, requestCode, values.email]);
 
     // 회원가입 버튼 클릭
     const onSubmit = useCallback((event: React.FormEvent<HTMLFormElement>) => {
