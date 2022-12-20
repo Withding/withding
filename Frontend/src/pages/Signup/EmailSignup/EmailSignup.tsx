@@ -23,16 +23,18 @@ function EmailSignup() {
     });
 
     // 이메일에 인증코드 보내기
-    const { refetch: requestCode, isSuccess: isSuccessSendMail } =
+    const { refetch: requestCode, isSuccess: isSuccessSendMail, isLoading: requestCodeIsLoading } =
         useQuery(["requestAuthCode"], () => requestAuthCode(values.email), {
             enabled: false,
+            suspense: false
         });
 
     // 이메일 인증번호 클릭
     const sendEmailHandler = useCallback(() => {
         console.log(values.email);
+        if (errors.emaill) return;
         requestCode();
-    }, [requestCode, values.email]);
+    }, [errors.emaill, requestCode, values.email]);
 
     // 회원가입 버튼 클릭
     const onSubmit = useCallback((event: React.FormEvent<HTMLFormElement>) => {
@@ -48,7 +50,8 @@ function EmailSignup() {
             isSuccessSendMail: isSuccessSendMail,
             onSendMail: sendEmailHandler,
             onSubmit: onSubmit,
-            errors: errors
+            errors: errors,
+            requestCodeIsLoading: requestCodeIsLoading
         }}>
             <EmailSignupForm />
         </EmailSignupContext.Provider>

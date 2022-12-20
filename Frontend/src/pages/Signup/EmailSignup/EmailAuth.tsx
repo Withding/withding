@@ -5,7 +5,7 @@ import Input from "../../../components/common/Input";
 import EmailSignupContext from "../../../store/EmailSignupContext";
 
 function EmailAuth() {
-    const { values, onChangeValues, isSuccessSendMail, onSendMail, errors }
+    const { values, onChangeValues, isSuccessSendMail, onSendMail, errors, requestCodeIsLoading }
         = React.useContext(EmailSignupContext);
     return (
         <div css={style} className="email-auth">
@@ -27,6 +27,7 @@ function EmailAuth() {
                     className={`email-auth-button ${isSuccessSendMail ? "non-btn" : "fill-btn"}`}
                     onClick={onSendMail}
                     value={"인증하기"}
+                    disabled={requestCodeIsLoading || isSuccessSendMail}
                 />
             </div>
             {errors.email && <p className="error">{errors.email}</p>}

@@ -4,6 +4,7 @@ import BaseProps from "../../types/BaseProps";
 
 interface ButtonProps {
     value: string;
+    disabled?: boolean;
 }
 
 function Button(props: BaseProps & ButtonProps) {
@@ -12,6 +13,7 @@ function Button(props: BaseProps & ButtonProps) {
             className={props.className}
             onClick={props.onClick}
             css={[style, props.css]}
+            disabled={props.disabled}
         >
             {props.value}
         </button>

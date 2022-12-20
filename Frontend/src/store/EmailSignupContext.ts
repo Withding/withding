@@ -19,7 +19,9 @@ const EmailSignupContext = React.createContext<EmailSignupContextProps>({
         name: false,
         password: false,
         password2: false,
-    }
+    },
+
+    requestCodeIsLoading: false,
 });
 
 export default EmailSignupContext;
