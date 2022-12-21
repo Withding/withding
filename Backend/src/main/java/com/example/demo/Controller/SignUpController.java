@@ -2,6 +2,8 @@ package com.example.demo.Controller;
 
 import com.example.demo.Config.BeanConfig;
 import com.example.demo.DTO.EmailAuth;
+import com.example.demo.DTO.IdType;
+import com.example.demo.DTO.State;
 import com.example.demo.DTO.User;
 import com.example.demo.Repository.EmailAuthRepo;
 import com.example.demo.Repository.UserRepo;
@@ -13,6 +15,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 @Controller
@@ -52,7 +56,7 @@ public class SignUpController {
 
         User user = new User();                                                                                         // UserRepo에서 이메일로 User 테이블에서 조회할 때 사용할 변수
         user.setEmail(email);
-        List<User> users = userRepo.findToEmail(user);                                                                  // User 테이블에서 해당 이메일을 조회
+        List<User> users = userRepo.findUserToEmail(user);                                                              // User 테이블에서 해당 이메일을 조회
 
         EmailAuth emailAuth = new EmailAuth();
         emailAuth.setCode(CODE);
@@ -90,13 +94,30 @@ public class SignUpController {
     }
 
 
-    @RequestMapping(value = "/user/signup", method = RequestMethod.POST)
-    public ResponseEntity<Object> singUp(@RequestBody final User request){
+    /**
+     * 이메일 발송 코드 인증을 마치고 회원을 생성
+     * @param request 회원가입 양식(email, nickName, pwd)를 담고있는 User 객체
+     * @return 정상 생성시 HttpStatus.NO_CONTENT 반환
+     */
+    @RequestMapping(value = "/user", method = RequestMethod.POST)
+    public ResponseEntity<Object> createUser(@RequestBody User request) {
+        request.setIdType(new IdType(0));
+        request.setState(new State(0));
 
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        request.setCreatedAt(dateFormat.format(new Timestamp(System.currentTimeMillis())));
 
+        EmailAuth emailAuth = new EmailAuth();                                                                          // emailAuthRepo.getEmailAuthCountToSecretKeyAndEmail()에서 사용될 객체
+        emailAuth.setEmail(request.getEmail());
+        emailAuth.setSecretKey(request.getAuthCode());
 
-
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        if ((emailAuthRepo.getEmailAuthCountToSecretKeyAndEmail(emailAuth) == 1)                                        // SecretKey와 Email이 매칭된 튜플이 존재
+                && (request.isEmail() && request.isNickName() && request.isPwd())                                       // email, nickName, pwd 셋 다 통과
+                && userRepo.save(request)) {                                                                            // User 테이블에 요청온 User 객체 저장 성공
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);                                                        // 그 외에 모든 경우(secretKey 인증 실패 or 검증식 통과 실패 or User 객체 저장 실패 등등...)
+        }
     }
 
 }

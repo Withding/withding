@@ -23,6 +23,7 @@ public class EmailAuthRepo {
     private EntityTransaction tr;
 
 
+
     /**
      * emailauth 테이블에 데이터 저장
      * @param emailAuth 저장할 EmailAuth 객체
@@ -72,4 +73,22 @@ public class EmailAuthRepo {
                 .setParameter("email", request.getEmail())
                 .getResultList();
     }
+
+
+    /**
+     * EmailAuth 테이블에서 특정 SecretKey와 특정 email이 매칭된 튜플의 갯수를 검색
+     * @param emailAuth SecretKey, email이 담겨있는 EmailAuth 객체
+     * @return 검색된 갯수를 반환
+     */
+    public Long getEmailAuthCountToSecretKeyAndEmail(final EmailAuth emailAuth){
+        return (Long) em.createQuery("SELECT count(ea.secretKey) FROM EmailAuth ea WHERE ea.email =: email AND ea.secretKey =: secretKey")
+                .setParameter("email", emailAuth.getEmail())
+                .setParameter("secretKey", emailAuth.getSecretKey())
+                .getSingleResult();
+    }
+
+
+
+
+
 }
