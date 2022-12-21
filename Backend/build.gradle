@@ -50,7 +50,10 @@ dependencies {
 	implementation group: 'org.hibernate.javax.persistence', name: 'hibernate-jpa-2.1-api', version: '1.0.0.Final'			// JPA 관련
 
 	// https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt
-	implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'					//	jwt 관련
+	implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'								//	jwt 관련
+
+
+	implementation 'org.springframework.security:spring-security-crypto:5.1.5.RELEASE'					// 단방향 암호화
 
 
 }
