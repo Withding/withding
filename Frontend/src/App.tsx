@@ -12,6 +12,7 @@ const Oauth = React.lazy(() => import("./pages/Oauth/Index"));
 import { Suspense } from "react";
 import Auth from "./components/auth/Auth";
 import { QueryClient, QueryClientProvider } from "react-query";
+import GuestRoute from "./components/common/permissionRoute/GuestRoute";
 
 
 const queryClient = new QueryClient({
@@ -41,14 +42,19 @@ function App() {
                             <Routes>
                                 <Route path="/" element={<Navigate to="/main" />} />
                                 <Route path="/main" element={<Main />} />
-                                <Route path="/signin/*" element={<Signin />} />
-                                <Route path="/signup/*" element={<Signup />} />
-                                <Route path="/oauth/*" element={<Oauth />} />
+                                <Route path="/signin/*"
+                                    element={<GuestRoute RouteComponent={Signin} />}
+                                />
+                                <Route path="/signup/*"
+                                    element={<GuestRoute RouteComponent={Signup} />}
+                                />
+                                <Route path="/oauth/*"
+                                    element={<GuestRoute RouteComponent={Oauth} />}
+                                />
                                 <Route path="/funding" element={<div>funding</div>} />
                                 <Route path="/commingsoon" element={<div>commingsoon</div>} />
                             </Routes>
                         </Suspense>
-
                     </div>
                 </div>
             </Auth >
