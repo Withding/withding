@@ -16,6 +16,11 @@ import javax.persistence.Table;
 @Table(name = "id_type")
 public class IdType {
 
+    public IdType(int code){
+        this.Code = code;
+    }
+
+
     @Id
     @Column(name = "id_type_code")
     private Integer Code;

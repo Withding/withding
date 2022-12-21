@@ -13,6 +13,10 @@ import javax.persistence.*;
 @Table(name = "funding_category")           // 펀딩 카테고리
 public class FundingCategory {
 
+    public FundingCategory(int id){
+        this.id = id;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "funding_category_id")
