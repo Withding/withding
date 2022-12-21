@@ -43,7 +43,7 @@ public class JwtService {
                 //.setSubject()                                         // 보통 username
                 .setHeader(createHeader())
                 .claim("userNum", userNum)
-                .claim("name", name)
+                .claim("name", name)                              //
                 .claim("loginTime", loginTime)
                 //.setClaims(createClaims(usernum))                     // 클레임, 토큰에 포함될 정보
                 .setExpiration(new Date(now.getTime() + expiredTime))   // 만료일

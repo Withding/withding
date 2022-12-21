@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 @NoArgsConstructor
@@ -23,6 +22,9 @@ public class EmailAuth {
     private String email;
 
     private String code;
+
+    @Column(name = "secretkey")
+    private String secretKey;
 
     @Column(name = "deadline")
     private String deadLine;

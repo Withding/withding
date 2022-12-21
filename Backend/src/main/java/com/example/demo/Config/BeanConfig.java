@@ -1,5 +1,6 @@
 package com.example.demo.Config;
 
+import com.example.demo.Repository.UserRepo;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -7,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
 import java.util.Properties;
@@ -68,5 +70,15 @@ public class BeanConfig {
         javaMailSender.setJavaMailProperties(prop);
 
         return javaMailSender;
+    }
+
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public UserRepo userRepol(){
+        return new UserRepo();
     }
 }

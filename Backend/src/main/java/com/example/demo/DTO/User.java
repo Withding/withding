@@ -21,7 +21,7 @@ public class User {
     private String accessToken;       // 카카오 로그인 API에 사용
 
     @Transient
-    private int authCode;               // 인증코드
+    private String authCode;               // 인증코드
 
     @Transient
     private Date loginTime;             // 로그인 시간
@@ -86,12 +86,12 @@ public class User {
      * 닉네임(name) 유효성 검사
      * @return 사용 가능시 true
      */
-    public boolean isName()
+    public boolean isNickName()
     {
         if (this.nickName == null) {
             return false;
         }
-        String str4 = "^[a-zA-Z가-힣0-9]$"; // 닉네임 검증식 (2~10자)
+        String str4 = "^[a-zA-Z가-힣]{1}[a-zA-Z0-9가-힣]{2,10}$"; // 닉네임 검증식 (2~10자)
 
         if (2 <= this.nickName.length() && this.nickName.length() <= 10)
         {

@@ -1,5 +1,8 @@
 package com.example.demo.Service;
 
+import com.example.demo.DTO.EmailAuth;
+import com.example.demo.DTO.User;
+import com.example.demo.Repository.EmailAuthRepo;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +12,12 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import java.util.Random;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Service
 @Data
@@ -18,6 +26,9 @@ public class MailService {
 
     @Autowired
     private JavaMailSender javaMailSender;
+
+    @Autowired
+    private EmailAuthRepo emailAuthRepo;
 
     /**
      * 회원가입 전용 이메일 발송
@@ -60,5 +71,33 @@ public class MailService {
         return code;
     }
 
+    public String checkEmailAuthCode(User request) {
+        String secretKey = null;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");                               // 패턴의 대소문자 정확히 구분해줘야됨 대소문자 차이로 값이 이상해질 수 있음
+
+        EmailAuth emailAuth = new EmailAuth();
+        emailAuth.setCode(request.getAuthCode());
+        emailAuth.setEmail(request.getEmail());
+
+
+        List<EmailAuth> emailAuths = emailAuthRepo.findEmailAuthToCodeAndEmail(emailAuth);                              // 조회
+        final Date now = new Date(System.currentTimeMillis());                                                          // 현재 시간을 Date 객체에 저장
+        Date deadLine;                                                                                                  // deadLine(만료시간)을 담을 변수
+
+        if (emailAuths.size() != 0){
+            try {
+                deadLine = dateFormat.parse(emailAuths.get(0).getDeadLine());                                           // Date 타입 변수에 만료시간 대입
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+
+            if (now.before(deadLine)){                                                                                  // now.before(deadLine) -> now가 deadLine 보다 이전(before)이다. -> ture
+                secretKey = emailAuths.get(0).getSecretKey();
+            }
+        }
+
+
+        return secretKey;
+    }
 
 }
