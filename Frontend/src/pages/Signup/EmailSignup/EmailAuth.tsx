@@ -4,6 +4,7 @@ import Button from "@/components/common/Button";
 import Input from "@/components/common/Input";
 import EmailSignupContext from "@/store/EmailSignupContext";
 import EmailInput from "./EmailInput";
+import AuthCodeInput from "./AuthCodeInput";
 
 /**
  * Timer 컴포넌트
@@ -65,37 +66,17 @@ function EmailAuth() {
                 disabled={validAuthCode}
             />
             {(isSuccessSendMail && !validAuthCode) &&
-                <React.Fragment>
-                    <div className="field">
-                        <div className="auth-wrap">
-                            <Input
-                                className="input"
-                                type="text"
-                                name="authCode"
-                                placeholder="인증번호 입력"
-                                value={values.authCode}
-                                onChange={onChangeValues}
-                                error={errors.authCode || timer === 0}
-                                maxLength={6}
-                            />
-                            <Timer
-                                timer={timer}
-                                setTimer={setTimer}
-                            />
-                        </div>
-                        <Button
-                            className={`check-auth-button ${isSuccessSendMail ? "fill-btn" : ""}`}
-                            onClick={onCheckAuthCode}
-                            disabled={requestCodeIsLoading || timer === 0 || validAuthCode}
-                            value={"확인"}
-                        />
-                    </div>
-                    {timer === 0 && <p className="error">{"인증시간이 만료되었습니다. 재인증 해주세요"}</p>}
-                    {(errors.authCode && timer !== 0) && <p className="error">{errors.authCode}</p>}
-                    <p className="auth-help-text">
-                        {"인증번호 입력해주세요"}
-                    </p>
-                </React.Fragment>
+                <AuthCodeInput
+                    value={values.authCode}
+                    onChangeValue={onChangeValues}
+                    error={errors.authCode}
+                    onCheckAuthCode={onCheckAuthCode}
+                    timer={timer}
+                    setTimer={setTimer}
+                    isSuccessSendMail={isSuccessSendMail}
+                    requestCodeIsLoading={requestCodeIsLoading}
+                    invalidAuthCode={invalidAuthCode}
+                />
             }
         </div>
     );
