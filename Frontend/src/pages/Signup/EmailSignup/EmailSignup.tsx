@@ -3,8 +3,9 @@ import EmailSignupContext from "../../../store/EmailSignupContext";
 import EmailSignupForm from "./EmailSignupForm";
 import useForm from "../../../hooks/use-form";
 import SignupValidator from "./SignupValidator";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import requestAuthCode from "@/utils/RequestApis/signup/requestAuthCode";
+import checkAuthCode from "@/utils/RequestApis/signup/checkAuthCode";
 
 /**
  * 이메일 회원가입 컴포넌트
@@ -18,6 +19,7 @@ function EmailSignup() {
             name: "",
             password: "",
             passwordConfirm: "",
+            authCode: ""
         },
         validator: SignupValidator
     });
@@ -29,11 +31,23 @@ function EmailSignup() {
             suspense: false
         });
 
+    const { mutate } = useMutation(["checkAuthCode"], () => checkAuthCode(values.email, values.authCode), {
+        useErrorBoundary: false,
+        onSuccess(data) {
+            console.log(data);
+        },
+    });
+
     // 이메일 인증 클릭
     const sendEmailHandler = useCallback(() => {
         if (errors.email || values.email.length === 0) return;
         requestCode();
     }, [errors.email, requestCode, values.email]);
+
+    const checkAuthCodeHandler = useCallback(() => {
+        if (errors.authCode || values.authCode.length === 0) return;
+        mutate();
+    }, [errors.authCode, mutate, values.authCode.length]);
 
     // 회원가입 버튼 클릭
     const onSubmit = useCallback((event: React.FormEvent<HTMLFormElement>) => {
@@ -50,7 +64,8 @@ function EmailSignup() {
             onSendMail: sendEmailHandler,
             onSubmit: onSubmit,
             errors: errors,
-            requestCodeIsLoading: requestCodeIsLoading
+            requestCodeIsLoading: requestCodeIsLoading,
+            onCheckAuthCode: checkAuthCodeHandler
         }}>
             <EmailSignupForm />
         </EmailSignupContext.Provider>
