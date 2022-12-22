@@ -1,10 +1,10 @@
 import { css } from "@emotion/react";
 import React from "react";
-import Button from "../../../components/common/Button";
 import EmailSignupContext from "../../../store/EmailSignupContext";
 import EmailAuth from "./EmailAuth";
 import Password from "./Password";
 import ValidInput from "../../../components/common/ValidInput";
+import Input from "@/components/common/Input";
 
 /**
  * 이메일 회원가입 폼 컴포넌트
@@ -34,7 +34,8 @@ function EmailSignupForm() {
                 />
             </label>
             <Password />
-            <Button
+            <Input
+                type="submit"
                 className="fill-btn submit"
                 value={"완료"}
             />

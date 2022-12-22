@@ -6,6 +6,7 @@ import SignupValidator from "./SignupValidator";
 import { useMutation, useQuery } from "react-query";
 import requestAuthCode from "@/utils/RequestApis/signup/requestAuthCode";
 import checkAuthCode from "@/utils/RequestApis/signup/checkAuthCode";
+import requestSignup from "@/utils/RequestApis/signup/requestSignup";
 
 /**
  * 이메일 회원가입 컴포넌트
@@ -23,7 +24,7 @@ function EmailSignup() {
         },
         validator: SignupValidator
     });
-
+    const [secretKey, setSecretKey] = React.useState<string>("");
     // 이메일에 인증코드 보내기
     const { refetch: requestCode, isSuccess: isSuccessSendMail, isLoading: requestCodeIsLoading } =
         useQuery(["requestAuthCode"], () => requestAuthCode(values.email), {
@@ -33,13 +34,27 @@ function EmailSignup() {
             retry: 30
         });
 
+    // 인증코드 확인
     const { mutate, isError: inValidAuthCode, isSuccess: validAuthCode }
         = useMutation(["checkAuthCode"], () => checkAuthCode(values.email, values.authCode), {
             useErrorBoundary: false,
-            onSuccess(data) {
-                console.log(data);
+            onSuccess(data: { secretKey: string }) {
+                setSecretKey(() => data.secretKey);
             },
         });
+
+    // 회원가입
+    const { mutate: signup } = useMutation(["signup"], () => requestSignup({
+        email: values.email,
+        name: values.name,
+        password: values.password,
+        secretKey
+    }), {
+        useErrorBoundary: false,
+        onSuccess: () => {
+            console.log("성공");
+        }
+    });
 
     // 이메일 인증 클릭
     const sendEmailHandler = useCallback(() => {
@@ -47,6 +62,7 @@ function EmailSignup() {
         requestCode();
     }, [errors.email, requestCode, values.email]);
 
+    // 인증코드 확인 클릭
     const checkAuthCodeHandler = useCallback(() => {
         if (errors.authCode || values.authCode.length === 0) return;
         mutate();
@@ -55,9 +71,9 @@ function EmailSignup() {
     // 회원가입 버튼 클릭
     const onSubmit = useCallback((event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        console.log("submit");
-        console.log(errors);
-    }, [errors]);
+        console.log(event.currentTarget);
+        signup();
+    }, [signup]);
 
     return (
         <EmailSignupContext.Provider value={{

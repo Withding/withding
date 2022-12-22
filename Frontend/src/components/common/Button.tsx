@@ -10,6 +10,7 @@ interface ButtonProps {
 function Button(props: BaseProps & ButtonProps) {
     return (
         <button
+            type="button"
             className={props.className}
             onClick={props.onClick}
             css={[style, props.css]}

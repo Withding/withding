@@ -37,7 +37,7 @@ function InputPassword(props: InputPasswordProps) {
                     placeholder={props.placeholder}
                     value={props.value}
                     onChange={props.onChangeValues}
-                    disabled={!props.disabled}
+                    disabled={props.disabled}
                     error={props.error}
                 />
                 {
