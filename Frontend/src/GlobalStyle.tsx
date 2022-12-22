@@ -168,6 +168,7 @@ const style = css`
         --green-50: #E0F2F1;
         --yellow: #fede03;
         --orange: #ffa100;
+        --orange-600: #FB8C00;
         --coral: #ff5268;
         --red-400: #fc2b38;
         --minus-margin-android: 0px -16px;

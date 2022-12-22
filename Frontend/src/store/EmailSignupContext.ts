@@ -22,7 +22,10 @@ const EmailSignupContext = React.createContext<EmailSignupContextProps>({
     },
 
     requestCodeIsLoading: false,
-    onCheckAuthCode: () => {} 
+    onCheckAuthCode: () => {} ,
+
+    invalidAuthCode: false,
+    validAuthCode: false,
 });
 
 export default EmailSignupContext;

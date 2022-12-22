@@ -10,6 +10,8 @@ import React from "react";
  *  @property {{[key: string]: boolean}} errors - 회원가입 입력값 에러 여부
  *  @property {boolean} requestCodeIsLoading - 이메일 인증 요청 로딩 여부
  *  @property {() => void} onCheckAuthCode - 이메일 인증 코드 확인 
+ *  @property {boolean} invalidAuthCode - 이메일 인증 코드 미유효
+ *  @property {boolean} validAuthCode - 이메일 인증 코드 유효
  */
 interface EmailSignupContextProps {
     values: {
@@ -25,6 +27,9 @@ interface EmailSignupContextProps {
     ,
     requestCodeIsLoading: boolean;
     onCheckAuthCode: () => void;
+
+    invalidAuthCode: boolean;
+    validAuthCode: boolean;
 }
 
 export default EmailSignupContextProps;

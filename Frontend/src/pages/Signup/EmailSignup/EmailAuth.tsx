@@ -1,55 +1,97 @@
 import { css } from "@emotion/react";
-import React from "react";
-import Button from "../../../components/common/Button";
-import Input from "../../../components/common/Input";
-import EmailSignupContext from "../../../store/EmailSignupContext";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import Button from "@/components/common/Button";
+import Input from "@/components/common/Input";
+import EmailSignupContext from "@/store/EmailSignupContext";
+import EmailInput from "./EmailInput";
 
+/**
+ * Timer 컴포넌트
+ * @param props 
+ * @returns 
+ */
+function Timer(props: { timer: number, setTimer: React.Dispatch<React.SetStateAction<number>> }) {
+    const { timer, setTimer } = props;
+    const secondToMinute = useCallback((milliSecond: number) => {
+        const minute = Math.floor(milliSecond / 60);
+        const second = milliSecond % 60;
+        return `${minute < 10 ? "0" + minute : minute}:${second < 10 ? "0" + second : second}`;
+    }, []);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if (timer === 0) {
+                return;
+            }
+            setTimer(timer => timer - 1);
+        }, 1000);
+        return () => clearInterval(interval);
+    }, [timer, setTimer]);
+
+    return (
+        <p className="timer">{secondToMinute(timer)}</p>
+    );
+}
+
+
+/**
+ * 이메일 인증 영역
+ * @returns 
+ */
 function EmailAuth() {
-    const { values, onChangeValues, isSuccessSendMail, onSendMail, errors, requestCodeIsLoading, onCheckAuthCode }
+    const { values, onChangeValues, isSuccessSendMail, onSendMail, errors, requestCodeIsLoading, onCheckAuthCode,
+        invalidAuthCode, validAuthCode }
         = React.useContext(EmailSignupContext);
+    const LIMIT_TIME = useMemo(() => 180, []);
+    const [timer, setTimer] = useState<number>(LIMIT_TIME);
+
+    // 이메일 인증 재전송
+    const onRetryEmailAuth = useCallback(() => {
+        onSendMail();
+        setTimer(LIMIT_TIME);
+    }, [LIMIT_TIME, onSendMail]);
+
     return (
         <div css={style} className="email-auth">
-            <div
-                className="field"
-            >
-                <label className="input label-input">
-                    이메일
-                    <Input
-                        type="email"
-                        name="email"
-                        placeholder="이메일 계정"
-                        value={values.email}
-                        onChange={onChangeValues}
-                        error={errors.email}
-                    />
-                </label>
-                <Button
-                    className={`email-auth-button ${isSuccessSendMail ? "non-btn" : "fill-btn"}`}
-                    onClick={onSendMail}
-                    value={"인증하기"}
-                    disabled={requestCodeIsLoading || isSuccessSendMail}
-                />
-            </div>
-            {errors.email && <p className="error">{errors.email}</p>}
-            {isSuccessSendMail &&
+            <EmailInput
+                value={values.email}
+                onChangeValue={onChangeValues}
+                error={errors.email}
+                onSendMail={onSendMail}
+                isSuccessSendMail={isSuccessSendMail}
+                requestCodeIsLoading={requestCodeIsLoading}
+                onRetryEmailAuth={onRetryEmailAuth}
+                timer={timer}
+                disabled={validAuthCode}
+            />
+            {(isSuccessSendMail && !validAuthCode) &&
                 <React.Fragment>
                     <div className="field">
-                        <Input
-                            className="input"
-                            type="text"
-                            name="authCode"
-                            placeholder="인증번호 입력"
-                            value={values.authCode}
-                            onChange={onChangeValues}
-                            error={errors.authCode}
-                        />
+                        <div className="auth-wrap">
+                            <Input
+                                className="input"
+                                type="text"
+                                name="authCode"
+                                placeholder="인증번호 입력"
+                                value={values.authCode}
+                                onChange={onChangeValues}
+                                error={errors.authCode || timer === 0}
+                                maxLength={6}
+                            />
+                            <Timer
+                                timer={timer}
+                                setTimer={setTimer}
+                            />
+                        </div>
                         <Button
                             className={`check-auth-button ${isSuccessSendMail ? "fill-btn" : ""}`}
                             onClick={onCheckAuthCode}
+                            disabled={requestCodeIsLoading || timer === 0 || validAuthCode}
                             value={"확인"}
                         />
                     </div>
-                    {errors.authCode && <p className="error">{"인증번호를 입력해주세요"}</p>}
+                    {timer === 0 && <p className="error">{"인증시간이 만료되었습니다. 재인증 해주세요"}</p>}
+                    {(errors.authCode && timer !== 0) && <p className="error">{errors.authCode}</p>}
                     <p className="auth-help-text">
                         {"인증번호 입력해주세요"}
                     </p>
@@ -83,11 +125,44 @@ const style = css`
         font-weight: 300;
     }
 
+    .retry-btn {
+        background-color: var(--orange);
+        color: var(--white);
+    }
+
+    .retry-btn:hover {
+        background-color: var(--orange-600);
+    }
+
     .error {
         line-height: 2;
         color: rgb(242, 85, 85);
         font-size: 0.9rem;
     }
+
+    .auth-wrap {
+        position: relative;
+        width: 100%;
+        display: inline-flex;
+        align-items: center;
+        margin-top: 0.3rem;
+        margin-right: 0.5rem;
+        input {
+            margin: 0;
+        }
+        .timer {
+            position: absolute;
+            right: 0;
+            margin-right: 0.5rem;
+            font-size: 0.8rem;
+            color: var(--coral);
+        }
+    }
+    
 `;
 
 export default EmailAuth;
+
+function useClientQuery() {
+    throw new Error("Function not implemented.");
+}

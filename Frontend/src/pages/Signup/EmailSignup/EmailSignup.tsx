@@ -28,15 +28,18 @@ function EmailSignup() {
     const { refetch: requestCode, isSuccess: isSuccessSendMail, isLoading: requestCodeIsLoading } =
         useQuery(["requestAuthCode"], () => requestAuthCode(values.email), {
             enabled: false,
-            suspense: false
+            suspense: false,
+            useErrorBoundary: false,
+            retry: 30
         });
 
-    const { mutate } = useMutation(["checkAuthCode"], () => checkAuthCode(values.email, values.authCode), {
-        useErrorBoundary: false,
-        onSuccess(data) {
-            console.log(data);
-        },
-    });
+    const { mutate, isError: inValidAuthCode, isSuccess: validAuthCode }
+        = useMutation(["checkAuthCode"], () => checkAuthCode(values.email, values.authCode), {
+            useErrorBoundary: false,
+            onSuccess(data) {
+                console.log(data);
+            },
+        });
 
     // 이메일 인증 클릭
     const sendEmailHandler = useCallback(() => {
@@ -65,7 +68,9 @@ function EmailSignup() {
             onSubmit: onSubmit,
             errors: errors,
             requestCodeIsLoading: requestCodeIsLoading,
-            onCheckAuthCode: checkAuthCodeHandler
+            onCheckAuthCode: checkAuthCodeHandler,
+            invalidAuthCode: inValidAuthCode,
+            validAuthCode: validAuthCode
         }}>
             <EmailSignupForm />
         </EmailSignupContext.Provider>

@@ -7,6 +7,7 @@ interface InputProps {
     onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
     onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
     disabled?: boolean;
+    maxLength?: number;
 }
 
 export default InputProps;

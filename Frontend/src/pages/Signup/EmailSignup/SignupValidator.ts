@@ -10,8 +10,13 @@ interface SignupValidatorProps {
     setErrors: (e: any) => void;
 }
 
-function isEmail(email: string) {
-    return /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email);
+function authCodeIsNumber(value: string) {
+    const reg = /^[0-9]*$/;
+    return reg.test(value);
+}
+
+function authCodeIsShort(value: string) {
+    return value.length !== 6;
 }
 
 function SignupValidator({ name, value, errors, setErrors }: SignupValidatorProps){
@@ -114,8 +119,30 @@ function SignupValidator({ name, value, errors, setErrors }: SignupValidatorProp
                 password: false
             });
         }
+        break;
     }
+    case "authCode": {
+        if(!authCodeIsNumber(value)) {
+            setErrors({
+                ...errors,
+                authCode: "숫자만 입력해주세요"
+            });
+        }
+        else if(authCodeIsShort(value)) {
+            setErrors({
+                ...errors,
+                authCode: "인증번호는 6자리입니다"
+            });
+        }
+        else {
+            setErrors({
+                ...errors,
+                authCode: false
+            });
+        }
+        break;
     }
+    } // end switch case
 
 }
 

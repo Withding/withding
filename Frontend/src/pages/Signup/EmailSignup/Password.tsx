@@ -14,6 +14,7 @@ interface InputPasswordProps {
     valid: boolean;
     placeholder: string;
     className: string;
+    disabled: boolean;
 }
 
 /**
@@ -37,7 +38,7 @@ function InputPassword(props: InputPasswordProps) {
                         placeholder: props.placeholder,
                         value: props.value,
                         onChange: props.onChangeValues,
-
+                        disabled: props.disabled,
                     }}
                     valid={props.valid}
                     msg={props.msg}
@@ -65,7 +66,7 @@ function InputPassword(props: InputPasswordProps) {
  * @returns 
  */
 function Password() {
-    const { values, onChangeValues, errors } = React.useContext(EmailSignupContext);
+    const { values, onChangeValues, errors, validAuthCode } = React.useContext(EmailSignupContext);
     return (
         <div>
             <InputPassword
@@ -77,6 +78,7 @@ function Password() {
                 msg={errors.password}
                 valid={!errors.password}
                 placeholder={"비밀번호 입력"}
+                disabled={!validAuthCode}
             />
             <InputPassword
                 className={"password-input password-reinput"}
@@ -87,6 +89,7 @@ function Password() {
                 msg={"비밀번호를 입력해주세요"}
                 valid={!errors.password2}
                 placeholder={"비밀번호 입력"}
+                disabled={!validAuthCode}
             />
         </div>
     );
