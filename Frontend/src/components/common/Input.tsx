@@ -22,8 +22,12 @@ const InputTag = React.memo(styled.input<{ error: boolean }>`
     border-radius: 2px;
     width: 100%;
     border: 1px solid var(--grey-200);
-    &:hover {
+    &[type="text"]:hover, &[type="password"]:hover, &[type="email"]:hover {
         border: ${props => props.error ? "1px solid #f66" : "1px solid var(--grey-500)"};
+    }
+
+    &[type="submit"]:hover {
+        cursor: pointer;
     }
 
     &:focus {
