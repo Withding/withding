@@ -2,7 +2,7 @@ import React, { useCallback, useState } from "react";
 import EmailSignupContext from "../../../store/EmailSignupContext";
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 import { css } from "@emotion/react";
-import ValidInput from "../../../components/common/ValidInput";
+import Input from "@/components/common/Input";
 
 
 interface InputPasswordProps {
@@ -11,7 +11,7 @@ interface InputPasswordProps {
     name: string;
     label: string;
     msg: string | boolean;
-    valid: boolean;
+    error: boolean;
     placeholder: string;
     className: string;
     disabled: boolean;
@@ -28,20 +28,17 @@ function InputPassword(props: InputPasswordProps) {
         setIsPasswordVisible((prev) => !prev);
     }, []);
     return (
-        <div css={style}>
-            <label className={props.className}>
-                {props.label}
-                <ValidInput
-                    input={{
-                        type: isPasswordVisible ? "text" : "password",
-                        name: props.name,
-                        placeholder: props.placeholder,
-                        value: props.value,
-                        onChange: props.onChangeValues,
-                        disabled: props.disabled,
-                    }}
-                    valid={props.valid}
-                    msg={props.msg}
+        <label className={props.className} css={style}>
+            <p>{props.label}</p>
+            <div className="password-input">
+                <Input
+                    type={isPasswordVisible ? "text" : "password"}
+                    name={props.name}
+                    placeholder={props.placeholder}
+                    value={props.value}
+                    onChange={props.onChangeValues}
+                    disabled={!props.disabled}
+                    error={props.error}
                 />
                 {
                     !isPasswordVisible
@@ -56,9 +53,9 @@ function InputPassword(props: InputPasswordProps) {
                             onClick={visiblePasswordHandler}
                         />
                 }
-            </label>
-
-        </div>
+            </div>
+            {props.error && <p className="error">{props.msg}</p>}
+        </label>
     );
 }
 /**
@@ -76,18 +73,20 @@ function Password() {
                 label={"비밀번호"}
                 name={"password"}
                 msg={errors.password}
-                valid={!errors.password}
+                error={errors.password}
                 placeholder={"비밀번호 입력"}
                 disabled={!validAuthCode}
             />
             <InputPassword
                 className={"password-input password-reinput"}
-                value={values.password2}
+                value={values.passwordConfirm}
                 onChangeValues={onChangeValues}
                 label={""}
-                name={"password2"}
-                msg={"비밀번호를 입력해주세요"}
-                valid={!errors.password2}
+                name={"passwordConfirm"}
+                msg={"비밀번호가 일치하지 않습니다."}
+                error={
+                    values.passwordConfirm.length > 0 && values.password !== values.passwordConfirm
+                }
                 placeholder={"비밀번호 입력"}
                 disabled={!validAuthCode}
             />
@@ -96,16 +95,29 @@ function Password() {
 }
 
 const style = css`
-    position:relative;
-    .password-icon {
-        cursor: pointer;
-        position: absolute;
-        right: 0;
-        bottom: 0;
-        margin-bottom: 1rem;
-        margin-right: 1rem;
-        font-size: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    .error {
+        line-height: 2;
+        color: rgb(242, 85, 85);
+        font-size: 0.9rem;
     }
+    .password-input {
+        position: relative;
+        width: 100%;
+        display: inline-flex;
+        align-items: center;
+        .password-icon {
+            cursor: pointer;
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            margin-bottom: 1rem;
+            margin-right: 1rem;
+            font-size: 1.2rem;
+        }
+    }
+    
 `;
 
 export default Password;

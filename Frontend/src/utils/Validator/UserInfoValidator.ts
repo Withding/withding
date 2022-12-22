@@ -35,7 +35,11 @@ const UserInfoValidator = {
     },
     isName: (name: string) => {
         return /^[0-9a-zA-Z가-힣]{2,10}$/i.test(name);
-    }   
+    },
+
+    isMatchPassword : (password: string, passwordCheck: string) => {
+        return password === passwordCheck;
+    }
 };
 
 export default UserInfoValidator;

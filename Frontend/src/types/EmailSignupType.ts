@@ -1,9 +1,8 @@
 interface EmailSignupType{
-    email: string;
-    authCode: string;
+    email: string
     name: string;
     password: string;
-    password2: string;
+    secretKey: string;
 }
 
 export default EmailSignupType;
