@@ -143,7 +143,3 @@ const style = css`
 `;
 
 export default EmailAuth;
-
-function useClientQuery() {
-    throw new Error("Function not implemented.");
-}
