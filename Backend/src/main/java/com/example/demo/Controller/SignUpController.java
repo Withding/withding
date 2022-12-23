@@ -2,10 +2,7 @@ package com.example.demo.Controller;
 
 import com.example.demo.Config.AES256;
 import com.example.demo.Config.BeanConfig;
-import com.example.demo.DTO.EmailAuth;
-import com.example.demo.DTO.IdType;
-import com.example.demo.DTO.State;
-import com.example.demo.DTO.User;
+import com.example.demo.DTO.*;
 import com.example.demo.Repository.EmailAuthRepo;
 import com.example.demo.Repository.UserRepo;
 import com.example.demo.Service.MailService;
@@ -70,7 +67,7 @@ public class SignUpController {
         user.setEmail(email);                                                                                           // 이메일 검증식을 위해 다시 복호화한 이메일로 바꿔줘야됨
 
         EmailAuth emailAuth = new EmailAuth();
-        emailAuth.setCode(CODE);
+        emailAuth.setAuthCode(CODE);
         emailAuth.setSecretKey(secretKey);
         emailAuth.setEmail(encryptEmail);
 
@@ -90,17 +87,22 @@ public class SignUpController {
 
     /**
      * 회원가입 전용 이메일 코드 확인
-     * @param request User객체의 authCode, email에 값이 담겨져 있음
+     * @param signUpRequest SignUpRequest 객체 authCode, email에 값이 담겨져 있음
      * @return 인증 완료시 HttpStatus와 secretKey 함께 반환
      */
     @RequestMapping(value = "/user/auth/check", method = RequestMethod.POST)
-    public ResponseEntity<Object> checkEmailAuthCode(@RequestBody final User request) {
+    public ResponseEntity<Object> checkEmailAuthCode(@RequestBody final SignUpRequest signUpRequest) {
 
         EmailAuth emailAuth = new EmailAuth();
-        emailAuth.setSecretKey(mailService.checkEmailAuthCode(request));
+        emailAuth.setEmail(signUpRequest.getEmail());
+        emailAuth.setAuthCode(signUpRequest.getAuthCode());
+        emailAuth.setSecretKey(mailService.checkEmailAuthCode(emailAuth));
+
         if (emailAuth.getSecretKey() == null){
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }else {
+            emailAuth.setEmail(null);
+            emailAuth.setAuthCode(null);
             return new ResponseEntity<>(emailAuth, HttpStatus.OK);
         }
     }
@@ -112,7 +114,7 @@ public class SignUpController {
      * @return 정상 생성시 HttpStatus.NO_CONTENT 반환
      */
     @RequestMapping(value = "/user", method = RequestMethod.POST)
-    public ResponseEntity<Object> createUser(@RequestBody User request) {
+    public ResponseEntity<Object> createUser(@RequestBody SignUpRequest request) {
         String encryptEmail = "";
         try {
             encryptEmail = aes256.encrypt(request.getEmail());                                                          // User 객체의 email 양방향 암호화
@@ -121,24 +123,26 @@ public class SignUpController {
         }
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-        EmailAuth emailAuth = new EmailAuth();                                                                          // emailAuthRepo.getEmailAuthCountToSecretKeyAndEmail()에서 사용될 객체
-        emailAuth.setSecretKey(request.getAuthCode());
+        EmailAuth emailAuth = new EmailAuth();
         emailAuth.setEmail(encryptEmail);
+        emailAuth.setSecretKey(request.getSecretKey());
 
         User tempUser = new User();                                                                                     // 검증식을 위해 사용될 User 객체
         tempUser.setEmail(request.getEmail());
         tempUser.setNickName(request.getNickName());
         tempUser.setPassword(request.getPassword());
 
-        request.setIdType(new IdType(0));
-        request.setState(new State(0));
-        request.setPassword(bCryptPasswordEncoder.encode(request.getPassword()));                                                 // User 객체의 pwd 단방향 암호화
-        request.setEmail(encryptEmail);
-        request.setCreatedAt(dateFormat.format(new Timestamp(System.currentTimeMillis())));
+        User user = new User();
+        user.setIdType(new IdType(0));
+        user.setState(new State(0));
+        user.setPassword(bCryptPasswordEncoder.encode(request.getPassword()));                                          // User 객체의 pwd 단방향 암호화
+        user.setEmail(encryptEmail);
+        user.setCreatedAt(dateFormat.format(new Timestamp(System.currentTimeMillis())));
+        user.setNickName(request.getNickName());
 
-        if ((emailAuthRepo.getEmailAuthCountToSecretKeyAndEmail(emailAuth) == 1)                                        // SecretKey와 Email이 매칭된 튜플이 존재
-                && (tempUser.isEmail() && tempUser.isNickName() && tempUser.isPwd())                                       // email, nickName, pwd 셋 다 통과
-                && userRepo.save(request)) {                                                                            // User 테이블에 요청온 User 객체 저장 성공
+        if (    (emailAuthRepo.getEmailAuthCountToSecretKeyAndEmail(emailAuth) == 1)                                        // SecretKey와 Email이 매칭된 튜플이 존재
+                && (tempUser.isEmail() && tempUser.isNickName() && tempUser.isPwd())                                    // email, nickName, pwd 셋 다 통과
+                && userRepo.save(user)) {                                                                               // User 테이블에 요청온 User 객체 저장 성공
             emailAuthRepo.deleteEmailAuthToSecretKeyAndEmail(emailAuth);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {

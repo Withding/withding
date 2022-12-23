@@ -21,7 +21,8 @@ public class EmailAuth {
 
     private String email;
 
-    private String code;
+    @Column(name = "code")
+    private String authCode;
 
     @Column(name = "secretkey")
     private String secretKey;

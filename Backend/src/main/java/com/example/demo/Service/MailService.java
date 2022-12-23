@@ -17,7 +17,6 @@ import javax.mail.internet.MimeMessage;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -67,7 +66,7 @@ public class MailService {
      * @param digit 자릿수
      * @return String 타입의 숫자
      */
-    public String getEmailAuthCode(int digit){
+    public String getEmailAuthCode(final int digit){
         char[] strs = {'0','1','2','3','4','5','6','7','8','9'};
         String code = "";
         // Math.random() * ( 최대값 - 최소값 )  ) + 최소값
@@ -80,17 +79,15 @@ public class MailService {
 
     /**
      * 이메일 인증 코드 확인
-     * @param request authCode를 담고있는 User 객체
+     * @param emailAuth email, authCode를 담고있는 EmailAuth 객체
      * @return 정상 처리시 sectetKey 반환, 비정상상시 null 반환
      */
-    public String checkEmailAuthCode(User request) {
+    public String checkEmailAuthCode(final EmailAuth emailAuth) {
         String secretKey = null;
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");                               // 패턴의 대소문자 정확히 구분해줘야됨 대소문자 차이로 값이 이상해질 수 있음
 
-        EmailAuth emailAuth = new EmailAuth();
-        emailAuth.setCode(request.getAuthCode());
         try{
-            emailAuth.setEmail(aes256.encrypt(request.getEmail()));
+            emailAuth.setEmail(aes256.encrypt(emailAuth.getEmail()));
         } catch (Exception e) {
             e.printStackTrace();
         }
