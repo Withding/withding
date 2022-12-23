@@ -1,5 +1,6 @@
 package com.example.demo.Controller;
 
+import com.example.demo.Config.AES256;
 import com.example.demo.Config.BeanConfig;
 import com.example.demo.DTO.EmailAuth;
 import com.example.demo.DTO.IdType;
@@ -36,11 +37,13 @@ public class SignUpController {
     private EmailAuthRepo emailAuthRepo;
 
     @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private BCryptPasswordEncoder bCryptPasswordEncoder;                                                                // 단방향 암호화
 
     @Autowired
     private UserRepo userRepo;
 
+    @Autowired
+    private AES256 aes256;                                                                                              // 양방향 암호화
 
 
     /**
@@ -50,19 +53,26 @@ public class SignUpController {
      */
     @RequestMapping(value = "/user/auth/email", method = RequestMethod.GET)
     public ResponseEntity<Object> getEmailAuth(@RequestParam final String email){
+        String encryptEmail = "";
+        try {
+            encryptEmail = aes256.encrypt(email);                                                                       // 이메일 양방향 암호화
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
         final String CODE = mailService.getEmailAuthCode(DIGIT);                                                        // 이메일 인증 코드 생성
         final String secretKey =
                 bCryptPasswordEncoder.encode(email + "music_meet" + beanConfig.getJwtKey());                // (이메일 + "music_meet" + jwt 토큰 값) + 단방향 암호화
 
         User user = new User();                                                                                         // UserRepo에서 이메일로 User 테이블에서 조회할 때 사용할 변수
-        user.setEmail(email);
+        user.setEmail(encryptEmail);
         List<User> users = userRepo.findUserToEmail(user);                                                              // User 테이블에서 해당 이메일을 조회
+        user.setEmail(email);                                                                                           // 이메일 검증식을 위해 다시 복호화한 이메일로 바꿔줘야됨
 
         EmailAuth emailAuth = new EmailAuth();
         emailAuth.setCode(CODE);
-        emailAuth.setEmail(email);
         emailAuth.setSecretKey(secretKey);
-
+        emailAuth.setEmail(encryptEmail);
 
         if (user.isEmail()                                                                                              // email 검증식 통과
                 && mailService.sendSignUpCode(email, CODE)                                                              // && 메일 전송 성공
@@ -101,19 +111,33 @@ public class SignUpController {
      */
     @RequestMapping(value = "/user", method = RequestMethod.POST)
     public ResponseEntity<Object> createUser(@RequestBody User request) {
-        request.setIdType(new IdType(0));
-        request.setState(new State(0));
-
+        String encryptEmail = "";
+        try {
+            encryptEmail = aes256.encrypt(request.getEmail());                                                          // User 객체의 email 양방향 암호화
+        } catch (Exception e){
+            e.printStackTrace();
+        }
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        request.setCreatedAt(dateFormat.format(new Timestamp(System.currentTimeMillis())));
 
         EmailAuth emailAuth = new EmailAuth();                                                                          // emailAuthRepo.getEmailAuthCountToSecretKeyAndEmail()에서 사용될 객체
-        emailAuth.setEmail(request.getEmail());
         emailAuth.setSecretKey(request.getAuthCode());
+        emailAuth.setEmail(encryptEmail);
+
+        User tempUser = new User();                                                                                     // 검증식을 위해 사용될 User 객체
+        tempUser.setEmail(request.getEmail());
+        tempUser.setNickName(request.getNickName());
+        tempUser.setPwd(request.getPwd());
+
+        request.setIdType(new IdType(0));
+        request.setState(new State(0));
+        request.setPwd(bCryptPasswordEncoder.encode(request.getPwd()));                                                 // User 객체의 pwd 단방향 암호화
+        request.setEmail(encryptEmail);
+        request.setCreatedAt(dateFormat.format(new Timestamp(System.currentTimeMillis())));
 
         if ((emailAuthRepo.getEmailAuthCountToSecretKeyAndEmail(emailAuth) == 1)                                        // SecretKey와 Email이 매칭된 튜플이 존재
-                && (request.isEmail() && request.isNickName() && request.isPwd())                                       // email, nickName, pwd 셋 다 통과
+                && (tempUser.isEmail() && tempUser.isNickName() && tempUser.isPwd())                                       // email, nickName, pwd 셋 다 통과
                 && userRepo.save(request)) {                                                                            // User 테이블에 요청온 User 객체 저장 성공
+            emailAuthRepo.deleteEmailAuthToSecretKeyAndEmail(emailAuth);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);                                                        // 그 외에 모든 경우(secretKey 인증 실패 or 검증식 통과 실패 or User 객체 저장 실패 등등...)

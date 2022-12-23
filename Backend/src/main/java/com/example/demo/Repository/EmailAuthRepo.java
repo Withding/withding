@@ -88,7 +88,27 @@ public class EmailAuthRepo {
     }
 
 
-
+    /**
+     * 특정 secretKey와 특정 email이 매칭되는 튜플을 삭제 (업데이트, 딜리트 문은 .executeUpdate()로 마무리 해야된다.)
+     * @param emailAuth secretKey와 email을 담고있는 EmailAuth 객체
+     * @return 정상 처리시 true 반환
+     */
+    public boolean deleteEmailAuthToSecretKeyAndEmail(final EmailAuth emailAuth){
+        boolean result = false;
+        try{
+            tr.begin();
+            em.createQuery("DELETE FROM EmailAuth ea WHERE ea.secretKey = : secretKey AND ea.email =: email")   // 업데이트, 딜리트 문은 .executeUpdate()로 마무리 해야된다.
+                    .setParameter("secretKey", emailAuth.getSecretKey())
+                    .setParameter("email", emailAuth.getEmail())
+                    .executeUpdate();
+            tr.commit();
+            result = true;
+        }catch (Exception e){
+            e.printStackTrace();
+            tr.rollback();
+        }
+        return result;
+    }
 
 
 }

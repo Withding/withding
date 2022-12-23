@@ -31,29 +31,28 @@ dependencies {
 	implementation group: 'commons-io', name: 'commons-io', version: '2.11.0'
 
 	// https://mvnrepository.com/artifact/org.springframework/spring-context
-	implementation group: 'org.springframework', name: 'spring-context', version: '5.3.18'				// 자바 메일에서 사용
+	implementation group: 'org.springframework', name: 'spring-context', version: '5.3.18'								// 자바 메일에서 사용
 
 	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-mail
-	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '1.2.0.RELEASE'
-	// 자바 메일 발송
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '1.2.0.RELEASE'		// 자바 메일 발송
 
 	// https://mvnrepository.com/artifact/com.google.code.gson/gson
-	implementation 'com.google.code.gson:gson:2.10'														// GSON
+	implementation 'com.google.code.gson:gson:2.10'																		// GSON
 
 	// https://mvnrepository.com/artifact/org.hibernate/hibernate-core
-	implementation group: 'org.hibernate', name: 'hibernate-core', version: '5.6.10.Final'				// JPA 관련
+	implementation group: 'org.hibernate', name: 'hibernate-core', version: '5.6.10.Final'								// JPA 관련
 
 	// https://mvnrepository.com/artifact/org.hibernate/hibernate-entitymanager
-	implementation group: 'org.hibernate', name: 'hibernate-entitymanager', version: '5.6.10.Final'		// JPA 관련
+	implementation group: 'org.hibernate', name: 'hibernate-entitymanager', version: '5.6.10.Final'						// JPA 관련
 
 	// https://mvnrepository.com/artifact/org.hibernate.javax.persistence/hibernate-jpa-2.1-api
-	implementation group: 'org.hibernate.javax.persistence', name: 'hibernate-jpa-2.1-api', version: '1.0.0.Final'			// JPA 관련
+	implementation group: 'org.hibernate.javax.persistence', name: 'hibernate-jpa-2.1-api', version: '1.0.0.Final'		// JPA 관련
 
 	// https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt
-	implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'								//	jwt 관련
+	implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'												//	jwt 관련
 
+	implementation 'org.springframework.security:spring-security-crypto:5.1.5.RELEASE'									// 단방향 암호화
 
-	implementation 'org.springframework.security:spring-security-crypto:5.1.5.RELEASE'					// 단방향 암호화
 
 
 }

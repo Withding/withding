@@ -82,6 +82,7 @@ public class User {
         }
     }
 
+
     /**
      * 닉네임(name) 유효성 검사
      * @return 사용 가능시 true
@@ -100,6 +101,7 @@ public class User {
         else
             return false;
     }
+
 
     /**
      * 비밀번호 유효성 검사

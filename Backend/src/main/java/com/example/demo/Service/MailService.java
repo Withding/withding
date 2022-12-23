@@ -1,5 +1,6 @@
 package com.example.demo.Service;
 
+import com.example.demo.Config.AES256;
 import com.example.demo.DTO.EmailAuth;
 import com.example.demo.DTO.User;
 import com.example.demo.Repository.EmailAuthRepo;
@@ -29,6 +30,9 @@ public class MailService {
 
     @Autowired
     private EmailAuthRepo emailAuthRepo;
+
+    @Autowired
+    private AES256 aes256;
 
     /**
      * 회원가입 전용 이메일 발송
@@ -77,8 +81,11 @@ public class MailService {
 
         EmailAuth emailAuth = new EmailAuth();
         emailAuth.setCode(request.getAuthCode());
-        emailAuth.setEmail(request.getEmail());
-
+        try{
+            emailAuth.setEmail(aes256.encrypt(request.getEmail()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         List<EmailAuth> emailAuths = emailAuthRepo.findEmailAuthToCodeAndEmail(emailAuth);                              // 조회
         final Date now = new Date(System.currentTimeMillis());                                                          // 현재 시간을 Date 객체에 저장
@@ -95,8 +102,6 @@ public class MailService {
                 secretKey = emailAuths.get(0).getSecretKey();
             }
         }
-
-
         return secretKey;
     }
 
