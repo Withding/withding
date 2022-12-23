@@ -21,9 +21,6 @@ public class User {
     private String accessToken;       // 카카오 로그인 API에 사용
 
     @Transient
-    private String authCode;               // 인증코드
-
-    @Transient
     private Date loginTime;             // 로그인 시간
 
 
@@ -37,6 +34,7 @@ public class User {
     @JoinColumn(name = "id_type_code")
     private IdType idType;                 // 카카오, 네이버, 구글 구분
 
+    @Column(name = "pwd")
     private String password;                 // 비밀번호
 
     @Column(name = "user")

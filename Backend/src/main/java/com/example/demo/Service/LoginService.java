@@ -5,7 +5,6 @@ import com.example.demo.DTO.*;
 
 import com.example.demo.Gson.Gson;
 import lombok.Data;
-import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;

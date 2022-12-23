@@ -1,10 +1,7 @@
 package com.example.demo.Repository;
 
 import com.example.demo.DTO.EmailAuth;
-import com.example.demo.DTO.User;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -68,8 +65,8 @@ public class EmailAuthRepo {
      * @return List<EmailAuth> 타입
      */
     public List<EmailAuth> findEmailAuthToCodeAndEmail(EmailAuth request) {
-        return em.createQuery("SELECT ea From EmailAuth ea WHERE ea.code =: code AND ea.email =: email")
-                .setParameter("code", request.getCode())
+        return em.createQuery("SELECT ea From EmailAuth ea WHERE ea.authCode =: code AND ea.email =: email")
+                .setParameter("code", request.getAuthCode())
                 .setParameter("email", request.getEmail())
                 .getResultList();
     }
@@ -111,6 +108,10 @@ public class EmailAuthRepo {
     }
 
 
+    /**
+     * deadLine이 현재시간 - 25분보다 작은 튜플들을 삭제
+     * @param time 현새시간 - 25분
+     */
     public void deleteEmailAuthToDeadLine(String time){
         try{
             tr.begin();
