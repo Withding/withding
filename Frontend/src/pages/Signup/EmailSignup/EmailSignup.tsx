@@ -7,6 +7,7 @@ import { useMutation, useQuery } from "react-query";
 import requestAuthCode from "@/utils/RequestApis/signup/requestAuthCode";
 import checkAuthCode from "@/utils/RequestApis/signup/checkAuthCode";
 import requestSignup from "@/utils/RequestApis/signup/requestSignup";
+import { useNavigate } from "react-router-dom";
 
 /**
  * 이메일 회원가입 컴포넌트
@@ -14,6 +15,7 @@ import requestSignup from "@/utils/RequestApis/signup/requestSignup";
  */
 function EmailSignup() {
     // const [isSuccessSendMail, setIsSuccessSendMail] = useState<boolean>(false); // 이메일에 인증코드 전송여부
+    const navigator = useNavigate();
     const { values, onChangeValues, errors } = useForm({
         initValues: {
             email: "",
@@ -52,7 +54,7 @@ function EmailSignup() {
     }), {
         useErrorBoundary: false,
         onSuccess: () => {
-            console.log("성공");
+            navigator("/signup/success");
         }
     });
 
