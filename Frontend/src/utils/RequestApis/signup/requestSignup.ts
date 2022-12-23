@@ -15,7 +15,7 @@ function requestSignup(user: EmailSignupType): Promise<AxiosResponse> {
         url: `/user`,
         data: {
             email: user.email,
-            name: user.name,
+            nickName: user.name,
             password: user.password,
             secretKey: user.secretKey
         }
