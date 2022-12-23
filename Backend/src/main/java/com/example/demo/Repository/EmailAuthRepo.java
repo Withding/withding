@@ -111,6 +111,10 @@ public class EmailAuthRepo {
     }
 
 
+    /**
+     * deadLine이 현재시간 - 25분보다 작은 튜플들을 삭제
+     * @param time 현새시간 - 25분
+     */
     public void deleteEmailAuthToDeadLine(String time){
         try{
             tr.begin();
