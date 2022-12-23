@@ -37,7 +37,7 @@ public class User {
     @JoinColumn(name = "id_type_code")
     private IdType idType;                 // 카카오, 네이버, 구글 구분
 
-    private String pwd;                 // 비밀번호
+    private String password;                 // 비밀번호
 
     @Column(name = "user")
     private String nickName;                // 닉네임
@@ -109,10 +109,10 @@ public class User {
      */
     public boolean isPwd()
     {
-        if (this.pwd == null)
+        if (this.password == null)
             return false;
         String str2 = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*\\W).{8,25}$"; // 비밀번호(8~25자)
-        boolean res2 = Pattern.matches(str2, this.pwd);
+        boolean res2 = Pattern.matches(str2, this.password);
         return res2;
     }
 

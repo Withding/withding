@@ -74,7 +74,7 @@ public class SignUpController {
         emailAuth.setSecretKey(secretKey);
         emailAuth.setEmail(encryptEmail);
 
-        if (    user.isEmail()                                                                                              // email 검증식 통과
+        if (    user.isEmail()                                                                                          // email 검증식 통과
                 && mailService.sendSignUpCode(email, CODE)                                                              // && 메일 전송 성공
                 && (users.size() == 0)                                                                                  // && User 테이블에도 해당 이메일이 없음 (회원가입한 적 없음)
                 && (emailAuthRepo.getEmailAuthCountToEmail(emailAuth) < MAX_REQUEST))                                   // && EmailAuth 테이블에 해당 이메일로 6번 이상 요청왔을경우 막아버림
@@ -128,11 +128,11 @@ public class SignUpController {
         User tempUser = new User();                                                                                     // 검증식을 위해 사용될 User 객체
         tempUser.setEmail(request.getEmail());
         tempUser.setNickName(request.getNickName());
-        tempUser.setPwd(request.getPwd());
+        tempUser.setPassword(request.getPassword());
 
         request.setIdType(new IdType(0));
         request.setState(new State(0));
-        request.setPwd(bCryptPasswordEncoder.encode(request.getPwd()));                                                 // User 객체의 pwd 단방향 암호화
+        request.setPassword(bCryptPasswordEncoder.encode(request.getPassword()));                                                 // User 객체의 pwd 단방향 암호화
         request.setEmail(encryptEmail);
         request.setCreatedAt(dateFormat.format(new Timestamp(System.currentTimeMillis())));
 
