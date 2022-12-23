@@ -96,11 +96,12 @@ public class SignUpController {
     @RequestMapping(value = "/user/auth/check", method = RequestMethod.POST)
     public ResponseEntity<Object> checkEmailAuthCode(@RequestBody final User request) {
 
-        String secretKey = mailService.checkEmailAuthCode(request);
-        if (secretKey == null){
+        EmailAuth emailAuth = new EmailAuth();
+        emailAuth.setSecretKey(mailService.checkEmailAuthCode(request));
+        if (emailAuth.getSecretKey() == null){
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }else {
-            return new ResponseEntity<>(secretKey, HttpStatus.OK);
+            return new ResponseEntity<>(emailAuth, HttpStatus.OK);
         }
     }
 
