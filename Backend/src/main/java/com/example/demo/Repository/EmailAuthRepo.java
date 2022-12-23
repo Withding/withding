@@ -111,4 +111,17 @@ public class EmailAuthRepo {
     }
 
 
+    public void deleteEmailAuthToDeadLine(String time){
+        try{
+            tr.begin();
+            em.createQuery("DELETE FROM EmailAuth ea WHERE ea.deadLine <: now")
+                    .setParameter("now", time)
+                    .executeUpdate();
+            tr.commit();
+        } catch (Exception e){
+            tr.rollback();
+        }
+
+
+    }
 }

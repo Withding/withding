@@ -25,7 +25,7 @@ import java.util.List;
 public class SignUpController {
 
     private static final int DIGIT = 6;                                                                                 // 이메일 인증 코드 자릿수
-    private static final int MAX_REQUEST = 6;                                                                           // 이메일 인증 코드 요청 최대 횟수(같은 이메일로 6번 이상 요청 불가)
+    private static final int MAX_REQUEST = 5;                                                                           // 이메일 인증 코드 요청 최대 횟수(같은 이메일로 6번 이상 요청 불가)
 
     @Autowired
     private MailService mailService;
@@ -74,7 +74,7 @@ public class SignUpController {
         emailAuth.setSecretKey(secretKey);
         emailAuth.setEmail(encryptEmail);
 
-        if (user.isEmail()                                                                                              // email 검증식 통과
+        if (    user.isEmail()                                                                                              // email 검증식 통과
                 && mailService.sendSignUpCode(email, CODE)                                                              // && 메일 전송 성공
                 && (users.size() == 0)                                                                                  // && User 테이블에도 해당 이메일이 없음 (회원가입한 적 없음)
                 && (emailAuthRepo.getEmailAuthCountToEmail(emailAuth) < MAX_REQUEST))                                   // && EmailAuth 테이블에 해당 이메일로 6번 이상 요청왔을경우 막아버림
@@ -82,6 +82,7 @@ public class SignUpController {
             emailAuthRepo.save(emailAuth);                                                                              // emailauth 테이블에 이메일, 코드 저장
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }else {
+
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }

@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
@@ -33,6 +34,7 @@ public class MailService {
 
     @Autowired
     private AES256 aes256;
+
 
     /**
      * 회원가입 전용 이메일 발송
@@ -75,6 +77,12 @@ public class MailService {
         return code;
     }
 
+
+    /**
+     * 이메일 인증 코드 확인
+     * @param request authCode를 담고있는 User 객체
+     * @return 정상 처리시 sectetKey 반환, 비정상상시 null 반환
+     */
     public String checkEmailAuthCode(User request) {
         String secretKey = null;
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");                               // 패턴의 대소문자 정확히 구분해줘야됨 대소문자 차이로 값이 이상해질 수 있음
@@ -105,4 +113,13 @@ public class MailService {
         return secretKey;
     }
 
+
+    /**
+     * 30분에 한번씩 EmailAuth 테이블을 지우는 함수, deadLine 값이 현재시간 - 30분 보다 작으면 삭제
+     */
+    @Scheduled(fixedRate = 1000 * 60 * 30)                                                                              // 30분에 한 번씩 실행
+    public void scheduler() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        emailAuthRepo.deleteEmailAuthToDeadLine(dateFormat.format(new Timestamp(System.currentTimeMillis() - (1000 * 60 * 25)))); // 현재시간 - 25분 이전의 deadLine에 해당하는 튜플들 모두 삭제
+    }
 }
