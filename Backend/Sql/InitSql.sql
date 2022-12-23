@@ -49,7 +49,7 @@ CREATE TABLE `user` (
 	`vote_list`	VARCHAR(100) NULL DEFAULT '[]',
 	`state_code`	TINYINT(1) NOT NULL
 );
-
+alter table user modify  pwd VARCHAR(100);
 
 CREATE TABLE `funding` (
 	`funding_id`	INT(10) auto_increment NOT NULL PRIMARY KEY,

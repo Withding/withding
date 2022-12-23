@@ -20,3 +20,5 @@ ALTER TABLE `user` ADD CONSTRAINT `FK_state_TO_user_1` FOREIGN KEY (
 REFERENCES `state` (
 	`state_code`
 );
+
+alter table user modify  pwd VARCHAR(100);
