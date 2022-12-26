@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.Parameter;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -74,14 +75,18 @@ public class EmailAuthRepo {
 
     /**
      * EmailAuth 테이블에서 특정 SecretKey와 특정 email이 매칭된 튜플의 갯수를 검색
-     * @param emailAuth SecretKey, email이 담겨있는 EmailAuth 객체
+     *
+     * @param emailAuth email이 담겨있는 EmailAuth 객체
      * @return 검색된 갯수를 반환
      */
-    public Long getEmailAuthCountToSecretKeyAndEmail(final EmailAuth emailAuth){
-        return (Long) em.createQuery("SELECT count(ea.secretKey) FROM EmailAuth ea WHERE ea.email =: email AND ea.secretKey =: secretKey")
-                .setParameter("email", emailAuth.getEmail())
-                .setParameter("secretKey", emailAuth.getSecretKey())
-                .getSingleResult();
+    public List<EmailAuth> getEmailAuthCountToSecretKeyAndEmail(final EmailAuth emailAuth){
+        List<EmailAuth> emailAuths;
+        emailAuths = (List<EmailAuth>) em.createQuery("SELECT ea FROM EmailAuth ea WHERE ea.email =: email ORDER BY ea.emailAuth_id DESC")
+                        .setParameter("email", emailAuth.getEmail())
+                        .setFirstResult(0)
+                        .setMaxResults(1)
+                        .getResultList();
+        return emailAuths;
     }
 
 
@@ -94,8 +99,7 @@ public class EmailAuthRepo {
         boolean result = false;
         try{
             tr.begin();
-            em.createQuery("DELETE FROM EmailAuth ea WHERE ea.secretKey = : secretKey AND ea.email =: email")   // 업데이트, 딜리트 문은 .executeUpdate()로 마무리 해야된다.
-                    .setParameter("secretKey", emailAuth.getSecretKey())
+            em.createQuery("DELETE FROM EmailAuth ea WHERE ea.email =: email")   // 업데이트, 딜리트 문은 .executeUpdate()로 마무리 해야된다.
                     .setParameter("email", emailAuth.getEmail())
                     .executeUpdate();
             tr.commit();
