@@ -7,8 +7,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import io.jsonwebtoken.*;
-
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,13 +35,13 @@ public class JwtService {
     //
     // 토큰 생성
     //
-    public String generateJwtToken(Long userNum, String name, Timestamp loginTime) {
+    public String generateJwtToken(Long userNum, String nickName, String loginTime) {
         Date now = new Date();
         return Jwts.builder()
                 //.setSubject()                                         // 보통 username
                 .setHeader(createHeader())
                 .claim("userNum", userNum)
-                .claim("name", name)                              //
+                .claim("nickName", nickName)                              //
                 .claim("loginTime", loginTime)
                 //.setClaims(createClaims(usernum))                     // 클레임, 토큰에 포함될 정보
                 .setExpiration(new Date(now.getTime() + expiredTime))   // 만료일
@@ -84,8 +82,10 @@ public class JwtService {
         try {
             //String userNum = claims.getBody().get("userNum", String.class);
             Claims claims = Jwts.parser().setSigningKey(beanConfig.getJwtKey()).parseClaimsJws(jwt).getBody();
-            String userNum = claims.get("userNum",String.class);
-            map.put("userNum", userNum);
+
+            map.put("userNum", claims.get("userNum",String.class));
+            map.put("nickName", claims.get("nickName",String.class));
+            map.put("loginTime", claims.get("loginTime",String.class));
             return map;
         } catch (Exception err) {
             //err.printStackTrace();
@@ -110,9 +110,9 @@ public class JwtService {
         try {
             //String userNum = claims.getBody().get("userNum", String.class);
             Claims claims = Jwts.parser().setSigningKey(beanConfig.getJwtKey()).parseClaimsJws(jwt).getBody();
-            user.setUserId(claims.get("userNum",Long.class));
+            user.setUserId(claims.get("userNum", Long.class));
             user.setNickName(claims.get("name", String.class));
-            user.setLoginTime(claims.get("loginTime", Date.class));
+            user.setLoginTime(claims.get("loginTime", String.class));
 
             return user;
         } catch (Exception err) {

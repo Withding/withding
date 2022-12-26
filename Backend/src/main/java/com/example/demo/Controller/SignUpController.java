@@ -3,6 +3,7 @@ package com.example.demo.Controller;
 import com.example.demo.Config.AES256;
 import com.example.demo.Config.BeanConfig;
 import com.example.demo.DTO.*;
+import com.example.demo.DTO.Request.SignUpRequest;
 import com.example.demo.Repository.EmailAuthRepo;
 import com.example.demo.Repository.UserRepo;
 import com.example.demo.Service.MailService;
@@ -71,7 +72,10 @@ public class SignUpController {
         emailAuth.setSecretKey(secretKey);
         emailAuth.setEmail(encryptEmail);
 
-        if (    user.isEmail()                                                                                          // email 검증식 통과
+        if (users.size() == 1) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);                                                           // 넘어온 email을 다른 사용자가 사용중
+        }
+        else if (    user.isEmail()                                                                                     // email 검증식 통과
                 && mailService.sendSignUpCode(email, CODE)                                                              // && 메일 전송 성공
                 && (users.size() == 0)                                                                                  // && User 테이블에도 해당 이메일이 없음 (회원가입한 적 없음)
                 && (emailAuthRepo.getEmailAuthCountToEmail(emailAuth) < MAX_REQUEST))                                   // && EmailAuth 테이블에 해당 이메일로 6번 이상 요청왔을경우 막아버림
@@ -79,7 +83,6 @@ public class SignUpController {
             emailAuthRepo.save(emailAuth);                                                                              // emailauth 테이블에 이메일, 코드 저장
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }else {
-
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -125,7 +128,7 @@ public class SignUpController {
 
         EmailAuth emailAuth = new EmailAuth();
         emailAuth.setEmail(encryptEmail);
-        emailAuth.setSecretKey(request.getSecretKey());
+
 
         User tempUser = new User();                                                                                     // 검증식을 위해 사용될 User 객체
         tempUser.setEmail(request.getEmail());
@@ -140,7 +143,10 @@ public class SignUpController {
         user.setCreatedAt(dateFormat.format(new Timestamp(System.currentTimeMillis())));
         user.setNickName(request.getNickName());
 
-        if (    (emailAuthRepo.getEmailAuthCountToSecretKeyAndEmail(emailAuth) == 1)                                        // SecretKey와 Email이 매칭된 튜플이 존재
+        List<EmailAuth> emailAuths = emailAuthRepo.getEmailAuthCountToSecretKeyAndEmail(emailAuth);
+
+        if (    emailAuths != null
+                && (emailAuths.get(0).getSecretKey().equals(request.getSecretKey()))                                    // SecretKey와 Email이 매칭된 튜플이 존재
                 && (tempUser.isEmail() && tempUser.isNickName() && tempUser.isPwd())                                    // email, nickName, pwd 셋 다 통과
                 && userRepo.save(user)) {                                                                               // User 테이블에 요청온 User 객체 저장 성공
             emailAuthRepo.deleteEmailAuthToSecretKeyAndEmail(emailAuth);

@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
-import java.util.Date;
 import java.util.regex.Pattern;
 
 @Data
@@ -21,7 +20,7 @@ public class User {
     private String accessToken;       // 카카오 로그인 API에 사용
 
     @Transient
-    private Date loginTime;             // 로그인 시간
+    private String loginTime;             // 로그인 시간
 
 
     @Id
@@ -34,7 +33,6 @@ public class User {
     @JoinColumn(name = "id_type_code")
     private IdType idType;                 // 카카오, 네이버, 구글 구분
 
-    @Column(name = "pwd")
     private String password;                 // 비밀번호
 
     @Column(name = "user")
@@ -47,7 +45,7 @@ public class User {
     private String createdAt;             // 가입시간
 
     @Column(name = "logout_at")
-    private Date logoutAt;              // 로그아웃 시간
+    private String logoutAt;              // 로그아웃 시간
 
     private Long point;                 // 보유 포인트
 

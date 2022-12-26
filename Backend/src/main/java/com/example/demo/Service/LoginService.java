@@ -1,17 +1,21 @@
 package com.example.demo.Service;
 
+import com.example.demo.Config.AES256;
 import com.example.demo.Config.BeanConfig;
 import com.example.demo.DTO.*;
 
 import com.example.demo.Gson.Gson;
+import com.example.demo.Repository.UserRepo;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -26,11 +30,23 @@ public class LoginService {
     private JwtService jwtService;
 
     @Autowired
+    private UserRepo userRepo;
+
+    @Autowired
     private EntityManager em;
 
     @Autowired
     private EntityTransaction tr;
 
+    @Autowired
+    private AES256 aes256;
+
+
+    /**
+     * 카카오 로그인에 사용되는 함수
+     * @param accessToken 발급받은 엑세스 토큰
+     * @return User 객체
+     */
     public User kakaoLogin(final String accessToken){
         User user = new User();
         HttpHeaders headers = new HttpHeaders();
@@ -81,6 +97,21 @@ public class LoginService {
             em.clear();
         }
 
+        return user;
+    }
+
+    /**
+     * 로그인 함수
+     * @param user email이 담겨있는 User 객체
+     * @return
+     */
+    public User login(User user){
+        try {
+            user.setEmail(aes256.encrypt(user.getEmail()));
+            user = userRepo.getUserToEmail(user);                                                                       // User 테이블에서 email, pwd 가 매칭되는 User 객체 반환
+        } catch (Exception e){
+            e.printStackTrace();
+        }
         return user;
     }
 }

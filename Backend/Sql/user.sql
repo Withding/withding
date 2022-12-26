@@ -2,7 +2,7 @@ CREATE TABLE `user` (
 	`user_id`	INT(10) auto_increment NOT NULL PRIMARY KEY,
 	`email`	VARCHAR(100)    NOT NULL,
 	`id_type`	TINYINT(1)  NOT NULL,
-	`pwd`	VARCHAR(50) NULL,
+	`password`	VARCHAR(100) NULL,
 	`user`	VARCHAR(50) NOT NULL,
 	`profile_image`	VARCHAR(100) NULL DEFAULT 'default.png',
 	`created_at` TIMESTAMP NOT NULL,
@@ -20,5 +20,3 @@ ALTER TABLE `user` ADD CONSTRAINT `FK_state_TO_user_1` FOREIGN KEY (
 REFERENCES `state` (
 	`state_code`
 );
-
-alter table user modify  pwd VARCHAR(100);
