@@ -39,7 +39,7 @@ CREATE TABLE `user` (
 	`user_id`	INT(10) auto_increment NOT NULL PRIMARY KEY,
 	`email`	VARCHAR(100)    NOT NULL,
 	`id_type_code`	TINYINT(1)  NOT NULL,
-	`pwd`	VARCHAR(50) NULL,
+	`password`	VARCHAR(100) NULL,
 	`user`	VARCHAR(50) NOT NULL,
 	`profile_image`	VARCHAR(100) NULL DEFAULT 'default.png',
 	`created_at` TIMESTAMP NOT NULL,
@@ -49,7 +49,6 @@ CREATE TABLE `user` (
 	`vote_list`	VARCHAR(100) NULL DEFAULT '[]',
 	`state_code`	TINYINT(1) NOT NULL
 );
-alter table user modify  pwd VARCHAR(100);
 
 CREATE TABLE `funding` (
 	`funding_id`	INT(10) auto_increment NOT NULL PRIMARY KEY,
