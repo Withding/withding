@@ -16,7 +16,8 @@ function fetchUserInfo(accessToken: string): Promise<User> {
         },
         data: {
             accessToken
-        }
+        },
+        withCredentials: true
     }).then((res) => res.data);
 }
 
