@@ -8,11 +8,12 @@ interface NormalLoginFormProps {
     onSubmit: (event: React.FormEvent<HTMLFormElement> | null) => void;
     onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
     emailBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
+    passwordBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
     values: {
         email: string;
         password: string;
     }
-    errors: {
+    valid: {
         email: boolean;
         password: boolean;
     }
@@ -23,8 +24,9 @@ interface NormalLoginFormProps {
  * @param props.onSubmit - 로그인 버튼 클릭 또는 엔터  입력시 실행되는 함수
  * @param props.onChange - input 태그의 값이 변경될 때 실행되는 함수
  * @param props.emailBlur - 이메일 입력창에서 포커스가 벗어날 때 실행되는 함수
+ * @param props.passwordBlur - 비밀번호 입력창에서 포커스가 벗어날 때 실행되는 함수
  * @param props.values - input 태그의 값
- * @param props.errors - input 태그의 값의 유효성 검사 결과
+ * @param props.valid - input 태그의 값의 유효성 검사 결과
  * @returns
  */
 function NormalLoginForm(props: NormalLoginFormProps) {
@@ -42,7 +44,7 @@ function NormalLoginForm(props: NormalLoginFormProps) {
                     onChange: props.onChange,
                     value: props.values.email,
                 }}
-                valid={props.errors.email}
+                valid={props.valid.email}
                 msg={"이메일 형식이 올바르지 않습니다."}
             />
 
@@ -52,10 +54,11 @@ function NormalLoginForm(props: NormalLoginFormProps) {
                     placeholder: "비밀번호 입력",
                     name: "password",
                     onChange: props.onChange,
+                    onBlur: props.passwordBlur,
                     value: props.values.password,
                 }}
-                valid={props.errors.password}
-                msg={"이메일 형식이 올바르지 않습니다."}
+                valid={props.valid.password}
+                msg={"비밀번호를 입력해주세요"}
             />
             <p className="forgot">
                 <a>{"로그인 정보를 잊으셨나요?"}</a>
