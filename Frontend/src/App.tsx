@@ -6,7 +6,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 
 const Main = React.lazy(() => import("./pages/Main/Index"));
 const Signin = React.lazy(() => import("./pages/Signin/Index"));
-const Signup = React.lazy(() => import("./pages/Signup/Signup"));
+const Signup = React.lazy(() => import("./pages/Signup/Index"));
 const Oauth = React.lazy(() => import("./pages/Oauth/Index"));
 
 import { Suspense } from "react";
@@ -68,6 +68,7 @@ const defaultStyle = css`
     & > .content {
         display: flex;
         justify-content: center;
+        min-height: 50vh;
     }
     @media screen and (max-width: 1095px) {
         & > .content {

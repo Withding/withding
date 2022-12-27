@@ -53,8 +53,10 @@ function EmailSignup() {
         secretKey
     }), {
         useErrorBoundary: false,
-        onSuccess: () => {
-            navigator("/signup/success");
+        onSuccess: (res) => {
+            if (res.status === 204) {
+                navigator("/signup/success");
+            }
         }
     });
 
