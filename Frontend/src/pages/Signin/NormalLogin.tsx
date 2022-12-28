@@ -1,7 +1,9 @@
+import fetchUserInfo from "@/utils/RequestApis/signin/login";
 import React, { useCallback } from "react";
 import NormalLoginForm from "./NormalLoginForm";
 import NormalLoginValues from "./NormalLoginValues";
 import NormalLoginValuesValid from "./NormalLoginValuesValid";
+import { useMutation } from "react-query";
 
 
 
@@ -18,6 +20,13 @@ function NormalLogin() {
     const [valid, setValid] = React.useState<NormalLoginValuesValid>({
         email: true,
         password: true,
+    });
+
+    const { mutate } = useMutation(["login"], () => fetchUserInfo({
+        email: values.email,
+        password: values.password,
+    }), {
+        useErrorBoundary: false
     });
 
     const isValidEmail = useCallback((email: string) => {
@@ -69,8 +78,8 @@ function NormalLogin() {
             return;
         }
         if (!valid.email || !valid.password) return;
-        console.log(values);
-    }, [valid, values]);
+        mutate();
+    }, [mutate, valid, values]);
 
     return (
         <React.Fragment>
@@ -87,3 +96,7 @@ function NormalLogin() {
 }
 
 export default NormalLogin;
+
+function useLoginMutation(): { mutate: any; } {
+    throw new Error("Function not implemented.");
+}
