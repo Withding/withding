@@ -8,9 +8,9 @@ const UserContext = React.createContext<UserContextProps>({
     isLogin: false,
     nickName: "",
     profileImage: "",
-    onChangeNickname: () => {},
-    onChangeProfileImage: () => {},
-    onChangeIsLogin: () => {},
+    onChangeUserInfo: (
+        { nickName, isLogin, profileImage }:
+        { nickName: string, isLogin: boolean, profileImage: string}) => {},
     onResetUser: () => {},
 });
 

@@ -5,9 +5,9 @@ interface UserContextProps {
     isLogin: boolean;
     nickName: string;
     profileImage: string;
-    onChangeNickname: (nickname: string) => void;
-    onChangeProfileImage: (profileImage: string) => void;
-    onChangeIsLogin: (isLogin: boolean) => void;
+    onChangeUserInfo: (
+        { nickName, isLogin, profileImage }:
+        { nickName: string, isLogin: boolean, profileImage: string}) => void,
     onResetUser: () => void;
 }
 

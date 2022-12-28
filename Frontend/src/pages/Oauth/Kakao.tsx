@@ -12,20 +12,22 @@ import { useNavigate } from "react-router-dom";
  */
 function Kakao() {
     const navigator = useNavigate();
-    const { onChangeIsLogin, onChangeNickname, onChangeProfileImage } = useContext(UserContext);
+    const { onChangeUserInfo } = useContext(UserContext);
     useEffect(() => {
         const code = new URLSearchParams(window.location.search).get("code") ?? "";
         fetchKakaoAuthCode(code)
             .then((res: KakaoAuthType) => {
                 fetchUserInfo(res.access_token).
                     then((res: User) => {
-                        onChangeIsLogin(true);
-                        onChangeNickname(res.nickName);
-                        onChangeProfileImage(res.profileImage);
+                        onChangeUserInfo({
+                            nickName: res.nickName,
+                            isLogin: true,
+                            profileImage: res.profileImage,
+                        });
                         navigator("/");
                     });
             });
-    }, [navigator, onChangeIsLogin, onChangeNickname, onChangeProfileImage]);
+    }, [navigator, onChangeUserInfo]);
 
     return (
         <React.Fragment>

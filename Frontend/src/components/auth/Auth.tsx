@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import UserContext from "../../store/UserContext";
 
 function Auth(props: { children: React.ReactNode }) {
@@ -6,29 +6,48 @@ function Auth(props: { children: React.ReactNode }) {
     const [isLogin, setIsLogin] = useState<boolean>(false);
     const [profileImage, setProfileImage] = useState<string>("");
 
-    const onChangeNickname = useCallback((nickName: string) => {
+    const onChangeUserInfo = useCallback(({
+        nickName,
+        isLogin,
+        profileImage,
+    }: {
+        nickName: string;
+        isLogin: boolean;
+        profileImage: string;
+    }) => {
         setNickname(nickName);
-    }, []);
-
-    const onChangeIsLogin = useCallback((isLogin: boolean) => {
         setIsLogin(isLogin);
+        setProfileImage(profileImage);
+        const user = {
+            nickName: nickName,
+            isLogin: isLogin,
+            profileImage: profileImage,
+        };
+        localStorage.setItem("user", JSON.stringify(user));
     }, []);
 
-    const onChangeProfileImage = useCallback((profileImage: string) => {
-        setProfileImage(profileImage);
-    }, []);
 
     const onResetUser = useCallback(() => {
 
     }, []);
+
+    useEffect(() => {
+        const user = localStorage.getItem("user");
+        if (user) {
+            const userInfo = JSON.parse(user);
+            onChangeUserInfo({
+                nickName: userInfo.nickName,
+                isLogin: userInfo.isLogin,
+                profileImage: userInfo.profileImage,
+            });
+        }
+    }, [onChangeUserInfo]);
     return (
         <UserContext.Provider value={{
             nickName,
             isLogin,
             profileImage,
-            onChangeNickname,
-            onChangeIsLogin,
-            onChangeProfileImage,
+            onChangeUserInfo,
             onResetUser
         }}>
             {props.children}
