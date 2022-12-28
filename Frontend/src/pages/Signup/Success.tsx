@@ -16,7 +16,7 @@ function Success() {
     }, [navigator]);
 
     const handleMoveToLogin = useCallback(() => {
-        navigator("/signup");
+        navigator("/signin");
     }, [navigator]);
     return (
         <div css={style}>
