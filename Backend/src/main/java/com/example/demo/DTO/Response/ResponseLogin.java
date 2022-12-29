@@ -8,4 +8,5 @@ import lombok.Data;
 public class ResponseLogin {
     private String accessToken;
     private String nickName;
+    private String image;
 }
