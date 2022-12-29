@@ -1,12 +1,12 @@
 import fetchUserInfo from "@/utils/RequestApis/signin/login";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useContext, useState } from "react";
 import NormalLoginForm from "./NormalLoginForm";
 import NormalLoginValues from "./NormalLoginValues";
 import NormalLoginValuesValid from "./NormalLoginValuesValid";
 import { useMutation } from "react-query";
 import { AxiosError } from "axios";
-
-
+import UserContext from "@/store/UserContext";
+import { useNavigate } from "react-router-dom";
 
 /**
  * 일반 로그인 컴포넌트
@@ -14,7 +14,8 @@ import { AxiosError } from "axios";
  */
 function NormalLogin() {
     const [loginFailMessage, setLoginFailMessag] = useState<string>(""); // 로그인 실패시 메세지
-
+    const { onChangeUserInfo } = useContext(UserContext);
+    const navigator = useNavigate();
     const [values, setValues] = useState<NormalLoginValues>({
         email: "",
         password: "",
@@ -30,6 +31,14 @@ function NormalLogin() {
         password: values.password,
     }), {
         useErrorBoundary: false,
+        onSuccess: (res) => {
+            onChangeUserInfo({
+                nickName: res.nickName,
+                profileImage: res.profileImage,
+                isLogin: true,
+            });
+            navigator("/main");
+        },
         onError: (error: AxiosError) => {
             if (error.response?.status === 401) {
                 setLoginFailMessag("등록되지 않은 계정이거나, 이메일 또는 비밀번호가 회원정보와 일치하지 않습니다.");

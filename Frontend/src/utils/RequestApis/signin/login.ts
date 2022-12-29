@@ -1,5 +1,5 @@
+import User from "@/types/User";
 import customAxios from "@/utils/customAxios";
-import { AxiosResponse } from "axios";
 
 /**
  * 이메일 로그인 API
@@ -12,7 +12,7 @@ function fetchUserInfo({
 }: {
     email: string;
     password: string;
-}): Promise<AxiosResponse> {
+}): Promise<User> {
     const axios = customAxios();
     return axios({
         method: "POST",
@@ -24,7 +24,7 @@ function fetchUserInfo({
             email,
             password
         },
-    });
+    }).then((res) => res.data);
 }
 
 export default fetchUserInfo;

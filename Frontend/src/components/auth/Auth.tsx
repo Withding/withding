@@ -1,3 +1,4 @@
+import User from "@/types/User";
 import React, { useCallback, useEffect, useState } from "react";
 import UserContext from "../../store/UserContext";
 
@@ -6,18 +7,11 @@ function Auth(props: { children: React.ReactNode }) {
     const [isLogin, setIsLogin] = useState<boolean>(false);
     const [profileImage, setProfileImage] = useState<string>("");
 
-    const onChangeUserInfo = useCallback(({
-        nickName,
-        isLogin,
-        profileImage,
-    }: {
-        nickName: string;
-        isLogin: boolean;
-        profileImage: string;
-    }) => {
-        setNickname(nickName);
-        setIsLogin(isLogin);
-        setProfileImage(profileImage);
+    const onChangeUserInfo = useCallback((_user: User) => {
+        const { nickName, isLogin, profileImage } = _user;
+        setNickname(nickName ?? "");
+        setIsLogin(isLogin ?? false);
+        setProfileImage(profileImage ?? "");
         const user = {
             nickName: nickName,
             isLogin: isLogin,

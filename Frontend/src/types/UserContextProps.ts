@@ -1,3 +1,5 @@
+import User from "./User";
+
 /**
  * 유저 정보
  */
@@ -5,9 +7,7 @@ interface UserContextProps {
     isLogin: boolean;
     nickName: string;
     profileImage: string;
-    onChangeUserInfo: (
-        { nickName, isLogin, profileImage }:
-        { nickName: string, isLogin: boolean, profileImage: string}) => void,
+    onChangeUserInfo: (user: User) => void,
     onResetUser: () => void;
 }
 

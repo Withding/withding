@@ -2,8 +2,10 @@
  * 유저 정보
  */
 interface User {
-    nickName: string;
-    profileImage: string;
+    nickName?: string;
+    profileImage?: string;
+    accessToken?: string;
+    isLogin?: boolean;
 }
 
 
