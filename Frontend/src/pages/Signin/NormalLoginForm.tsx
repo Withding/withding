@@ -16,7 +16,8 @@ interface NormalLoginFormProps {
     valid: {
         email: boolean;
         password: boolean;
-    }
+    },
+    loginFailMessage: string;
 }
 
 /**
@@ -27,6 +28,7 @@ interface NormalLoginFormProps {
  * @param props.passwordBlur - 비밀번호 입력창에서 포커스가 벗어날 때 실행되는 함수
  * @param props.values - input 태그의 값
  * @param props.valid - input 태그의 값의 유효성 검사 결과
+ * @param props.loginFailMessage - 로그인 실패시 보여지는 메시지 ( 로그인 실패 사유 )
  * @returns
  */
 function NormalLoginForm(props: NormalLoginFormProps) {
@@ -60,6 +62,7 @@ function NormalLoginForm(props: NormalLoginFormProps) {
                 valid={props.valid.password}
                 msg={"비밀번호를 입력해주세요"}
             />
+            <p className="error">{props.loginFailMessage}</p>
             <p className="forgot">
                 <a>{"로그인 정보를 잊으셨나요?"}</a>
             </p>
@@ -113,6 +116,13 @@ const style = css`
         font-size: 0.8rem;
         color: var(--grey-400);
         cursor: pointer;
+    }
+
+    .error {
+        line-height: 1.5;
+        font-size: 0.8rem;
+        margin-top: 0.5rem;
+        color: rgb(242, 85, 85);
     }
 `;
 

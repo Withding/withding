@@ -1,9 +1,10 @@
 import fetchUserInfo from "@/utils/RequestApis/signin/login";
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import NormalLoginForm from "./NormalLoginForm";
 import NormalLoginValues from "./NormalLoginValues";
 import NormalLoginValuesValid from "./NormalLoginValuesValid";
 import { useMutation } from "react-query";
+import { AxiosError } from "axios";
 
 
 
@@ -12,12 +13,14 @@ import { useMutation } from "react-query";
  * @returns 
  */
 function NormalLogin() {
-    const [values, setValues] = React.useState<NormalLoginValues>({
+    const [loginFailMessage, setLoginFailMessag] = useState<string>(""); // 로그인 실패시 메세지
+
+    const [values, setValues] = useState<NormalLoginValues>({
         email: "",
         password: "",
     });
 
-    const [valid, setValid] = React.useState<NormalLoginValuesValid>({
+    const [valid, setValid] = useState<NormalLoginValuesValid>({
         email: true,
         password: true,
     });
@@ -26,7 +29,12 @@ function NormalLogin() {
         email: values.email,
         password: values.password,
     }), {
-        useErrorBoundary: false
+        useErrorBoundary: false,
+        onError: (error: AxiosError) => {
+            if (error.response?.status === 401) {
+                setLoginFailMessag("등록되지 않은 계정이거나, 이메일 또는 비밀번호가 회원정보와 일치하지 않습니다.");
+            }
+        }
     });
 
     const isValidEmail = useCallback((email: string) => {
@@ -82,7 +90,7 @@ function NormalLogin() {
     }, [mutate, valid, values]);
 
     return (
-        <React.Fragment>
+        <React.Fragment >
             <NormalLoginForm
                 onSubmit={onSubmitHandler}
                 onChange={valueChangeHandler}
@@ -90,13 +98,10 @@ function NormalLogin() {
                 passwordBlur={passwordBlur}
                 values={values}
                 valid={valid}
+                loginFailMessage={loginFailMessage}
             />
-        </React.Fragment>
+        </React.Fragment >
     );
 }
 
 export default NormalLogin;
-
-function useLoginMutation(): { mutate: any; } {
-    throw new Error("Function not implemented.");
-}
