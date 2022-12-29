@@ -38,7 +38,6 @@ const style = css`
     @media screen and (min-width: 1096px) {
         .menus {
             max-width: 1025px;
-            margin-right: 3rem;
         }
     }
 

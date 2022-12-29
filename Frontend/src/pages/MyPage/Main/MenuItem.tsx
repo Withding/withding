@@ -26,14 +26,17 @@ function MenuItem(props: { children: React.ReactNode, id: number }) {
 const Item = styled.li<{ isSelected: boolean }>`
     cursor: pointer;
     min-width: 5rem;
-    height: 4rem;
+    height: 3rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: ${props => props.isSelected ? "var(--white)" : "var(--grey-100)"};
-    border-top-left-radius: 30px;
-    border-top-right-radius: 30px;
-    border: ${props => props.isSelected ? "1px solid var(--grey-200)" : ""};    
+    background-color: ${props => props.isSelected ? "var(--white)" : "var(--green-200)"};
+    border: ${props => props.isSelected ? "1px solid var(--grey-200)" : ""};   
+    color: ${props => props.isSelected ? "var(--black)" : "var(--white)"};
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom: ${props => props.isSelected ? "none" : "1px solid var(--grey-200)"};
+    font-weight: 400;
 `;
 
 export default React.memo(MenuItem);
