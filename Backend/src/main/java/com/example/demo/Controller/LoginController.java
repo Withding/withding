@@ -52,7 +52,14 @@ public class LoginController {
         }
         else {
             String jwt = jwtService.generateJwtToken(user.getUserId(), user.getNickName(), dateFormat.format(new Timestamp(System.currentTimeMillis())));
-            return new ResponseEntity(new ResponseLogin(jwt, user.getNickName()), HttpStatus.OK);
+            return new ResponseEntity (
+                    new ResponseLogin(
+                            jwt
+                            , user.getNickName()
+                            ,beanConfig.SERVER_URL + beanConfig.SERVER_PORT + beanConfig.PROFILE_IMAGE_URL + user.getProfileImage()
+                    )
+                    , HttpStatus.OK
+            );
         }
 
     }
@@ -72,7 +79,9 @@ public class LoginController {
         if (user.getUserId() != null && bCryptPasswordEncoder.matches(request.getPassword(), user.getPassword()) == true) {
             ResponseLogin responseLogin = new ResponseLogin(
                     jwtService.generateJwtToken(user.getUserId(), user.getNickName(), dateFormat.format(new Timestamp(System.currentTimeMillis())))
-                    , user.getNickName());
+                    , user.getNickName()
+                    ,beanConfig.SERVER_URL + beanConfig.SERVER_PORT + beanConfig.PROFILE_IMAGE_URL + user.getProfileImage()
+            );
             return new ResponseEntity<>(responseLogin, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);

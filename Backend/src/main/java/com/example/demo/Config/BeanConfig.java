@@ -11,12 +11,22 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
+import java.io.File;
 import java.util.Properties;
 
 @Getter
 @NoArgsConstructor
 @Configuration
 public class BeanConfig {
+
+    public final String PROFILE_IMAGE_URL = "/user/image/";
+    public final String PROFILE_IMAGE_PATH = System.getProperty("user.dir") + File.separator + "profileImages/";
+
+    @Value("${server.url}")
+    public String SERVER_URL;
+
+    @Value("${server.port}")
+    public String SERVER_PORT;
 
     @Value("${spring.mail.host}")
     private String mailHost;
