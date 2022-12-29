@@ -8,6 +8,8 @@ const Main = React.lazy(() => import("./pages/Main/Index"));
 const Signin = React.lazy(() => import("./pages/Signin/Index"));
 const Signup = React.lazy(() => import("./pages/Signup/Index"));
 const Oauth = React.lazy(() => import("./pages/Oauth/Index"));
+const MyPage = React.lazy(() => import("./pages/MyPage/Index"));
+
 
 import { Suspense } from "react";
 import Auth from "./components/auth/Auth";
@@ -53,6 +55,7 @@ function App() {
                                 />
                                 <Route path="/funding" element={<div>funding</div>} />
                                 <Route path="/commingsoon" element={<div>commingsoon</div>} />
+                                <Route path="/mypage/*" element={<MyPage />} />
                             </Routes>
                         </Suspense>
                     </div>
@@ -72,6 +75,7 @@ const defaultStyle = css`
     }
     @media screen and (max-width: 1095px) {
         & > .content {
+            padding-top: 4rem;
             padding-bottom: 4rem;
         }
     }
