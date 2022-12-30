@@ -20,7 +20,7 @@ function Main() {
         }}>
             <div css={style}>
                 <Header />
-                <Content className="content max" />
+                <Content className="content" />
             </div>
         </MyPageMainContext.Provider>
     );
