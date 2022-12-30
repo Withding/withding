@@ -1,57 +1,88 @@
 import { css } from "@emotion/react";
 import React from "react";
 import Image from "./Image";
+import Logout from "../Logout";
+import { useMediaQuery } from "react-responsive";
 
 interface ProfileProps {
     profileImage: string;
     isEditProfileImage: boolean;
     nickName: string;
+    type: number;
 }
-
 
 /** 
  * ProfileCard 컴포넌트
  * @param props.profileImage - 프로필 이미지
  * @param props.isEditProfileImage - 프로필 이미지 수정 가능 여부
  * @param props.nickNamne - 닉네임
+ * @param props.type - 프로필 타입
  * @returns 
  */
 function Profile(props: ProfileProps) {
+    const nameDecorator: string[] = [
+        "님",
+        " 메이커님"
+    ];
+    const isDesktop = useMediaQuery({ query: "(min-width: 1096px)" });
     return (
-        <section css={style}>
-            <Image
-                src={props.profileImage}
-                isEdit={props.isEditProfileImage}
-            />
-            <section className="text">
-                <p className="name"><b>{props.nickName}</b>님</p>
+        <article
+            css={articleStyle}
+        >
+            <section css={style}>
+                <Image
+                    src={props.profileImage}
+                    isEdit={props.isEditProfileImage}
+                />
+                <section className="text">
+                    <p className="name">
+                        <b>{props.nickName}</b>
+                        {nameDecorator[props.type]}
+                    </p>
+                </section>
             </section>
-        </section>
+            {isDesktop && <Logout className="logout" />}
+        </article>
     );
 }
+
+const articleStyle = css`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+`;
 
 const style = css`
     display: flex;
     flex-direction: column;
-    align-items: center;
+    .text {
+        .name {
+            font-size: 1.2rem;
+            font-weight: 200;
+        }
 
+        b {
+            font-weight: 500;
+        }
+    }
     @media screen and (min-width: 1096px) {
         width: 233px;
+        align-items: center;
         flex-direction: column;
         .text {
             margin-top: 1.5rem;
-            .name {
-                font-size: 1.2rem;
-            }
-            b {
-                font-weight: 500;
-            }
         }
     }
 
     @media screen and (max-width: 1095px) {
         width: 100%;
-        flex-direction: ro;
+        align-items: center;
+        flex-direction: row;
+        .text {
+            width: 100%;
+            font-size: 1.2rem;
+            margin-left: 1.5rem;
+        }
     }
 `;
 
