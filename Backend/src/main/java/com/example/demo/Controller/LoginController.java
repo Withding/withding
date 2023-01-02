@@ -1,22 +1,17 @@
 package com.example.demo.Controller;
 
 import com.example.demo.Config.BeanConfig;
-import com.example.demo.DTO.Response.ResponseLogin;
+import com.example.demo.DTO.Response.Login;
 import com.example.demo.DTO.User;
 import com.example.demo.Service.JwtService;
 import com.example.demo.Service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.ServletResponse;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 
@@ -51,10 +46,9 @@ public class LoginController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         else {
-            String jwt = jwtService.generateJwtToken(user.getUserId(), user.getNickName(), dateFormat.format(new Timestamp(System.currentTimeMillis())));
             return new ResponseEntity (
-                    new ResponseLogin(
-                            jwt
+                    new Login(
+                            jwtService.generateJwtToken(user.getUserId(), user.getNickName(), dateFormat.format(new Timestamp(System.currentTimeMillis())))
                             , user.getNickName()
                             ,beanConfig.SERVER_URL + beanConfig.SERVER_PORT + beanConfig.PROFILE_IMAGE_URL + user.getProfileImage()
                     )
@@ -63,8 +57,6 @@ public class LoginController {
         }
 
     }
-
-
 
     /**
      * withding 로그인
@@ -77,7 +69,7 @@ public class LoginController {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         User user = loginService.login(request);
         if (user.getUserId() != null && bCryptPasswordEncoder.matches(request.getPassword(), user.getPassword()) == true) {
-            ResponseLogin responseLogin = new ResponseLogin(
+            Login responseLogin = new Login(
                     jwtService.generateJwtToken(user.getUserId(), user.getNickName(), dateFormat.format(new Timestamp(System.currentTimeMillis())))
                     , user.getNickName()
                     ,beanConfig.SERVER_URL + beanConfig.SERVER_PORT + beanConfig.PROFILE_IMAGE_URL + user.getProfileImage()

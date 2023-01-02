@@ -1,5 +1,6 @@
 package com.example.demo.Repository;
 
+import com.example.demo.DTO.State;
 import com.example.demo.DTO.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -54,14 +55,19 @@ public class UserRepo {
         return users;
     }
 
+
     /**
      * 양방향 암호화된 email로 해당되는 User 객체를 반환
      * @param user email이 담겨있는 User 객체
      * @return 찾은 User 객체
      */
     public User getUserToEmail(User user) {
-        return (User) em.createQuery("SELECT u FROM User u WHERE u.email =: email")
+        return (User) em.createQuery("SELECT u FROM User u WHERE u.email =: email AND u.state.stateCode = 0")
                 .setParameter("email", user.getEmail())
                 .getSingleResult();
+    }
+
+    public User getUserToUserId(User user){
+        return em.find(User.class, user.getUserId());
     }
 }

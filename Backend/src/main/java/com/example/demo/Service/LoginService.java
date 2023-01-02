@@ -7,19 +7,19 @@ import com.example.demo.DTO.*;
 import com.example.demo.Gson.Gson;
 import com.example.demo.Repository.UserRepo;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
 @Service
+@NoArgsConstructor
 @Data
 public class LoginService {
 
