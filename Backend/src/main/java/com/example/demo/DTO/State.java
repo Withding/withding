@@ -16,10 +16,6 @@ import javax.persistence.Table;
 @Table(name = "state")
 public class State {
 
-    public State(int stateCode){
-        this.setStateCode(stateCode);
-    }
-
 
     @Id
     @Column(name = "state_code")
