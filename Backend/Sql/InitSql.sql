@@ -45,8 +45,6 @@ CREATE TABLE `user` (
 	`created_at` TIMESTAMP NOT NULL,
 	`logout_at` TIMESTAMP NULL,
 	`point`	BIGINT(1) NULL DEFAULT 0,
-	`funding_list`	VARCHAR(300) NULL DEFAULT '[]',
-	`vote_list`	VARCHAR(100) NULL DEFAULT '[]',
 	`state_code`	TINYINT(1) NOT NULL
 );
 
@@ -109,7 +107,6 @@ REFERENCES `funding` (
 );
 
 
-
 /**
 Insert Into VALUES()
 */
@@ -120,4 +117,44 @@ CREATE TABLE `emailauth` (
 	`code` VARCHAR(50) NOT NULL,
 	`secretkey` VARCHAR(200) NOT NULL,
 	`deadline` TimeStamp NOT NULL
+);
+
+
+CREATE TABLE `invest` (
+	`user_id`	INT(10) NOT NULL,
+	`funding_id`	INT(10) NOT NULL,
+	PRIMARY KEY(`user_id`,`funding_id`)
+);
+ALTER TABLE `invest` ADD CONSTRAINT `FK_user_TO_invest_1` FOREIGN KEY (
+	`user_id`
+)
+REFERENCES `user` (
+	`user_id`
+);
+
+ALTER TABLE `invest` ADD CONSTRAINT `FK_funding_TO_invest_1` FOREIGN KEY (
+	`funding_id`
+)
+REFERENCES `funding` (
+	`funding_id`
+);
+
+
+CREATE TABLE `vote` (
+	`user_id`	INT(10)	NOT NULL,
+	`funding_id`	INT(10)	NOT NULL,
+	PRIMARY KEY(`user_id`,`funding_id`)
+);
+ALTER TABLE `vote` ADD CONSTRAINT `FK_user_TO_vote_1` FOREIGN KEY (
+	`user_id`
+)
+REFERENCES `user` (
+	`user_id`
+);
+
+ALTER TABLE `vote` ADD CONSTRAINT `FK_funding_TO_vote_1` FOREIGN KEY (
+	`funding_id`
+)
+REFERENCES `funding` (
+	`funding_id`
 );
