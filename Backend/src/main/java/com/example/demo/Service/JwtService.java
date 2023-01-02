@@ -1,25 +1,40 @@
 package com.example.demo.Service;
 
-import com.example.demo.Config.BeanConfig;
-import com.example.demo.DTO.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.beans.factory.annotation.Value;
 import io.jsonwebtoken.*;
+import org.springframework.stereotype.Service;
+
+import javax.crypto.spec.SecretKeySpec;
+import java.security.Key;
+import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+@Service
+@Configurable
 @Data
 @NoArgsConstructor
-@Service
-public class JwtService {
+public class JwtService implements InitializingBean{
 
-    @Autowired
-    private BeanConfig beanConfig;
+    @Value("${jwt.private.key}")
+    private String secretKey;
+
+    private Key key;
 
     private final Long expiredTime = 1000 * 60L * 60L * 24L * 365L; // 유효시간 365일 (밀리초 1000 = 1초 * 60 * 60  = 1시간 * 24 = 24시간 * 365L = 365일)
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        System.out.println("애프터 프로퍼티 셋 실행");
+        key = new SecretKeySpec(Base64.getEncoder().encode(secretKey.getBytes()), SignatureAlgorithm.HS256.getJcaName());
+        System.out.println("key : " + key);
+        System.out.println("secretKey : " + secretKey);
+    }
 
     //
     // 헤더 만드는부분
@@ -41,87 +56,75 @@ public class JwtService {
                 //.setSubject()                                         // 보통 username
                 .setHeader(createHeader())
                 .claim("userNum", userNum)
-                .claim("nickName", nickName)                              //
+                .claim("nickName", nickName)                      //
                 .claim("loginTime", loginTime)
                 //.setClaims(createClaims(usernum))                     // 클레임, 토큰에 포함될 정보
                 .setExpiration(new Date(now.getTime() + expiredTime))   // 만료일
-                .signWith(SignatureAlgorithm.HS256, beanConfig.getJwtKey())
+                .signWith(key)
                 .compact();
     }
+
 
 
     //
     // 토큰 유효성 검사
     //
-    public void validateToken(String jwt) {
+    public boolean validateToken(String jwt) {
         try {
-            Claims claims = Jwts.parser().setSigningKey(beanConfig.getJwtKey()).parseClaimsJws(jwt).getBody();
+            System.out.println("this.key : " + key.getEncoded());
+            Claims claims = (Claims) Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(jwt)
+                    .getBody();
+
+            //Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwt).getBody();
+            return true;
         } catch ( io.jsonwebtoken.SignatureException | MalformedJwtException e) {
+            e.printStackTrace();
             System.out.println("잘못된 JWT 서명입니다.");
         } catch (ExpiredJwtException e) {
+            e.printStackTrace();
             System.out.println("만료된 JWT 토큰입니다.");
         } catch (UnsupportedJwtException e) {
+            e.printStackTrace();
             System.out.println("지원되지 않는 JWT 토큰입니다.");
         } catch (IllegalArgumentException e) {
+            e.printStackTrace();
             System.out.println("JWT 토큰이 잘못되었습니다.");
         }
+        return false;
     }
 
 
     //
     // JWT에서 정보를 얻어내는 함수
     //
-    public Map<String,String> getClaimsFromJwt(String jwt) {
-        Map<String, String> map = new HashMap<>();
+    public Map<String,Object> getClaimsFromJwt(String jwt) {
+        Map<String, Object> map = new HashMap<>();
 
         if (jwt == null) {
-            System.out.println("JwtService -> getClaimsFromJwt()에서 토큰 == null");
-            System.out.println("토큰이 null임");
             return map;
         }
         try {
             //String userNum = claims.getBody().get("userNum", String.class);
-            Claims claims = Jwts.parser().setSigningKey(beanConfig.getJwtKey()).parseClaimsJws(jwt).getBody();
+            // Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwt).getBody();
+            Claims claims = (Claims) Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(jwt)
+                    .getBody();
 
-            map.put("userNum", claims.get("userNum",String.class));
+            map.put("userNum", claims.get("userNum",Long.class));
             map.put("nickName", claims.get("nickName",String.class));
             map.put("loginTime", claims.get("loginTime",String.class));
             return map;
         } catch (Exception err) {
-            //err.printStackTrace();
-            System.out.println("JwtService -> getClaimsFromJwt()에서 예외처리로 빠짐");
             return map;
-
         }
     }
 
 
-
-    //
-    // JWT에서 정보를 얻어내서 User로 반환하는 함수
-    //
-    public User getClaimsFromJwtToUser(String jwt) {
-        User user = new User();
-
-        if (jwt == null) {
-            System.out.println("JwtService -> getClaimsFromJwtToUser()에서 토큰 == null");
-            return user;
-        }
-        try {
-            //String userNum = claims.getBody().get("userNum", String.class);
-            Claims claims = Jwts.parser().setSigningKey(beanConfig.getJwtKey()).parseClaimsJws(jwt).getBody();
-            user.setUserId(claims.get("userNum", Long.class));
-            user.setNickName(claims.get("name", String.class));
-            user.setLoginTime(claims.get("loginTime", String.class));
-
-            return user;
-        } catch (Exception err) {
-            //err.printStackTrace();
-            System.out.println("JwtService -> getClaimsFromJwtToUser()에서 예외처리로 빠짐");
-            return user;
-
-        }
-    }
 
 
 }
