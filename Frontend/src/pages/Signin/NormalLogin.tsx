@@ -36,6 +36,8 @@ function NormalLogin() {
                 nickName: res.nickName,
                 image: res.image,
                 isLogin: true,
+                accessToken: res.accessToken,
+                loginType: 0
             });
             navigator("/main");
         },
