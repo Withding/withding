@@ -4,8 +4,8 @@ import React from "react";
 import { GrEdit } from "react-icons/gr";
 
 interface ImageProps {
-    src: string;
-    isEdit: boolean;
+    src?: string;
+    isEdit?: boolean;
 }
 
 /**

@@ -1,5 +1,6 @@
+import SupportContext from "@/store/SupportContext";
 import { css } from "@emotion/react";
-import React, { useMemo } from "react";
+import React, { useContext, useMemo } from "react";
 import SummaryItem from "./SummaryItem";
 
 
@@ -7,10 +8,11 @@ import SummaryItem from "./SummaryItem";
  * 요약 리스트 컴포넌트
  */
 function SummaryList() {
+    const { point, fundingCount } = useContext(SupportContext);
     const items = useMemo(() => [
-        { key: "펀딩", value: "0" },
-        { key: "포인트", value: "123,000" },
-    ], []);
+        { key: "펀딩", value: fundingCount + "" },
+        { key: "포인트", value: point + "" },
+    ], [fundingCount, point]);
     return (
         <ul css={style}>
             {items.map((item) => (

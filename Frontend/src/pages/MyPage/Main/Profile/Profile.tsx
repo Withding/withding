@@ -1,21 +1,18 @@
 import { css } from "@emotion/react";
-import React from "react";
+import React, { useContext } from "react";
 import Image from "./Image";
 import Logout from "../Logout";
 import { useMediaQuery } from "react-responsive";
+import SupportContext from "@/store/SupportContext";
 
 interface ProfileProps {
-    profileImage: string;
-    isEditProfileImage: boolean;
-    nickName: string;
-    type: number;
+    isEditProfileImage?: boolean;
+    type?: number;
 }
 
 /** 
  * ProfileCard 컴포넌트
- * @param props.profileImage - 프로필 이미지
  * @param props.isEditProfileImage - 프로필 이미지 수정 가능 여부
- * @param props.nickNamne - 닉네임
  * @param props.type - 프로필 타입
  * @returns 
  */
@@ -24,6 +21,7 @@ function Profile(props: ProfileProps) {
         "님",
         " 메이커님"
     ];
+    const { profileImage, nickName } = useContext(SupportContext);
     const isDesktop = useMediaQuery({ query: "(min-width: 1096px)" });
     return (
         <article
@@ -31,13 +29,13 @@ function Profile(props: ProfileProps) {
         >
             <section css={style}>
                 <Image
-                    src={props.profileImage}
+                    src={profileImage}
                     isEdit={props.isEditProfileImage}
                 />
                 <section className="text">
                     <p className="name">
-                        <b>{props.nickName}</b>
-                        {nameDecorator[props.type]}
+                        <b>{nickName}</b>
+                        {nameDecorator[props.type ?? 0]}
                     </p>
                 </section>
             </section>

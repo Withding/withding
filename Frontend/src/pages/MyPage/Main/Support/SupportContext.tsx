@@ -4,30 +4,41 @@ import Profile from "../Profile/Profile";
 import Logout from "../Logout";
 import { useMediaQuery } from "react-responsive";
 import Summary from "./Summary";
+import fetchSupportInfo from "@/utils/RequestApis/mypage/fetchSupportInfo";
+import { useQuery } from "react-query";
+import SupportContext from "@/store/SupportContext";
 
 /**
  * 서포터 탭 클릭시 보여주는 화면
  * @returns 
  */
-function SupportContext() {
-    const profileImage = "http://placehold.it/100x100";
+function Support() {
     const isMobile = useMediaQuery({ query: "(max-width: 1096px)" });
+    const { data } = useQuery(["fetchSupportInfo"], () => fetchSupportInfo(), {
+        suspense: false,
+        useErrorBoundary: false
+    });
 
     return (
         <React.Fragment>
-            <Profile
-                profileImage={profileImage}
-                isEditProfileImage={true}
-                nickName={"누구누"}
-                type={0}
-            />
-            <MenuContent>
-                <Summary />
-            </MenuContent>
-            {isMobile && <Logout />}
+            <SupportContext.Provider value={{
+                profileImage: data?.profileImage,
+                nickName: data?.nickName,
+                point: data?.point,
+                fundingCount: data?.fundingCount
+            }}>
+                <Profile
+                    isEditProfileImage={true}
+                    type={0}
+                />
+                <MenuContent>
+                    <Summary />
+                </MenuContent>
+                {isMobile && <Logout />}
+            </SupportContext.Provider>
         </React.Fragment>
     );
 }
 
 
-export default SupportContext;
+export default Support;
