@@ -54,7 +54,7 @@ public class MyPageController {
     }
 
 
-    @RequestMapping(value = "user/mypage/maker", method = RequestMethod.GET)
+    @RequestMapping(value = "/user/mypage/maker", method = RequestMethod.GET)
     public ResponseEntity<Object> getMaker(HttpServletRequest request){
 
         User user;
@@ -64,11 +64,8 @@ public class MyPageController {
             user = myPageService.setUserToHttpServletRequestAttribute(request);                                         // HttpServletRequest의 Attribute에서 값을 얻어서 User에 넣은 후 반환
             user = userRepo.getUserToUserId(user);                                                                      // 나머지 정보들 조회 후 반환
         }
-
-        //MyPageMaker myPageMaker = myPageService
-
-
-        return new ResponseEntity<>(HttpStatus.OK);
+        MyPageMaker myPageMaker = myPageService.setMyPageMaker(user);
+        return new ResponseEntity<>(myPageMaker, HttpStatus.OK);
     }
 
 

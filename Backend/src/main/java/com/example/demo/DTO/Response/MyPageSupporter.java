@@ -11,7 +11,6 @@ public class MyPageSupporter {
     private String nickName;
     private Long voteCount;
     private Long fundingCount;
-    private Integer idType;
     private String profileImage;
     private Long point;
 }

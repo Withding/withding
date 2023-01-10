@@ -43,14 +43,14 @@ public class MyPageService {
         myPageSupporter.setFundingCount(investRepo.getCountToUserId(user.getUserId()));
         myPageSupporter.setVoteCount(voteRepo.getCountToUserId(user.getUserId()));
         myPageSupporter.setProfileImage(beanConfig.SERVER_URL + beanConfig.SERVER_PORT + beanConfig.PROFILE_IMAGE_URL + user.getProfileImage());
-
         return myPageSupporter;
     }
 
-    /*public MyPageMaker setMyPageMaker(User user){
+    public MyPageMaker setMyPageMaker(User user){
         MyPageMaker myPageMaker = new MyPageMaker();
-        myPageMaker.setFundingCount(investRepo);
-
-    }*/
+        myPageMaker.setFundingCount(investRepo.getCountToUserId(user.getUserId()));
+        myPageMaker.setFollowCount(0L);
+        return myPageMaker;
+    }
 
 }
