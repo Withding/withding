@@ -5,6 +5,7 @@ import User from "./User";
  */
 interface UserContextProps {
     isLogin: boolean;
+    loginType: number;
     nickName: string;
     image: string;
     onChangeUserInfo: (user: User) => void,

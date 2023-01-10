@@ -1,23 +1,29 @@
 import User from "@/types/User";
 import React, { useCallback, useEffect, useState } from "react";
-import UserContext from "../../store/UserContext";
+import UserContext from "@/store/UserContext";
 
+/**
+ * 인증 ContextAPI
+ * @param props.children
+ * @returns 
+ */
 function Auth(props: { children: React.ReactNode }) {
     const [nickName, setNickname] = useState<string>("");
     const [isLogin, setIsLogin] = useState<boolean>(false);
     const [image, setImage] = useState<string>("");
-    const [accessToken, setAccessToken] = useState<string>("");
+    const [loginType, setLoginType] = useState<number>(0);
     const onChangeUserInfo = useCallback((_user: User) => {
-        const { nickName, isLogin, image, accessToken } = _user;
+        const { nickName, isLogin, image, accessToken, loginType } = _user;
         setNickname(nickName ?? "");
         setIsLogin(isLogin ?? false);
         setImage(image ?? "");
-        setAccessToken(accessToken ?? "");
+        setLoginType(loginType ?? 0);
         const user = {
             nickName: nickName,
             isLogin: isLogin,
             image: image,
-            accessToken: accessToken
+            accessToken: accessToken,
+            loginType: loginType
         };
         localStorage.setItem("user", JSON.stringify(user));
     }, []);
@@ -35,7 +41,8 @@ function Auth(props: { children: React.ReactNode }) {
                 nickName: userInfo.nickName,
                 isLogin: userInfo.isLogin,
                 image: userInfo.image,
-                accessToken: userInfo.accessToken
+                accessToken: userInfo.accessToken,
+                loginType: userInfo.loginType
             });
         }
     }, [onChangeUserInfo]);
@@ -44,6 +51,7 @@ function Auth(props: { children: React.ReactNode }) {
             nickName,
             isLogin,
             image,
+            loginType,
             onChangeUserInfo,
             onResetUser
         }}>
