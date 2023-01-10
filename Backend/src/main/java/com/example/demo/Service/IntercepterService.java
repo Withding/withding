@@ -5,6 +5,7 @@ import com.example.demo.Config.BeanConfig;
 import com.example.demo.Repository.UserRepo;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.HandlerInterceptor;

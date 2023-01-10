@@ -16,12 +16,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-@Configurable
 @Data
+@Configurable
 @NoArgsConstructor
-public class JwtService implements InitializingBean{
+public class JwtService implements InitializingBean {
 
-    @Value("${jwt.private.key}")
+    @Value("${spring.security.oauth2.resourceserver.jwt.public-key-location}")
     private String secretKey;
 
     private Key key;
