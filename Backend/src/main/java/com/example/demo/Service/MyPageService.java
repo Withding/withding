@@ -41,7 +41,6 @@ public class MyPageService {
         myPageSupporter.setNickName(user.getNickName());
         myPageSupporter.setPoint(user.getPoint());
         myPageSupporter.setFundingCount(investRepo.getCountToUserId(user.getUserId()));
-        myPageSupporter.setVoteCount(voteRepo.getCountToUserId(user.getUserId()));
         myPageSupporter.setProfileImage(beanConfig.SERVER_URL + beanConfig.SERVER_PORT + beanConfig.PROFILE_IMAGE_URL + user.getProfileImage());
         return myPageSupporter;
     }
