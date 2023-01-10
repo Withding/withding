@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @Data
 public class MyPageSupporter {
     private String nickName;
-    private Long voteCount;
     private Long fundingCount;
     private String profileImage;
     private Long point;
