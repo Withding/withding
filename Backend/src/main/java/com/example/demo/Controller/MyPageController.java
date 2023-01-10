@@ -38,11 +38,10 @@ public class MyPageController {
      */
     @RequestMapping(value = "/user/mypage/supporter", method = RequestMethod.GET)
     public ResponseEntity<Object> getSupporter(HttpServletRequest request){
-        //HttpServletRequest request2 = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        //System.out.println(request2.getAttribute("userNum"));
+
         User user;
 
-        //System.out.println("컨트롤러 안 : " + request2.getAttribute("userNum"));
+        //System.out.println("컨트롤러 안 : " + request.getAttribute("userNum"));
         if (request.getAttribute("userNum") == null){
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }else {
@@ -57,7 +56,6 @@ public class MyPageController {
 
     @RequestMapping(value = "user/mypage/maker", method = RequestMethod.GET)
     public ResponseEntity<Object> getMaker(HttpServletRequest request){
-        //HttpServletRequest request2 = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 
         User user;
         if (request.getAttribute("userNum") == null){

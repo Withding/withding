@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class MyPageSupporter {
-    private Long user_id;
     private String nickName;
     private Long voteCount;
     private Long fundingCount;

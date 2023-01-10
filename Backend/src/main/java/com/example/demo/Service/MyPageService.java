@@ -38,7 +38,6 @@ public class MyPageService {
 
     public MyPageSupporter setMyPageSupporter(User user){
         MyPageSupporter myPageSupporter = new MyPageSupporter();
-        myPageSupporter.setUser_id(user.getUserId());
         myPageSupporter.setNickName(user.getNickName());
         myPageSupporter.setPoint(user.getPoint());
         myPageSupporter.setFundingCount(investRepo.getCountToUserId(user.getUserId()));
