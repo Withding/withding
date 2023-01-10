@@ -34,7 +34,7 @@ function NormalLogin() {
         onSuccess: (res) => {
             onChangeUserInfo({
                 nickName: res.nickName,
-                profileImage: res.profileImage,
+                image: res.image,
                 isLogin: true,
             });
             navigator("/main");

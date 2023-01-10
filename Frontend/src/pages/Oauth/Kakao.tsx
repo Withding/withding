@@ -22,7 +22,8 @@ function Kakao() {
                         onChangeUserInfo({
                             nickName: res.nickName,
                             isLogin: true,
-                            profileImage: res.profileImage,
+                            image: res.image,
+                            accessToken: res.accessToken,
                         });
                         navigator("/");
                     });

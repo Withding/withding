@@ -3,7 +3,7 @@
  */
 interface User {
     nickName?: string;
-    profileImage?: string;
+    image?: string;
     accessToken?: string;
     isLogin?: boolean;
 }

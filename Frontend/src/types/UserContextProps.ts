@@ -6,7 +6,7 @@ import User from "./User";
 interface UserContextProps {
     isLogin: boolean;
     nickName: string;
-    profileImage: string;
+    image: string;
     onChangeUserInfo: (user: User) => void,
     onResetUser: () => void;
 }
