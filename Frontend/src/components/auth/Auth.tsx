@@ -5,17 +5,19 @@ import UserContext from "../../store/UserContext";
 function Auth(props: { children: React.ReactNode }) {
     const [nickName, setNickname] = useState<string>("");
     const [isLogin, setIsLogin] = useState<boolean>(false);
-    const [profileImage, setProfileImage] = useState<string>("");
-
+    const [image, setImage] = useState<string>("");
+    const [accessToken, setAccessToken] = useState<string>("");
     const onChangeUserInfo = useCallback((_user: User) => {
-        const { nickName, isLogin, profileImage } = _user;
+        const { nickName, isLogin, image, accessToken } = _user;
         setNickname(nickName ?? "");
         setIsLogin(isLogin ?? false);
-        setProfileImage(profileImage ?? "");
+        setImage(image ?? "");
+        setAccessToken(accessToken ?? "");
         const user = {
             nickName: nickName,
             isLogin: isLogin,
-            profileImage: profileImage,
+            image: image,
+            accessToken: accessToken
         };
         localStorage.setItem("user", JSON.stringify(user));
     }, []);
@@ -32,7 +34,8 @@ function Auth(props: { children: React.ReactNode }) {
             onChangeUserInfo({
                 nickName: userInfo.nickName,
                 isLogin: userInfo.isLogin,
-                profileImage: userInfo.profileImage,
+                image: userInfo.image,
+                accessToken: userInfo.accessToken
             });
         }
     }, [onChangeUserInfo]);
@@ -40,7 +43,7 @@ function Auth(props: { children: React.ReactNode }) {
         <UserContext.Provider value={{
             nickName,
             isLogin,
-            profileImage,
+            image,
             onChangeUserInfo,
             onResetUser
         }}>
