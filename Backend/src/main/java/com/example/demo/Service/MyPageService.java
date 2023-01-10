@@ -1,7 +1,8 @@
 package com.example.demo.Service;
 
 import com.example.demo.Config.BeanConfig;
-import com.example.demo.DTO.Response.MyPage;
+import com.example.demo.DTO.Response.MyPageMaker;
+import com.example.demo.DTO.Response.MyPageSupporter;
 import com.example.demo.DTO.User;
 import com.example.demo.Repository.InvestRepo;
 import com.example.demo.Repository.VoteRepo;
@@ -35,18 +36,22 @@ public class MyPageService {
     }
 
 
-    public MyPage setMyPage(User user){
-        MyPage myPage = new MyPage();
-        myPage.setUser_id(user.getUserId());
-        myPage.setNickName(user.getNickName());
-        myPage.setPoint(user.getPoint());
-        myPage.setFundingCount(investRepo.getCountToUserId(user.getUserId()));
-        myPage.setVoteCount(voteRepo.getCountToUserId(user.getUserId()));
-        myPage.setProfileImage(beanConfig.SERVER_URL + beanConfig.SERVER_PORT + beanConfig.PROFILE_IMAGE_URL + user.getProfileImage());
+    public MyPageSupporter setMyPageSupporter(User user){
+        MyPageSupporter myPageSupporter = new MyPageSupporter();
+        myPageSupporter.setUser_id(user.getUserId());
+        myPageSupporter.setNickName(user.getNickName());
+        myPageSupporter.setPoint(user.getPoint());
+        myPageSupporter.setFundingCount(investRepo.getCountToUserId(user.getUserId()));
+        myPageSupporter.setVoteCount(voteRepo.getCountToUserId(user.getUserId()));
+        myPageSupporter.setProfileImage(beanConfig.SERVER_URL + beanConfig.SERVER_PORT + beanConfig.PROFILE_IMAGE_URL + user.getProfileImage());
 
-        return myPage;
+        return myPageSupporter;
     }
 
+    /*public MyPageMaker setMyPageMaker(User user){
+        MyPageMaker myPageMaker = new MyPageMaker();
+        myPageMaker.setFundingCount(investRepo);
 
+    }*/
 
 }
