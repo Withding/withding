@@ -1,7 +1,8 @@
 package com.example.demo.Controller;
 
 import com.example.demo.Config.BeanConfig;
-import com.example.demo.DTO.Response.MyPage;
+import com.example.demo.DTO.Response.MyPageMaker;
+import com.example.demo.DTO.Response.MyPageSupporter;
 import com.example.demo.DTO.User;
 import com.example.demo.Repository.UserRepo;
 import com.example.demo.Service.MyPageService;
@@ -30,8 +31,13 @@ public class MyPageController {
     @Autowired
     private BeanConfig beanConfig;
 
-    @RequestMapping(value = "/user/mypage", method = RequestMethod.GET)
-    public ResponseEntity<Object> getMyPage(HttpServletRequest request){
+    /**
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/user/mypage/supporter", method = RequestMethod.GET)
+    public ResponseEntity<Object> getSupporter(HttpServletRequest request){
         HttpServletRequest request2 = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         System.out.println(request2.getAttribute("userNum"));
         User user;
@@ -41,10 +47,30 @@ public class MyPageController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }else {
             user = myPageService.setUserToHttpServletRequestAttribute(request);                                         // HttpServletRequest의 Attribute에서 값을 얻어서 User에 넣은 후 반환
-            user = userRepo.getUserToUserId(user);
+            user = userRepo.getUserToUserId(user);                                                                      // 나머지 정보들 조회 후 반환
         }
-        MyPage myPage = myPageService.setMyPage(user);
+        MyPageSupporter myPageSupporter = myPageService.setMyPageSupporter(user);
 
-        return new ResponseEntity<>(myPage,HttpStatus.OK);
+        return new ResponseEntity<>(myPageSupporter,HttpStatus.OK);
     }
+
+
+    @RequestMapping(value = "user/mypage/maker", method = RequestMethod.GET)
+    public ResponseEntity<Object> getMaker(HttpServletRequest request){
+        HttpServletRequest request2 = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        User user;
+        if (request.getAttribute("userNum") == null){
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }else {
+            user = myPageService.setUserToHttpServletRequestAttribute(request);                                         // HttpServletRequest의 Attribute에서 값을 얻어서 User에 넣은 후 반환
+            user = userRepo.getUserToUserId(user);                                                                      // 나머지 정보들 조회 후 반환
+        }
+
+        //MyPageMaker myPageMaker = myPageService
+
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
 }
