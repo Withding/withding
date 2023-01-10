@@ -84,6 +84,7 @@ public class LoginService {
                 tr.commit();
             } else {
                 //System.out.println("유저가 존재함");
+                user.setUserId(users.get(0).getUserId());
                 user.setNickName(users.get(0).getNickName());
                 user.setProfileImage(users.get(0).getProfileImage());
             }

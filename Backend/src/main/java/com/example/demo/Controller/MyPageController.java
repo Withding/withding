@@ -32,7 +32,7 @@ public class MyPageController {
     private BeanConfig beanConfig;
 
     /**
-     *
+     * 마이페이지 서포터
      * @param request
      * @return
      */
@@ -53,7 +53,11 @@ public class MyPageController {
         return new ResponseEntity<>(myPageSupporter,HttpStatus.OK);
     }
 
-
+    /**
+     * 마이페이지 메이커
+     * @param request
+     * @return
+     */
     @RequestMapping(value = "/user/mypage/maker", method = RequestMethod.GET)
     public ResponseEntity<Object> getMaker(HttpServletRequest request){
 
