@@ -49,12 +49,6 @@ public class User {
 
     private Long point;                 // 보유 포인트
 
-    @Column(name = "funding_list")
-    private String fundingList;         // 내가 펀딩한 목록
-
-    @Column(name = "vote_list")
-    private String voteList;            // 내가 좋아요 누른 목록
-
     @ManyToOne
     @JoinColumn(name = "state_code")
     private State state;                // 회원 상태

@@ -1,14 +1,20 @@
 package com.example.demo.Config;
 
 import com.example.demo.Repository.UserRepo;
+import com.example.demo.Service.IntercepterService;
+import com.example.demo.Service.JwtService;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.persistence.*;
 import java.io.File;
@@ -17,10 +23,19 @@ import java.util.Properties;
 @Getter
 @NoArgsConstructor
 @Configuration
-public class BeanConfig {
+public class BeanConfig implements WebMvcConfigurer {
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new IntercepterService())
+                .addPathPatterns("/user/mypage"); // 해당 경로에 접근하기 전에 인터셉터가 가로챈다.
+        //      .excludePathPatterns("/user/image/**"); // 해당 경로는 인터셉터가 가로채지 않는다.
+        WebMvcConfigurer.super.addInterceptors(registry);
+    }
 
     public final String PROFILE_IMAGE_URL = "/user/image/";
     public final String PROFILE_IMAGE_PATH = System.getProperty("user.dir") + File.separator + "profileImages/";
+
 
     @Value("${server.url}")
     public String SERVER_URL;
@@ -45,6 +60,8 @@ public class BeanConfig {
 
     @Value("${jwt.private.key}")
     private String jwtKey;
+
+
 
     @Bean
     public EntityManagerFactory emf(){
@@ -87,10 +104,11 @@ public class BeanConfig {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
+
+    /*@Bean
     public UserRepo userRepol(){
         return new UserRepo();
-    }
+    }*/
 
 
 }

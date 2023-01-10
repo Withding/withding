@@ -8,8 +8,6 @@ CREATE TABLE `user` (
 	`created_at` TIMESTAMP NOT NULL,
 	`logout_at` TIMESTAMP NOT NULL,
 	`point`	BIGINT(1)	NOT NULL DEFAULT 0,
-	`funding_list`	VARCHAR(300) NOT NULL DEFAULT '[]',
-	`vote_list`	VARCHAR(100) NOT NULL DEFAULT '[]',
 	`state_code`	TINYINT(1) NOT NULL
 );
 

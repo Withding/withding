@@ -75,7 +75,6 @@ public class EmailAuthRepo {
 
     /**
      * EmailAuth 테이블에서 특정 SecretKey와 특정 email이 매칭된 튜플의 갯수를 검색
-     *
      * @param emailAuth email이 담겨있는 EmailAuth 객체
      * @return 검색된 갯수를 반환
      */
