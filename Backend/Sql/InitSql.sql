@@ -120,25 +120,6 @@ CREATE TABLE `emailauth` (
 );
 
 
-CREATE TABLE `invest` (
-	`user_id`	INT(10) NOT NULL,
-	`funding_id`	INT(10) NOT NULL,
-	PRIMARY KEY(`user_id`,`funding_id`)
-);
-ALTER TABLE `invest` ADD CONSTRAINT `FK_user_TO_invest_1` FOREIGN KEY (
-	`user_id`
-)
-REFERENCES `user` (
-	`user_id`
-);
-
-ALTER TABLE `invest` ADD CONSTRAINT `FK_funding_TO_invest_1` FOREIGN KEY (
-	`funding_id`
-)
-REFERENCES `funding` (
-	`funding_id`
-);
-
 
 CREATE TABLE `vote` (
 	`user_id`	INT(10)	NOT NULL,
@@ -158,3 +139,18 @@ ALTER TABLE `vote` ADD CONSTRAINT `FK_funding_TO_vote_1` FOREIGN KEY (
 REFERENCES `funding` (
 	`funding_id`
 );
+
+
+CREATE TABLE `follow` (
+	`follow_id` INT(10) auto_increment NOT NULL PRIMARY KEY,
+	`user_id` INT(10) NOT NULL,
+	`follower` INT(10) NOT NULL
+);
+
+ALTER TABLE `follow` ADD CONSTRAINT `FK_user_TO_follow_1` FOREIGN KEY (
+	`user_id`
+)
+REFERENCES `user` (
+	`user_id`
+);
+

@@ -10,8 +10,8 @@
         <class>com.example.demo.DTO.FundingCategory</class>
         <class>com.example.demo.DTO.IdType</class>
         <class>com.example.demo.DTO.EmailAuth</class>
-        <class>com.example.demo.DTO.Invest</class>
         <class>com.example.demo.DTO.Vote</class>
+        <class>com.example.demo.DTO.Follower</class>
         <properties>
         <!-- 필수 속성 -->
             <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>

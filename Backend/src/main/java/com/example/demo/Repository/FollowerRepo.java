@@ -11,7 +11,7 @@ import javax.persistence.EntityTransaction;
 @Repository
 @Data
 @NoArgsConstructor
-public class InvestRepo {
+public class FollowerRepo {
 
     @Autowired
     private EntityManager em;
@@ -19,9 +19,10 @@ public class InvestRepo {
     @Autowired
     private EntityTransaction tr;
 
-    public Long getCountToUserId(Long user_id) {
-        return (Long) em.createQuery("SELECT COUNT(i.user_id) FROM Invest i WHERE i.user_id =: user_id")
+    public Long getCountToUserId(Long user_id){
+        return (Long) em.createQuery("SELECT COUNT(f.user.userId) FROM Follower f WHERE f.user.userId =: user_id")
                 .setParameter("user_id", user_id)
                 .getSingleResult();
     }
+
 }
