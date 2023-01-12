@@ -11,7 +11,7 @@ import java.util.Date;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @NoArgsConstructor
 @Entity
-@Table(name = "fundingdetails")           // 펀딩 내역
+@Table(name = "funding_details")           // 펀딩 내역
 public class FundingDetails {
 
     @Id
