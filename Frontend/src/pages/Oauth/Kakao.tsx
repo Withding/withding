@@ -24,6 +24,7 @@ function Kakao() {
                             isLogin: true,
                             image: res.image,
                             accessToken: res.accessToken,
+                            loginType: 1,
                         });
                         navigator("/");
                     });

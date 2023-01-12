@@ -10,8 +10,8 @@ import SummaryItem from "./SummaryItem";
 function SummaryList() {
     const { point, fundingCount } = useContext(SupportContext);
     const items = useMemo(() => [
-        { key: "펀딩", value: fundingCount + "" },
-        { key: "포인트", value: point + "" },
+        { key: "펀딩", value: (fundingCount ?? 0) + "" },
+        { key: "포인트", value: (point ?? 0) + "" },
     ], [fundingCount, point]);
     return (
         <ul css={style}>

@@ -6,6 +6,7 @@ interface User {
     image?: string;
     accessToken?: string;
     isLogin?: boolean;
+    loginType?: number;
 }
 
 
