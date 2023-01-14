@@ -8,6 +8,7 @@ import fetchSupportInfo from "@/utils/RequestApis/mypage/fetchSupportInfo";
 import { useQuery } from "react-query";
 import SupportContext from "@/store/SupportContext";
 import DivLine from "../DivLine";
+import MyActive from "./MyActive";
 
 /**
  * 서포터 탭 클릭시 보여주는 화면
@@ -35,6 +36,7 @@ function Support() {
                 <MenuContent>
                     <Summary />
                     <DivLine />
+                    <MyActive />
                 </MenuContent>
                 {isMobile && <Logout />}
             </SupportContext.Provider>
