@@ -1,3 +1,5 @@
 .DS_store
 
 Backend/src/main/resource
+Backend/profileImages
+Backend/*.jar
