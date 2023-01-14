@@ -24,22 +24,23 @@ function Image(props: BaseProps & ImageProps) {
 }
 
 const style = css`
-    background-color: red;
-    border-radius: 100%;
     display: flex;
     align-items: flex-end;
     text-align: center;
+    position: relative;
     img {
         width: 100%;
         height: 100%;
         object-fit: fill;
+        border-radius: 100%;
     }
 
     .edit-btn {
-        display: flex;
+        position: absolute;
+        right: 0;
+        display: inline-flex;
         align-items: center;
-        justify-content: center;
-        border-radius: 100%;
+        border-radius: 50%;
         padding: 0.3rem;
         border: 1px solid var(--grey-300);
         font-size: 0.7rem;
