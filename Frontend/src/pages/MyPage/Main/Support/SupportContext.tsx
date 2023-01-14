@@ -7,13 +7,14 @@ import Summary from "./Summary";
 import fetchSupportInfo from "@/utils/RequestApis/mypage/fetchSupportInfo";
 import { useQuery } from "react-query";
 import SupportContext from "@/store/SupportContext";
+import DivLine from "../DivLine";
 
 /**
  * 서포터 탭 클릭시 보여주는 화면
  * @returns 
  */
 function Support() {
-    const isMobile = useMediaQuery({ query: "(max-width: 1096px)" });
+    const isMobile = useMediaQuery({ query: "(max-width: 1095px)" });
     const { data } = useQuery(["fetchSupportInfo"], () => fetchSupportInfo(), {
         suspense: false,
         useErrorBoundary: false
@@ -33,6 +34,7 @@ function Support() {
                 />
                 <MenuContent>
                     <Summary />
+                    <DivLine />
                 </MenuContent>
                 {isMobile && <Logout />}
             </SupportContext.Provider>
