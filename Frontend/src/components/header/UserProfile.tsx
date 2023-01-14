@@ -1,4 +1,5 @@
 import UserContext from "@/store/UserContext";
+import { css } from "@emotion/react";
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -10,10 +11,16 @@ function UserProfile() {
     const { nickName } = useContext(UserContext);
     const navigate = useNavigate();
     return (
-        <div>
+        <div css={style}>
             <p onClick={() => navigate("/mypage/main")}>{nickName}</p>
         </div>
     );
 }
+
+const style = css`
+    p {
+        cursor: pointer;
+    }
+`;
 
 export default UserProfile;
