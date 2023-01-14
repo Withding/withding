@@ -60,7 +60,7 @@ function Nav() {
             show: "mobile",
             route: "/mypage",
             icon: <AiOutlineUser />,
-            onClick: () => menuOnClickHandler("/mypage")
+            onClick: () => menuOnClickHandler("/mypage/main")
         },
     ], [menuOnClickHandler]);
 
