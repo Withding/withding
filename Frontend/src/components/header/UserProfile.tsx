@@ -8,18 +8,21 @@ import { useNavigate } from "react-router-dom";
  * @returns 
  */
 function UserProfile() {
-    const { nickName } = useContext(UserContext);
+    const { image } = useContext(UserContext);
     const navigate = useNavigate();
     return (
-        <div css={style}>
-            <p onClick={() => navigate("/mypage/main")}>{nickName}</p>
-        </div>
+        <figure css={style} onClick={() => navigate("/mypage/main")}>
+            <img src={image} alt="유저 프로필 이미지" />
+        </figure >
     );
 }
 
 const style = css`
-    p {
-        cursor: pointer;
+    width: 2rem;
+    height: 2rem;
+    cursor: pointer;
+    img {
+        border-radius: 999px;
     }
 `;
 

@@ -195,7 +195,13 @@ const style = css`
     input:focus {
         outline: 0 none;
         border: 0 none;
-    }   
+    }
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: fill;
+    }
 `;
 
 export default GlobalStyle;
