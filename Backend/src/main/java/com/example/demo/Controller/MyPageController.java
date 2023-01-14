@@ -6,6 +6,7 @@ import com.example.demo.DTO.Response.MyPageSupporter;
 import com.example.demo.DTO.User;
 import com.example.demo.Repository.UserRepo;
 import com.example.demo.Service.MyPageService;
+import com.example.demo.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,9 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 @CrossOrigin("*")
 public class MyPageController {
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private MyPageService myPageService;
@@ -45,7 +49,7 @@ public class MyPageController {
         if (request.getAttribute("userNum") == null){
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }else {
-            user = myPageService.setUserToHttpServletRequestAttribute(request);                                         // HttpServletRequest의 Attribute에서 값을 얻어서 User에 넣은 후 반환
+            user = userService.setUserToHttpServletRequestAttribute(request);                                         // HttpServletRequest의 Attribute에서 값을 얻어서 User에 넣은 후 반환
             user = userRepo.getUserToUserId(user);                                                                      // 나머지 정보들 조회 후 반환
         }
         MyPageSupporter myPageSupporter = myPageService.setMyPageSupporter(user);
@@ -65,7 +69,7 @@ public class MyPageController {
         if (request.getAttribute("userNum") == null){
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }else {
-            user = myPageService.setUserToHttpServletRequestAttribute(request);                                         // HttpServletRequest의 Attribute에서 값을 얻어서 User에 넣은 후 반환
+            user = userService.setUserToHttpServletRequestAttribute(request);                                         // HttpServletRequest의 Attribute에서 값을 얻어서 User에 넣은 후 반환
             user = userRepo.getUserToUserId(user);                                                                      // 나머지 정보들 조회 후 반환
         }
         MyPageMaker myPageMaker = myPageService.setMyPageMaker(user);

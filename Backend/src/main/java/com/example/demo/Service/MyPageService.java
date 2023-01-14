@@ -31,14 +31,12 @@ public class MyPageService {
     @Autowired
     private BeanConfig beanConfig;
 
-    public User setUserToHttpServletRequestAttribute(HttpServletRequest request){
-        User user = new User();
-        user.setUserId((Long) request.getAttribute("userNum"));
-        user.setNickName((String) request.getAttribute("nickName"));
-        user.setLoginTime((String) request.getAttribute("loginTime"));
-        return user;
-    }
 
+    /**
+     * 마이페이지 서포터 정보 세팅에 사용
+     * @param user 특정 사용자의 정보가 담긴 객체
+     * @return
+     */
     public MyPageSupporter setMyPageSupporter(User user){
         MyPageSupporter myPageSupporter = new MyPageSupporter();
         myPageSupporter.setNickName(user.getNickName());
@@ -48,6 +46,12 @@ public class MyPageService {
         return myPageSupporter;
     }
 
+
+    /**
+     * 마이페이지 메이커 정보 세팅에 사용
+     * @param user 특정 사용자의 정보가 담긴 객체
+     * @return
+     */
     public MyPageMaker setMyPageMaker(User user){
         MyPageMaker myPageMaker = new MyPageMaker();
         myPageMaker.setFundingCount(fundingDetailsRepo.getCountToUserId(user.getUserId()));
