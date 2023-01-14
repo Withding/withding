@@ -4,6 +4,24 @@ plugins {
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 }
 
+
+bootJar{
+	//----------- build 후 jar 파일 생성 위치 설정 ---------
+	destinationDir = file("$rootDir")  // jar 파일 생성 위치를 project root로 설정
+	//------------------------------------------------
+
+	//----------- build 후 jar 파일 이름 변경 설정 ---------
+	archivesBaseName = '1' 	// 원하는 이름
+	archiveFileName = '1.jar' // 원하는 이름.jar
+	archiveVersion = "0.0.0"
+	//------------------------------------------------
+
+	//------------- 빌드시 jar을 실행하는 설정 --------------------
+	//jar.enabled = true
+	//------------------------------------------------
+}
+
+
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
