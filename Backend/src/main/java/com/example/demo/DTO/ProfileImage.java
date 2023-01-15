@@ -19,7 +19,6 @@ import javax.persistence.Table;
 public class ProfileImage {
 
 
-
     @Id
     @Column(name = "profile_image")
     private String profileImage;

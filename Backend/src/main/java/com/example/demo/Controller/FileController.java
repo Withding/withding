@@ -69,8 +69,13 @@ public class FileController {
 
 
         User user = userService.setUserToHttpServletRequestAttribute(request);                                          // request에 담긴 값으로 User 세팅
-        if (fileService.changeUserImage(user, new ProfileImage(fileName, image.getOriginalFilename())) == true){        // user 테이블에서 해당 사용자의 프로필 이미지 값을 바꾸는 함수
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        if (fileService.changeUserImage(user, new ProfileImage(fileName, image.getOriginalFilename())) != null){        // user 테이블에서 해당 사용자의 프로필 이미지 값을 바꾸는 함수
+            ProfileImage profileImage = new ProfileImage();
+            profileImage.setProfileImage(beanConfig.SERVER_URL + ":" + beanConfig.SERVER_PORT + beanConfig.PROFILE_IMAGE_URL + fileName);
+            profileImage.setOriginProfileImage(null);
+            return new ResponseEntity<>(
+                    profileImage,
+                    HttpStatus.OK);
         }else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

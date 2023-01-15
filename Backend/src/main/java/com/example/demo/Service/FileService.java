@@ -63,7 +63,7 @@ public class FileService {
      * @param profileImage user 테이블의 프로필 이미지에 변경될 ProfileImage 객체
      * @return 정상 true, 실패 false
      */
-    public boolean changeUserImage(User user, ProfileImage profileImage){
+    public String changeUserImage(User user, ProfileImage profileImage){
 
         try{
             user = em.find(User.class, user.getUserId());
@@ -72,11 +72,11 @@ public class FileService {
             em.persist(user);                                                                                           // JPA에서 관리 시작
             user.setProfileImage(profileImage);                                                                         // 변경
             tr.commit();
-            return true;
+            return user.getProfileImage().getProfileImage();
         } catch (Exception e){
             tr.rollback();
             e.printStackTrace();
-            return false;
+            return null;
         }
     }
 
