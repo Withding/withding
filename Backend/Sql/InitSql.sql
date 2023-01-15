@@ -35,6 +35,13 @@ Insert Into `id_type` VALUES(0, 'withding');
 Insert Into `id_type` VALUES(1, 'kakao');
 Insert Into `id_type` VALUES(2, 'naver');
 
+
+CREATE TABLE `profileimage` (
+	`profile_image` VARCHAR(100) NOT NULL PRIMARY KEY,
+	`origin_profile_image` VARCHAR(100) NOT NULL
+);
+Insert into profileimage VALUES('default.png', 'default.png');
+
 CREATE TABLE `user` (
 	`user_id`	INT(10) auto_increment NOT NULL PRIMARY KEY,
 	`email`	VARCHAR(100)    NOT NULL,
@@ -105,6 +112,14 @@ ALTER TABLE `funding_details` ADD CONSTRAINT `FK_funding_TO_funding_details_1` F
 REFERENCES `funding` (
 	`funding_id`
 );
+
+ALTER TABLE `user` ADD CONSTRAINT `FK_profileimage_TO_user_1` FOREIGN KEY (
+	`profile_image`
+)
+REFERENCES `profileimage` (
+	`profile_image`
+);
+
 
 
 /**
