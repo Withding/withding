@@ -4,12 +4,14 @@ import CreateButton from "./CreateButton";
 import Login from "./Login";
 import MobileDynamicHeader from "./MobileDynamicHeader";
 import Nav from "./Nav";
+import PCHeader from "./PCHeader";
 
 function Header() {
     return (
         <header css={defaultStyle}>
             <Nav />
             <div className="right">
+                <PCHeader />
                 <MobileDynamicHeader />
                 <Login className="login" />
                 <CreateButton className="create-btn" />

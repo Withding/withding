@@ -14,9 +14,7 @@ function Notice(props: BaseProps) {
 }
 
 const style = css`
-    font-size: 2rem;
-    margin-left: 0.5rem;
-    margin-right: 0.5rem;
+    font-size: 1.8rem;
     cursor: pointer;
 `;
 

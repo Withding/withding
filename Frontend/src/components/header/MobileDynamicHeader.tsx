@@ -1,3 +1,4 @@
+import { css } from "@emotion/react";
 import React, { useCallback } from "react";
 import { useLocation } from "react-router-dom";
 import DefaultHeader from "./PageHeaders/DefaultHeader";
@@ -31,12 +32,18 @@ function MobileDynamicHeader() {
         else {
             return <DefaultHeader />;
         }
-    }, [isLoginPage, isMyPageMain, isSignupPage]);
+    }, [isLoginPage, isMainPage, isMyPageMain, isSignupPage]);
 
     return (
-        <React.Fragment>
+        <div css={css`
+            display: none;
+            @media screen and (max-width: 1095px) {
+                display: block;
+                width: 100%;
+            }
+        `}>
             {getHeader()}
-        </React.Fragment>
+        </div>
     );
 }
 export default MobileDynamicHeader;

@@ -1,13 +1,11 @@
 import styled from "@emotion/styled";
 import React from "react";
-import { useMediaQuery } from "react-responsive";
 import { useLocation } from "react-router-dom";
 import Notice from "../Notice/Notice";
 import Search from "../Search/Search";
 
 function SearchHeader() {
     const { pathname } = useLocation();
-    const isMobile = useMediaQuery({ query: "(max-width: 1095px)" });
     const isMain = pathname.startsWith("/main");
     return (
         <Div
@@ -20,11 +18,12 @@ function SearchHeader() {
 }
 
 const Div = styled.div<{ isRender: boolean }>`
-    
+    justify-content: center;
+    align-items: center;
     @media screen and (min-width: 1096px) { 
-        & > .notice {
-            display: none;
-        }
+        display: inline-flex;
+        margin-right: 1rem;
+        
     }
 
     @media screen and (max-width: 1095px) {
