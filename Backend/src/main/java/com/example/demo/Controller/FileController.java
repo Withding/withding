@@ -56,7 +56,7 @@ public class FileController {
      * 사용자의 프로필 이미지를 바꾸는 컨트롤러
      * @param image 변경할 이미지 파일
      * @param request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
-     * @return 인증실패 401, 성공 200, 정상 처리 실패 400
+     * @return 인증실패 401, 성공 204, 정상 처리 실패 400
      */
     @RequestMapping(value = "/user/image", method = RequestMethod.PUT, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Object> changeUserImage(@RequestParam(value = "image") MultipartFile image, HttpServletRequest request)
@@ -77,6 +77,11 @@ public class FileController {
     }
 
 
+    /**
+     * 사용자 프로필 이미지를 기본 이미지로 변경하는 컨트롤러
+     * @param request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
+     * @return 인증실패 401, 성공 204, 정상 처리 실패 400
+     */
     @RequestMapping(value = "/user/image", method = RequestMethod.DELETE)
     public ResponseEntity<Object> deleteUserImage(HttpServletRequest request)
     {
