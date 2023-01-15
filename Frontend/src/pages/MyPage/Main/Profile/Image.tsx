@@ -1,7 +1,8 @@
 import BaseProps from "@/types/BaseProps";
 import { css } from "@emotion/react";
-import React from "react";
+import React, { useCallback } from "react";
 import { GrEdit } from "react-icons/gr";
+import { useNavigate } from "react-router-dom";
 
 interface ImageProps {
     src?: string;
@@ -15,10 +16,15 @@ interface ImageProps {
  * @returns 
  */
 function Image(props: BaseProps & ImageProps) {
+    const navigate = useNavigate();
+
+    const goEditProfile = useCallback(() => {
+        navigate("/mypage/myprofile");
+    }, [navigate]);
     return (
         <figure css={style}>
             <img src={props.src} alt="Image loading fail..." />
-            {props.isEdit && <button className="edit-btn"><GrEdit /></button>}
+            {props.isEdit && <button onClick={goEditProfile} className="edit-btn"><GrEdit /></button>}
         </figure>
     );
 }
