@@ -4,6 +4,7 @@ import React, { useCallback, useContext, useRef } from "react";
 import SubContent from "./SubContent";
 import { useMutation } from "react-query";
 import replaceProfileImage from "@/utils/RequestApis/mypage/replaceProfileImage";
+import deleteProfileImage from "@/utils/RequestApis/mypage/deleteProfileImage";
 
 
 /**
@@ -15,16 +16,26 @@ function EditProfileImage() {
     const imgRef = useRef<HTMLInputElement>(null);
     const { mutate } = useMutation(replaceProfileImage, {
         onSuccess: (data) => {
-            console.log(data);
             onChangeProfileImage(data.profileImage);
         }
     });
+
+    const { mutate: deleteImg } = useMutation(deleteProfileImage, {
+        onSuccess: (data) => {
+            onChangeProfileImage(data.profileImage);
+        }
+    });
+
     const onChangeImage = useCallback(() => {
         if (imgRef.current?.files) {
             const file = imgRef.current.files[0];
             mutate(file);
         }
     }, [mutate]);
+
+    const onDeleteImage = useCallback(() => {
+        deleteImg();
+    }, [deleteImg]);
     return (
         <SubContent
             title={"프로필 사진"}
@@ -34,7 +45,7 @@ function EditProfileImage() {
                 <input hidden ref={imgRef} type="file" onChange={onChangeImage} accept="image/png, image/jpeg" />
                 <div className="event">
                     <button onClick={() => imgRef.current?.click()}>바꾸기</button>
-                    <button>삭제</button>
+                    <button onClick={onDeleteImage}>삭제</button>
                 </div>
             </figure>
         </SubContent >
