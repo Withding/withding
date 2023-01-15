@@ -29,17 +29,17 @@ public class UserRepo {
      * @return 정상 저장시 true 반환
      */
     public boolean save(final User request) {
-        boolean result = false;
+
         try{
             tr.begin();
             em.persist(request);
             tr.commit();
-            result = true;
+            return true;
         }catch (Exception e){
             e.printStackTrace();
             tr.rollback();
+            return false;
         }
-        return result;
     }
 
 
