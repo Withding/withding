@@ -7,27 +7,30 @@ import UserContext from "@/store/UserContext";
  * @param props.children
  * @returns 
  */
+
+
+const InitUser = {
+    nickName: "",
+    isLogin: false,
+    image: "",
+    accessToken: "",
+    loginType: 0,
+};
 function Auth(props: { children: React.ReactNode }) {
-    const [nickName, setNickname] = useState<string>("");
-    const [isLogin, setIsLogin] = useState<boolean>(false);
-    const [image, setImage] = useState<string>("");
-    const [loginType, setLoginType] = useState<number>(0);
+    const [user, setUser] = useState<User>(InitUser);
     const onChangeUserInfo = useCallback((_user: User) => {
-        const { nickName, isLogin, image, accessToken, loginType } = _user;
-        setNickname(nickName ?? "");
-        setIsLogin(isLogin ?? false);
-        setImage(image ?? "");
-        setLoginType(loginType ?? 0);
-        const user = {
-            nickName: nickName,
-            isLogin: isLogin,
-            image: image,
-            accessToken: accessToken,
-            loginType: loginType
-        };
-        localStorage.setItem("user", JSON.stringify(user));
+        setUser(() => _user);
+        localStorage.setItem("user", JSON.stringify(_user));
     }, []);
 
+
+    const onChangeProfileImage = useCallback((image: string) => {
+        setUser({
+            ...user,
+            image: image
+        });
+        localStorage.setItem("user", JSON.stringify(user));
+    }, [user]);
 
     const onResetUser = useCallback(() => {
 
@@ -48,11 +51,12 @@ function Auth(props: { children: React.ReactNode }) {
     }, [onChangeUserInfo]);
     return (
         <UserContext.Provider value={{
-            nickName,
-            isLogin,
-            image,
-            loginType,
+            nickName: user.nickName ?? "",
+            isLogin: user.isLogin ?? false,
+            image: user.image ?? "",
+            loginType: user.loginType ?? 0,
             onChangeUserInfo,
+            onChangeProfileImage,
             onResetUser
         }}>
             {props.children}
