@@ -8,6 +8,7 @@ function PreviousButton(props: BaseProps) {
     return (
         <GrPrevious
             className={props.className}
+            style={{ cursor: "pointer" }}
             onClick={() => navigator(-1)}
         />
     );

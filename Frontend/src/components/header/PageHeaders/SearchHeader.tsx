@@ -11,7 +11,7 @@ function SearchHeader() {
     const isMain = pathname.startsWith("/main");
     return (
         <Div
-            isRender={isMobile && isMain}
+            isRender={isMain}
         >
             <Search />
             <Notice className="notice" />
