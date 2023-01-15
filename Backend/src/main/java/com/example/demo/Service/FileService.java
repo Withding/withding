@@ -1,6 +1,7 @@
 package com.example.demo.Service;
 
 import com.example.demo.Config.BeanConfig;
+import com.example.demo.DTO.ProfileImage;
 import com.example.demo.DTO.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,6 +30,7 @@ public class FileService {
     @Autowired
     private EntityTransaction tr;
 
+
     /**
      * 변경하기 위한 이미지의 이름에 현재시간을 추가하고 공백들을 제거 및 profileImages 폴더에 저장하기 위한 함수
      * @param image 변경하기 위한 이미지
@@ -56,18 +58,19 @@ public class FileService {
 
 
     /**
-     *
+     * 사용자가 원하는 이미지로 변경하는 함수
      * @param user  userNum, nickName, loginTime이 세팅된 user 객체
-     * @param fileName user 테이블의 프로필 이미지에 변경될 파일 이름
+     * @param profileImage user 테이블의 프로필 이미지에 변경될 ProfileImage 객체
      * @return 정상 true, 실패 false
      */
-    public boolean changeUserImage(User user, String fileName){
+    public boolean changeUserImage(User user, ProfileImage profileImage){
 
         try{
             user = em.find(User.class, user.getUserId());
             tr.begin();
+            em.persist(profileImage);                                                                                   // profileImage 관리 시작 (없으면 DB에 삽입)
             em.persist(user);                                                                                           // JPA에서 관리 시작
-            user.setProfileImage(fileName);                                                                             // 변경
+            user.setProfileImage(profileImage);                                                                         // 변경
             tr.commit();
             return true;
         } catch (Exception e){
@@ -78,4 +81,24 @@ public class FileService {
     }
 
 
+    /**
+     * 사용자의 프로필 이미지를 default.png로 변경하는 함수
+     * @param userId 변경할 유저 고유 번호
+     * @return
+     */
+    public boolean deleteUserImage(Long userId) {
+
+        try{
+            User user = em.find(User.class, userId);
+            tr.begin();
+            em.persist(user);                                                                                           // JPA에서 관리 시작
+            user.setProfileImage(new ProfileImage("default.png", "default.png"));             // 변경
+            tr.commit();
+            return true;
+        } catch (Exception e){
+            tr.rollback();
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

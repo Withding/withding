@@ -38,8 +38,10 @@ public class User {
     @Column(name = "user")
     private String nickName;                // 닉네임
 
-    @Column(name = "profile_image")
-    private String profileImage;        // 프로필 이미지
+
+    @OneToOne
+    @JoinColumn(name = "profile_image")
+    private ProfileImage profileImage;        // 프로필 이미지
 
     @Column(name = "created_at")
     private String createdAt;             // 가입시간
