@@ -11,10 +11,12 @@ import replaceProfileImage from "@/utils/RequestApis/mypage/replaceProfileImage"
  * @returns 
  */
 function EditProfileImage() {
-    const { image } = useContext(UserContext);
+    const { image, onChangeProfileImage } = useContext(UserContext);
     const imgRef = useRef<HTMLInputElement>(null);
     const { mutate } = useMutation(replaceProfileImage, {
-
+        onSuccess: (data) => {
+            onChangeProfileImage(data.image);
+        }
     });
     const onChangeImage = useCallback(() => {
         if (imgRef.current?.files) {

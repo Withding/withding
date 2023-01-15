@@ -9,6 +9,7 @@ interface UserContextProps {
     nickName: string;
     image: string;
     onChangeUserInfo: (user: User) => void,
+    onChangeProfileImage: (image: string) => void
     onResetUser: () => void;
 }
 

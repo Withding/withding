@@ -11,6 +11,7 @@ const UserContext = React.createContext<UserContextProps>({
     nickName: "",
     image: "",
     onChangeUserInfo: (user: User) => {},
+    onChangeProfileImage: (image: string) => {},
     onResetUser: () => {},
 });
 
