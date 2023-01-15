@@ -50,7 +50,7 @@ public class LoginController {
                     new Login(
                             jwtService.generateJwtToken(user.getUserId(), user.getNickName(), dateFormat.format(new Timestamp(System.currentTimeMillis())))
                             , user.getNickName()
-                            ,beanConfig.SERVER_URL + ":" + beanConfig.SERVER_PORT + beanConfig.PROFILE_IMAGE_URL + user.getProfileImage()
+                            ,beanConfig.SERVER_URL + ":" + beanConfig.SERVER_PORT + beanConfig.PROFILE_IMAGE_URL + user.getProfileImage().getProfileImage()
                     )
                     , HttpStatus.OK
             );
