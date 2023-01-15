@@ -42,7 +42,7 @@ public class MyPageService {
         myPageSupporter.setNickName(user.getNickName());
         myPageSupporter.setPoint(user.getPoint());
         myPageSupporter.setFundingCount(fundingDetailsRepo.getCountToUserId(user.getUserId()));
-        myPageSupporter.setProfileImage(beanConfig.SERVER_URL + ":" + beanConfig.SERVER_PORT + beanConfig.PROFILE_IMAGE_URL + user.getProfileImage());
+        myPageSupporter.setProfileImage(beanConfig.SERVER_URL + ":" + beanConfig.SERVER_PORT + beanConfig.PROFILE_IMAGE_URL + user.getProfileImage().getProfileImage());
         return myPageSupporter;
     }
 
