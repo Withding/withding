@@ -90,13 +90,16 @@ public class FileController {
     @RequestMapping(value = "/user/image", method = RequestMethod.DELETE)
     public ResponseEntity<Object> deleteUserImage(HttpServletRequest request)
     {
-        if (request.getAttribute("userNum") == null){
+        if (request.getAttribute("userNum") == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         User user = userService.setUserToHttpServletRequestAttribute(request);
 
-        if (fileService.deleteUserImage(user.getUserId())){
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        if (fileService.deleteUserImage(user.getUserId())) {
+            ProfileImage profileImage = new ProfileImage();
+            profileImage.setProfileImage(beanConfig.SERVER_URL + ":" + beanConfig.SERVER_PORT + beanConfig.PROFILE_IMAGE_URL + "default.png");
+            profileImage.setOriginProfileImage(null);
+            return new ResponseEntity<>(profileImage, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
