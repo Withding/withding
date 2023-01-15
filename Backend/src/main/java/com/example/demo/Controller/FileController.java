@@ -1,6 +1,7 @@
 package com.example.demo.Controller;
 
 import com.example.demo.Config.BeanConfig;
+import com.example.demo.DTO.ProfileImage;
 import com.example.demo.DTO.User;
 import com.example.demo.Service.FileService;
 import com.example.demo.Service.UserService;
@@ -34,6 +35,7 @@ public class FileController {
     @Autowired
     private FileService fileService;
 
+
     /**
      * User 프로필 이미지 호출하는 컨트롤러
      * @param imageName 호출할 파일 이름
@@ -56,20 +58,41 @@ public class FileController {
      * @param request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
      * @return 인증실패 401, 성공 200, 정상 처리 실패 400
      */
-    @RequestMapping(value = "/user/image/change", method = RequestMethod.PUT, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @RequestMapping(value = "/user/image", method = RequestMethod.PUT, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Object> changeUserImage(@RequestParam(value = "image") MultipartFile image, HttpServletRequest request)
     {
-        System.out.println(request.getAttribute("userNum"));
         if (request.getAttribute("userNum") == null){
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
         final String fileName = fileService.createUserImage(image);                                                     // 변경하기 위한 이미지의 이름을 수정하고 폴더에 저장하는 함수
+
+
         User user = userService.setUserToHttpServletRequestAttribute(request);                                          // request에 담긴 값으로 User 세팅
-        if (fileService.changeUserImage(user, fileName) == true){                                                       // user 테이블에서 해당 사용자의 프로필 이미지 값을 바꾸는 함수
-            return new ResponseEntity<>(HttpStatus.OK);
+        if (fileService.changeUserImage(user, new ProfileImage(fileName, image.getOriginalFilename())) == true){        // user 테이블에서 해당 사용자의 프로필 이미지 값을 바꾸는 함수
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
+
+    @RequestMapping(value = "/user/image", method = RequestMethod.DELETE)
+    public ResponseEntity<Object> deleteUserImage(HttpServletRequest request)
+    {
+        if (request.getAttribute("userNum") == null){
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        User user = userService.setUserToHttpServletRequestAttribute(request);
+
+        if (fileService.deleteUserImage(user.getUserId())){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+    }
+
+
+
 }
