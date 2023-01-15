@@ -25,11 +25,9 @@ function Auth(props: { children: React.ReactNode }) {
 
 
     const onChangeProfileImage = useCallback((image: string) => {
-        setUser({
-            ...user,
-            image: image
-        });
-        localStorage.setItem("user", JSON.stringify(user));
+        const newUser = { ...user, image: image };
+        setUser(newUser);
+        localStorage.setItem("user", JSON.stringify(newUser));
     }, [user]);
 
     const onResetUser = useCallback(() => {

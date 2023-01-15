@@ -15,7 +15,8 @@ function EditProfileImage() {
     const imgRef = useRef<HTMLInputElement>(null);
     const { mutate } = useMutation(replaceProfileImage, {
         onSuccess: (data) => {
-            onChangeProfileImage(data.image);
+            console.log(data);
+            onChangeProfileImage(data.profileImage);
         }
     });
     const onChangeImage = useCallback(() => {

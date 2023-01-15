@@ -3,7 +3,7 @@ import customAxios from "@/utils/customAxios";
  * 프로필 이미지 변경 API
  * @returns 
  */
-function replaceProfileImage(image: File): Promise<{ image: string}> {
+function replaceProfileImage(image: File): Promise<{ profileImage: string}> {
     const axios = customAxios();
     const user = JSON.parse(localStorage.getItem("user") || "{}");
     const accessToken = user?.accessToken;
