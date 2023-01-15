@@ -26,7 +26,7 @@ const style = css`
     width: 100%;
     position: relative;
     flex-direction: column;
-
+    z-index: 999;
     // Desktop
     @media screen and (min-width: 1096px) {
         align-items: center; // 메뉴를 리스트를 가운대에 오기위해 사용

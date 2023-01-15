@@ -21,6 +21,7 @@ function Header() {
 }
 
 const defaultStyle = css`
+    z-index: 999;
     width: 100%;
     min-height: 4rem;
     background-color: var(--white);
