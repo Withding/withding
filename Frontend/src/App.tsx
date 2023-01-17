@@ -9,7 +9,7 @@ const Signin = React.lazy(() => import("./pages/Signin/Index"));
 const Signup = React.lazy(() => import("./pages/Signup/Index"));
 const Oauth = React.lazy(() => import("./pages/Oauth/Index"));
 const MyPage = React.lazy(() => import("./pages/MyPage/Index"));
-
+const Project = React.lazy(() => import("./pages/Project/Index"));
 
 import { Suspense } from "react";
 import Auth from "./components/auth/Auth";
@@ -56,6 +56,7 @@ function App() {
                                 <Route path="/funding" element={<div>funding</div>} />
                                 <Route path="/commingsoon" element={<div>commingsoon</div>} />
                                 <Route path="/mypage/*" element={<MyPage />} />
+                                <Route path="/project/*" element={<Project />} />
                             </Routes>
                         </Suspense>
                     </div>
