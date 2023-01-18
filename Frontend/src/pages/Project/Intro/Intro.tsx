@@ -1,11 +1,13 @@
 import ProjectMakeContext from "@/store/ProjectMakeContext";
 import { css } from "@emotion/react";
 import { EmotionJSX } from "@emotion/react/types/jsx-namespace";
-import React, { useCallback, useState } from "react";
+import React, { useCallback } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Start from "./Start/Start";
 import Ready from "./Ready/Ready";
 import Button from "@/components/common/Button";
+import After from "./After/After";
+import Final from "./Final/Final";
 
 
 interface EpisodeType {
@@ -26,7 +28,8 @@ function Intro() {
     const episode: EpisodeType[] = [
         { step: 1, component: <Start />, nextButtonValue: "좋아요" },
         { step: 2, component: <Ready />, nextButtonValue: "다음" },
-        { step: 3, component: <Ready />, nextButtonValue: "다음" },
+        { step: 3, component: <After />, nextButtonValue: "다음" },
+        { step: 4, component: <Final />, nextButtonValue: "시작하기" },
     ];
     const render = episode.find((item) => item.step === step);// step에 해당하는 컴포넌트를 렌더링  
 

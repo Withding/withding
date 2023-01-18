@@ -7,7 +7,7 @@ function Index() {
     return (
         <React.Fragment>
             <Routes>
-                <Route path="/" element={<Navigate to="/intro" />} />
+                <Route path="/" element={<Navigate to="/project/intro" />} />
                 <Route path="intro" element={<Intro />} />
             </Routes>
         </React.Fragment>
