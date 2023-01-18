@@ -1,15 +1,17 @@
 import { css } from "@emotion/react";
 import React from "react";
 import Button from "../common/Button";
-import BaseProps from "../../types/BaseProps";
+import BaseProps from "@/types/BaseProps";
+import { useNavigate } from "react-router-dom";
 
 function CreateButton(props: BaseProps) {
+    const navigator = useNavigate();
     return (
         <Button
-            onClick={props.onClick}
             css={style}
             className={props.className}
             value={"프로젝트 생성"}
+            onClick={() => navigator("/project/intro")}
         />
     );
 }
