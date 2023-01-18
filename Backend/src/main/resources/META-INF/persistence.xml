@@ -13,6 +13,10 @@
         <class>com.example.demo.DTO.Vote</class>
         <class>com.example.demo.DTO.Follower</class>
         <class>com.example.demo.DTO.ProfileImage</class>
+        <class>com.example.demo.DTO.ArticleImage</class>
+        <class>com.example.demo.DTO.Article</class>
+        <class>com.example.demo.DTO.thumbnail</class>
+        <class>com.example.demo.DTO.FundingStateCode</class>
         <properties>
         <!-- 필수 속성 -->
             <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
