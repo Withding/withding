@@ -34,6 +34,9 @@ function Intro() {
     const render = episode.find((item) => item.step === step);// step에 해당하는 컴포넌트를 렌더링  
 
     const goNextStepHandler = useCallback(() => {
+        if (step === episode.length) {
+            console.log("시작하기");
+        }
         if (episode.length > step)
             navigator(`/project/intro?step=${step + 1}`);
     }, [episode.length, navigator, step]);
@@ -61,13 +64,11 @@ function Intro() {
                                 value="< 이전"
                             />
                         }
-                        {episode.length > render!.step &&
-                            <Button
-                                className="next"
-                                onClick={goNextStepHandler}
-                                value={render?.nextButtonValue ?? ""}
-                            />
-                        }
+                        <Button
+                            className="next"
+                            onClick={goNextStepHandler}
+                            value={render?.nextButtonValue ?? ""}
+                        />
                     </article>
                 </main>
             </div>
