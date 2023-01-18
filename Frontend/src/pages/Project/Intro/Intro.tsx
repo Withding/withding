@@ -3,7 +3,7 @@ import { css } from "@emotion/react";
 import { EmotionJSX } from "@emotion/react/types/jsx-namespace";
 import React, { useCallback, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import Intro from "./Intro/Intro";
+import Start from "./Start/Start";
 import Ready from "./Ready/Ready";
 import Button from "@/components/common/Button";
 
@@ -19,12 +19,12 @@ interface EpisodeType {
  * 프로젝트 생성 페이지
  * @returns 
  */
-function Make() {
+function Intro() {
     const { search } = useLocation();
     const step = parseInt(new URLSearchParams(search).get("step") ?? "1");
     const navigator = useNavigate();
     const episode: EpisodeType[] = [
-        { step: 1, component: <Intro />, nextButtonValue: "좋아요" },
+        { step: 1, component: <Start />, nextButtonValue: "좋아요" },
         { step: 2, component: <Ready />, nextButtonValue: "다음" },
         { step: 3, component: <Ready />, nextButtonValue: "다음" },
     ];
@@ -32,13 +32,14 @@ function Make() {
 
     const goNextStepHandler = useCallback(() => {
         if (episode.length > step)
-            navigator(`/project/make?step=${step + 1}`);
+            navigator(`/project/intro?step=${step + 1}`);
     }, [episode.length, navigator, step]);
 
     const prevStepHandler = useCallback(() => {
         if (step !== 1)
-            navigator(`/project/make?step=${step - 1}`);
+            navigator(`/project/intro?step=${step - 1}`);
     }, [navigator, step]);
+
     return (
         <ProjectMakeContext.Provider value={{
             goNextStepHandler
@@ -134,4 +135,4 @@ const style = css`
     }
 `;
 
-export default Make;
+export default Intro;

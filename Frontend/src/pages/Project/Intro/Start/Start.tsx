@@ -3,10 +3,10 @@ import UserContext from "@/store/UserContext";
 import { css } from "@emotion/react";
 import UserContextProps from "@/types/UserContextProps";
 /**
- * 프로젝트 생성 step=1 인트로 페이지
+ * 프로젝트 생성 step=1 인트로 시작 페이지
  * @returns 
  */
-function Intro() {
+function Start() {
     const { nickName } = useContext<UserContextProps>(UserContext);
     return (
         <article
@@ -33,4 +33,4 @@ const style = css`
     }
 `;
 
-export default Intro;
+export default Start;
