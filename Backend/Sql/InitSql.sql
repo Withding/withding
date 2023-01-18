@@ -1,20 +1,37 @@
-CREATE TABLE `funding_category` (
-	`funding_category_id`	TINYINT(1) auto_increment NOT NULL PRIMARY KEY,
-	`category`	VARCHAR(30)	NOT NULL
+CREATE TABLE `funding_state_code` (
+	`state_code` TINYINT NOT NULL PRIMARY KEY,
+	`state` VARCHAR(50) NOT NULL
 );
+INSERT INTO funding_state_code VALUES(0, '진행대기');
+INSERT INTO funding_state_code VALUES(1, '진행중');
+INSERT INTO funding_state_code VALUES(2, '종료');
+INSERT INTO funding_state_code VALUES(3, '정지');
+INSERT INTO funding_state_code VALUES(4, '임시저장');
 
-/**
-Insert funding_category Into VALUES(0,'BEST 펀딩');
-Insert funding_category Into VALUES(1,'테크·가전');
-Insert funding_category Into VALUES(2,'패션·잡화');
-Insert funding_category Into VALUES(3,'');
-Insert funding_category Into VALUES(4,'');
-Insert funding_category Into VALUES(5,'');
-Insert funding_category Into VALUES(6,'');
-Insert funding_category Into VALUES(7,'');
-Insert funding_category Into VALUES(8,'');
-Insert funding_category Into VALUES(9,'');
-*/
+CREATE TABLE `funding_category` (
+	`funding_category_id` TINYINT NOT NULL PRIMARY KEY,
+	`category` VARCHAR(30) NOT NULL
+);
+Insert Into funding_category VALUES(0, 'BEST 펀딩');
+Insert Into funding_category VALUES(1,'테크·가전');
+Insert Into funding_category VALUES(2, '패션·잡화');
+Insert Into funding_category VALUES(3, '뷰티');
+Insert Into funding_category VALUES(4, '푸드');
+Insert Into funding_category VALUES(5, '홈·리빙');
+Insert Into funding_category VALUES(6, '여행·레져');
+Insert Into funding_category VALUES(7, '스포츠·모빌리티');
+Insert Into funding_category VALUES(8, '캐릭터·굿즈');
+Insert Into funding_category VALUES(9, '베이비·키즈');
+Insert Into funding_category VALUES(10, '베이비·키즈');
+Insert Into funding_category VALUES(11, '반려동물');
+Insert Into funding_category VALUES(12, '게임·취미');
+Insert Into funding_category VALUES(13, '컬쳐·아티스트');
+Insert Into funding_category VALUES(14, '클래스·컨설팅');
+Insert Into funding_category VALUES(15, '출판');
+Insert Into funding_category VALUES(16, '기부·캠페인');
+Insert Into funding_category VALUES(17, '후원');
+Insert Into funding_category VALUES(18, '모임');
+
 
 CREATE TABLE `state` (
 	`state_code` TINYINT(1) NOT NULL PRIMARY KEY,
@@ -28,7 +45,7 @@ Insert Into `state` VALUES(2, '정지');
 
 CREATE TABLE `id_type` (
 	`id_type_code`	TINYINT(1) NOT NULL PRIMARY KEY,
-	`id_type`	VARCHAR(30)	NOT NULL DEFAULT '자체'
+	`id_type`	VARCHAR(30)	NOT NULL
 );
 
 Insert Into `id_type` VALUES(0, 'withding');
@@ -55,19 +72,7 @@ CREATE TABLE `user` (
 	`state_code`	TINYINT(1) NOT NULL
 );
 
-CREATE TABLE `funding` (
-	`funding_id`	INT(10) auto_increment NOT NULL PRIMARY KEY,
-	`funding_category_id`	TINYINT(1) NOT NULL,
-	`title`	VARCHAR(100)	NOT NULL,
-	`content`	VARCHAR(1000)	NOT NULL,
-	`max_amount`	BIGINT(2)	NOT NULL DEFAULT 0,
-	`now_amount`	BIGINT(2)	NOT NULL DEFAULT 0,
-	`deadline`	TimeStamp NOT NULL,
-	`view_count`	INT(1)	NOT NULL DEFAULT 0,
-	`vote_count`	INT(1)	NOT NULL DEFAULT 0,
-	`created_at`	TimeStamp NOT NULL,
-	`open_at`	TimeStamp NOT NULL
-);
+
 
 CREATE TABLE `funding_details` (
 	`funding_details_id`	INT(10) auto_increment NOT NULL PRIMARY KEY,
@@ -75,6 +80,54 @@ CREATE TABLE `funding_details` (
 	`funding_id`	INT(10)	NOT NULL,
 	`amount`	BIGINT(1)	NOT NULL DEFAULT 0,
 	`funding_at`	TimeStamp NOT NULL
+);
+
+
+CREATE TABLE `article_image` (
+	`image` VARCHAR(100) NOT NULL PRIMARY KEY,
+	`origin_image` VARCHAR(100) NOT NULL
+);
+INSERT INTO `article_image` VALUES('default.png', 'default.png');
+
+
+CREATE TABLE `article` (
+	`article_id` INT(10) auto_increment NOT NULL PRIMARY KEY,
+	`image` VARCHAR(100) NOT NULL DEFAULT 'default.png',
+	`article_name` VARCHAR(100) NOT NULL,
+	`comment` VARCHAR(100) NOT NULL,
+	`price` INT(10) NOT NULL,
+	`shipping` INT(10) NOT NULL DEFAULT 0,
+	`start_send` TimeStamp NULL,
+	`inventory` INT(2) NOT NULL DEFAULT 0
+);
+
+
+CREATE TABLE `thumbnail` (
+	`image` VARCHAR(100) NOT NULL PRIMARY KEY,
+	`comment` VARCHAR(1500) NULL
+);
+
+
+CREATE TABLE `funding` (
+	`funding_id` INT(10) auto_increment NOT NULL PRIMARY KEY,
+	`funding_category_id` TINYINT(1) NULL,
+	`title` VARCHAR(100) NULL,
+	`content` VARCHAR(1000) NULL,
+	`image` VARCHAR(100) NULL,
+	`max_amount` BIGINT(2) NOT NULL DEFAULT 0,
+	`now_amount` BIGINT(2) NOT NULL DEFAULT 0,
+	`view_count` INT NOT NULL DEFAULT 0,
+	`vote_count` INT NOT NULL DEFAULT 0,
+	`user_id` INT(10) NOT NULL,
+	`created_at` TimeStamp NULL,
+	`open_at` TimeStamp NULL,
+	`deadline` TimeStamp NULL,
+	`article_id_1` INT(10) NULL DEFAULT null,
+	`article_id_2` INT(10) NULL DEFAULT null,
+	`article_id_3` INT(10) NULL DEFAULT null,
+	`article_id_4` INT(10) NULL DEFAULT null,
+	`article_id_5` INT(10) NULL DEFAULT null,
+	`state_code` TINYINT NULL DEFAULT 4
 );
 
 
@@ -92,11 +145,11 @@ REFERENCES `state` (
 	`state_code`
 );
 
-ALTER TABLE `funding` ADD CONSTRAINT `FK_funding_category_TO_funding_1` FOREIGN KEY (
-	`funding_category_id`
+ALTER TABLE `user` ADD CONSTRAINT `FK_profileimage_TO_user_1` FOREIGN KEY (
+	`profile_image`
 )
-REFERENCES `funding_category` (
-	`funding_category_id`
+REFERENCES `profileimage` (
+	`profile_image`
 );
 
 ALTER TABLE `funding_details` ADD CONSTRAINT `FK_user_TO_funding_details_1` FOREIGN KEY (
@@ -113,18 +166,58 @@ REFERENCES `funding` (
 	`funding_id`
 );
 
-ALTER TABLE `user` ADD CONSTRAINT `FK_profileimage_TO_user_1` FOREIGN KEY (
-	`profile_image`
+
+ALTER TABLE `funding` ADD CONSTRAINT `FK_article_TO_funding_1` FOREIGN KEY (
+	`article_id_1`
 )
-REFERENCES `profileimage` (
-	`profile_image`
+REFERENCES `article` (
+	`article_id`
+);
+
+ALTER TABLE `funding` ADD CONSTRAINT `FK_article_TO_funding_2` FOREIGN KEY (
+	`article_id_2`
+)
+REFERENCES `article` (
+	`article_id`
+);
+
+ALTER TABLE `funding` ADD CONSTRAINT `FK_article_TO_funding_3` FOREIGN KEY (
+	`article_id_3`
+)
+REFERENCES `article` (
+	`article_id`
+);
+
+ALTER TABLE `funding` ADD CONSTRAINT `FK_article_TO_funding_4` FOREIGN KEY (
+	`article_id_4`
+)
+REFERENCES `article` (
+	`article_id`
+);
+
+ALTER TABLE `funding` ADD CONSTRAINT `FK_article_TO_funding_5` FOREIGN KEY (
+	`article_id_5`
+)
+REFERENCES `article` (
+	`article_id`
+);
+
+ALTER TABLE `funding` ADD CONSTRAINT `FK_funding_state_code_TO_funding_1` FOREIGN KEY (
+	`state_code`
+)
+REFERENCES `funding_state_code` (
+	`state_code`
+);
+
+ALTER TABLE `article` ADD CONSTRAINT `FK_article_image_TO_article_1` FOREIGN KEY (
+	`image`
+)
+REFERENCES `article_image` (
+	`image`
 );
 
 
 
-/**
-Insert Into VALUES()
-*/
 
 CREATE TABLE `emailauth` (
 	`emailauth_id` INT(5) auto_increment NOT NULL PRIMARY KEY,
@@ -133,7 +226,6 @@ CREATE TABLE `emailauth` (
 	`secretkey` VARCHAR(200) NOT NULL,
 	`deadline` TimeStamp NOT NULL
 );
-
 
 
 CREATE TABLE `vote` (
