@@ -44,9 +44,9 @@ function Nav() {
         {
             name: "",
             show: "mobile",
-            route: "/QQQ",
+            route: "/project",
             icon: <AiOutlinePlusCircle className="add" />,
-            onClick: () => { /** */ }
+            onClick: () => menuOnClickHandler("/project/intro")
         },
         {
             name: "찜하기",
