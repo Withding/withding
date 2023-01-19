@@ -55,6 +55,7 @@ function Intro() {
                     menu
                 </aside>
                 <main>
+                    <span className="left-page">{`${(episode.length) - render!.step}단계 남음`}</span>
                     {render?.component}
                     <article className="button">
                         {render?.step !== 1 &&
@@ -123,6 +124,15 @@ const style = css`
 
     .prev {
         color: var(--grey-500);
+    }
+
+    .left-page {
+        text-align: right;
+        float: right;
+        font-size: 0.8rem;
+        width: 100%;
+        color: var(--grey-400);
+        margin-bottom: 1rem;
     }
 
     @media screen and (max-width: 1095px) {
