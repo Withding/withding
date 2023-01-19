@@ -1,5 +1,4 @@
 import ProjectMakeContext from "@/store/ProjectMakeContext";
-import { css } from "@emotion/react";
 import React, { useCallback } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Start from "./Start/Start";
@@ -11,14 +10,15 @@ import HorizontalProgressBar from "@/components/common/HorizontalProgressBar";
 import ProcedureNavigator from "@/components/common/Procedure/ProcedureNavigator";
 import EpisodeType from "@/types/EpisodeType";
 import Wrapper from "../Wrapper";
+import useStepParam from "@/hooks/useStepParam";
+
 /**
  * /project/make 페이지 컴포넌트
  * 프로젝트 생성 페이지
  * @returns 
  */
 function Intro() {
-    const { search } = useLocation();
-    const step = parseInt(new URLSearchParams(search).get("step") ?? "1");
+    const step = useStepParam();
     const navigator = useNavigate();
     const episode: EpisodeType[] = [
         { step: 1, component: <Start />, nextButtonValue: "좋아요", name: "시작하기" },
