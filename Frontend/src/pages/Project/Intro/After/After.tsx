@@ -1,6 +1,6 @@
+import ProcedureList from "@/components/common/Procedure/ProcedureList";
 import ProcedureType from "@/types/ProcedureType";
 import React from "react";
-import ProcedureList from "@/components/common/ProcedureList";
 
 /**
  * 프로젝트 등록후 어떤식으로 진행되는지 설명해주는 컴포넌트 

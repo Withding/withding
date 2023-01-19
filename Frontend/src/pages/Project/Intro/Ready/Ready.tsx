@@ -1,7 +1,7 @@
+import ProcedureList from "@/components/common/Procedure/ProcedureList";
 import ProcedureType from "@/types/ProcedureType";
 import { css } from "@emotion/react";
 import React from "react";
-import ProcedureList from "@/components/common/ProcedureList";
 import { IoAlertCircle } from "react-icons/io5";
 
 /**

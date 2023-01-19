@@ -1,6 +1,5 @@
 import ProjectMakeContext from "@/store/ProjectMakeContext";
 import { css } from "@emotion/react";
-import { EmotionJSX } from "@emotion/react/types/jsx-namespace";
 import React, { useCallback } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Start from "./Start/Start";
@@ -8,14 +7,9 @@ import Ready from "./Ready/Ready";
 import Button from "@/components/common/Button";
 import After from "./After/After";
 import Final from "./Final/Final";
-
-
-interface EpisodeType {
-    step: number;
-    component: EmotionJSX.Element;
-    nextButtonValue: string;
-}
-
+import HorizontalProgressBar from "@/components/common/HorizontalProgressBar";
+import ProcedureNavigator from "@/components/common/Procedure/ProcedureNavigator";
+import EpisodeType from "@/types/EpisodeType";
 /**
  * /project/make 페이지 컴포넌트
  * 프로젝트 생성 페이지
@@ -26,10 +20,10 @@ function Intro() {
     const step = parseInt(new URLSearchParams(search).get("step") ?? "1");
     const navigator = useNavigate();
     const episode: EpisodeType[] = [
-        { step: 1, component: <Start />, nextButtonValue: "좋아요" },
-        { step: 2, component: <Ready />, nextButtonValue: "다음" },
-        { step: 3, component: <After />, nextButtonValue: "다음" },
-        { step: 4, component: <Final />, nextButtonValue: "시작하기" },
+        { step: 1, component: <Start />, nextButtonValue: "좋아요", name: "시작하기" },
+        { step: 2, component: <Ready />, nextButtonValue: "다음", name: "프로젝트 생성 진행단계" },
+        { step: 3, component: <After />, nextButtonValue: "다음", name: "프로젝트 공개후 진행단계" },
+        { step: 4, component: <Final />, nextButtonValue: "시작하기", name: "정산" },
     ];
     const render = episode.find((item) => item.step === step);// step에 해당하는 컴포넌트를 렌더링  
 
@@ -51,10 +45,17 @@ function Intro() {
             goNextStepHandler
         }}>
             <div css={style}>
-                <aside>
-                    menu
-                </aside>
+                <ProcedureNavigator
+                    list={episode}
+                    path={"/project/intro?step="}
+                    currnet={step}
+                />
                 <main>
+                    <HorizontalProgressBar
+                        now={render!.step}
+                        max={episode.length}
+                        height={3}
+                    />
                     <span className="left-page">{`${(episode.length) - render!.step}단계 남음`}</span>
                     {render?.component}
                     <article className="button">
@@ -135,10 +136,20 @@ const style = css`
         margin-bottom: 1rem;
     }
 
-    @media screen and (max-width: 1095px) {
+    @media screen and (min-width: 1096px) {
         aside {
-            display: none;
+            min-width: 15rem;
+            max-width: 16rem;
         }
+        main {
+            border-left: 1px solid var(--grey-200);
+        }
+    }
+
+    @media screen and (max-width: 1095px) {
+        /* aside {
+            display: none;
+        } */
 
         .next {
             width: 20%;
