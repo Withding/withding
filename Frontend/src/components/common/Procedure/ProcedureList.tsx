@@ -24,6 +24,7 @@ function ProcedureList({ list }: { list: ProcedureType[] }) {
 const style = css`
     margin-top: 3rem;
     width: 100%;
+    margin-left: 1rem;
 `;
 
 export default ProcedureList;
