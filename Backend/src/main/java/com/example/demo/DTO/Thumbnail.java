@@ -12,7 +12,7 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @Entity
 @Table(name = "thumbnail")
-public class thumbnail {
+public class Thumbnail {
 
     @Id
     @Column(name = "image")
@@ -20,4 +20,7 @@ public class thumbnail {
 
     @Column(name = "comment")
     private String comment;
+
+    @Column(name = "origin_image")
+    private String origin_image;
 }
