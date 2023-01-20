@@ -15,7 +15,7 @@ public class Article {
 
     @Id
     @Column(name = "article_id")
-    private Long article_id;                    // 물품 번호
+    private Long articleId;                    // 물품 번호
 
     @ManyToOne
     @JoinColumn(name = "image")
