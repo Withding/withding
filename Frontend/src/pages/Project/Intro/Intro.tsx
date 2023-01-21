@@ -1,6 +1,5 @@
-import ProjectMakeContext from "@/store/ProjectMakeContext";
 import React, { useCallback } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Start from "./Start/Start";
 import Ready from "./Ready/Ready";
 import Button from "@/components/common/Button";
@@ -42,40 +41,36 @@ function Intro() {
     }, [navigator, step]);
 
     return (
-        <ProjectMakeContext.Provider value={{
-            goNextStepHandler
-        }}>
-            <Wrapper>
-                <ProcedureNavigator
-                    list={episode}
-                    path={"/project/intro?step="}
-                    currnet={step}
+        <Wrapper>
+            <ProcedureNavigator
+                list={episode}
+                path={"/project/intro?step="}
+                currnet={step}
+            />
+            <main>
+                <HorizontalProgressBar
+                    now={render!.step}
+                    max={episode.length}
+                    height={3}
                 />
-                <main>
-                    <HorizontalProgressBar
-                        now={render!.step}
-                        max={episode.length}
-                        height={3}
-                    />
-                    <span className="left-page">{`${(episode.length) - render!.step}단계 남음`}</span>
-                    {render?.component}
-                    <article className="button">
-                        {render?.step !== 1 &&
-                            <Button
-                                className="prev"
-                                onClick={prevStepHandler}
-                                value="< 이전"
-                            />
-                        }
+                <span className="left-page">{`${(episode.length) - render!.step}단계 남음`}</span>
+                {render?.component}
+                <article className="button">
+                    {render?.step !== 1 &&
                         <Button
-                            className="next"
-                            onClick={goNextStepHandler}
-                            value={render?.nextButtonValue ?? ""}
+                            className="prev"
+                            onClick={prevStepHandler}
+                            value="< 이전"
                         />
-                    </article>
-                </main>
-            </Wrapper>
-        </ProjectMakeContext.Provider>
+                    }
+                    <Button
+                        className="next"
+                        onClick={goNextStepHandler}
+                        value={render?.nextButtonValue ?? ""}
+                    />
+                </article>
+            </main>
+        </Wrapper>
     );
 }
 
