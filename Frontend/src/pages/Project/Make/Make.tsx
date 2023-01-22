@@ -28,6 +28,15 @@ function Make() {
 
     const onChangeValue = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
+        if (name === "bestImage") {
+            const { files } = e.target;
+            const file = files?.[0];
+            setValues({
+                ...values,
+                bestImage: file
+            });
+            return;
+        }
         setValues({
             ...values,
             [name]: value
