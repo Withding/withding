@@ -8,6 +8,8 @@ interface InputProps {
     onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
     disabled?: boolean;
     maxLength?: number;
+    min?: string | number;
+    max?: string | number;
 }
 
 export default InputProps;

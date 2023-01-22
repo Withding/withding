@@ -1,36 +1,28 @@
-import React from "react";
-import Start from "./Start/Start";
-import Ready from "./Ready/Ready";
-import After from "./After/After";
-import Final from "./Final/Final";
 import ProcedureNavigator from "@/components/common/Procedure/ProcedureNavigator";
-import EpisodeType from "@/types/EpisodeType";
+import React from "react";
 import Wrapper from "../Wrapper";
 import useStepParam from "@/hooks/useStepParam";
+import ProjectInfo from "./ProjectInfo/ProjectInfo";
+import EpisodeType from "@/types/EpisodeType";
 import ButtonController from "../ButtonController";
 import MainHeader from "../MainHeader";
 
 /**
- * /project/intro 페이지 컴포넌트
- * 프로젝트 생성 페이지
+ * /project/make 페이지 컴포넌트
  * @returns 
  */
-function Intro() {
+function Make() {
     const step = useStepParam();
     const episode: EpisodeType[] = [
-        { step: 1, component: <Start />, nextButtonValue: "좋아요", name: "시작하기" },
-        { step: 2, component: <Ready />, nextButtonValue: "다음", name: "프로젝트 생성 진행단계" },
-        { step: 3, component: <After />, nextButtonValue: "다음", name: "프로젝트 공개후 진행단계" },
-        { step: 4, component: <Final />, nextButtonValue: "시작하기", name: "정산" },
+        { step: 1, component: <ProjectInfo />, nextButtonValue: "검토하기", name: "프로젝트 정보 입력" },
     ];
     const render = episode.find((item) => item.step === step);// step에 해당하는 컴포넌트를 렌더링  
-
     return (
         <Wrapper>
             <ProcedureNavigator
                 list={episode}
-                path={"/project/intro?step="}
-                currnet={step}
+                path={"/project/make?step="}
+                currnet={1}
             />
             <main>
                 <MainHeader
@@ -46,7 +38,7 @@ function Intro() {
                     className="button"
                     step={step}
                     lastStep={episode.length}
-                    path={"/project/intro?step="}
+                    path={"/project/make?step="}
                     nextButtonValue={render?.nextButtonValue}
                 />
             </main>
@@ -54,7 +46,4 @@ function Intro() {
     );
 }
 
-
-
-
-export default Intro;
+export default Make;
