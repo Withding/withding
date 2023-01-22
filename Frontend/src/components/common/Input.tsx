@@ -12,6 +12,7 @@ function Input(props: BaseProps & InputProps & { error?: boolean }) {
     // console.log(props.error);
     return (
         <InputTag
+            className={props?.className}
             error={props.error || false}
             {...props}
         />
