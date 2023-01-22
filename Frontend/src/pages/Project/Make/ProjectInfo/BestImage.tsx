@@ -2,6 +2,11 @@ import { css } from "@emotion/react";
 import React from "react";
 import { AiOutlineCamera } from "react-icons/ai";
 
+
+/**
+ * 프로젝트 대표 이미지 선택 컴포넌트
+ * @returns 
+ */
 function BestImage() {
     return (
         <section css={style}>

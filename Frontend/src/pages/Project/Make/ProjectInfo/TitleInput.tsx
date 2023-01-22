@@ -1,6 +1,10 @@
 import React from "react";
 import LabelInput from "@/components/common/LabelInput";
 
+/**
+ * 프로젝트 제목을 적는 컴포넌트
+ * @returns 
+ */
 function TitleInput() {
     return (
         <section>

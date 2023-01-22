@@ -2,6 +2,10 @@ import { css } from "@emotion/react";
 import React from "react";
 import InputForm from "./InputForm";
 
+/**
+ * 프로젝트 정보를 입력하는 컴포넌트
+ * @returns 
+ */
 function ProjectInfo() {
     return (
         <article css={style}>

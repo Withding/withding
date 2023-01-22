@@ -1,6 +1,10 @@
 import { css } from "@emotion/react";
 import React from "react";
 
+/**
+ * 프로젝트 카테고리 선택 컴포넌트
+ * @returns 
+ */
 function Category() {
     return (
         <section>

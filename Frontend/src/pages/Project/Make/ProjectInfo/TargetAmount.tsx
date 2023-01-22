@@ -2,6 +2,10 @@ import Input from "@/components/common/Input";
 import { css } from "@emotion/react";
 import React from "react";
 
+/**
+ * 프로젝트 목표 금액을 작성하는 컴포넌트
+ * @returns 
+ */
 function TargetAmount() {
     return (
         <section css={style}>
