@@ -3,15 +3,15 @@ import Start from "./Start/Start";
 import Ready from "./Ready/Ready";
 import After from "./After/After";
 import Final from "./Final/Final";
-import HorizontalProgressBar from "@/components/common/HorizontalProgressBar";
 import ProcedureNavigator from "@/components/common/Procedure/ProcedureNavigator";
 import EpisodeType from "@/types/EpisodeType";
 import Wrapper from "../Wrapper";
 import useStepParam from "@/hooks/useStepParam";
 import ButtonController from "../ButtonController";
+import MainHeader from "../MainHeader";
 
 /**
- * /project/make 페이지 컴포넌트
+ * /project/intro 페이지 컴포넌트
  * 프로젝트 생성 페이지
  * @returns 
  */
@@ -33,14 +33,17 @@ function Intro() {
                 currnet={step}
             />
             <main>
-                <HorizontalProgressBar
-                    now={render!.step}
-                    max={episode.length}
-                    height={3}
+                <MainHeader
+                    progressBar={{
+                        now: step,
+                        max: episode.length,
+                        height: 3
+                    }}
+                    leftPage={`${episode.length - step}단계 남음`}
                 />
-                <span className="left-page">{`${(episode.length) - render!.step}단계 남음`}</span>
                 {render?.component}
                 <ButtonController
+                    className="button"
                     step={step}
                     lastStep={episode.length}
                     path={"/project/intro?step="}

@@ -4,8 +4,8 @@ import Wrapper from "../Wrapper";
 import useStepParam from "@/hooks/useStepParam";
 import ProjectInfo from "./ProjectInfo/ProjectInfo";
 import EpisodeType from "@/types/EpisodeType";
-import HorizontalProgressBar from "@/components/common/HorizontalProgressBar";
 import ButtonController from "../ButtonController";
+import MainHeader from "../MainHeader";
 
 /**
  * /project/make 페이지 컴포넌트
@@ -25,13 +25,17 @@ function Make() {
                 currnet={1}
             />
             <main>
-                <HorizontalProgressBar
-                    now={step}
-                    max={episode.length} height={3}
+                <MainHeader
+                    progressBar={{
+                        now: step,
+                        max: episode.length,
+                        height: 3
+                    }}
+                    leftPage={`${episode.length - step}단계 남음`}
                 />
-                <span className="left-page">{`${episode.length - step}단계 남음`}</span>
                 {render?.component}
                 <ButtonController
+                    className="button"
                     step={step}
                     lastStep={episode.length}
                     path={"/project/make?step="}
