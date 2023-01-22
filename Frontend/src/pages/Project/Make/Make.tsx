@@ -5,6 +5,7 @@ import useStepParam from "@/hooks/useStepParam";
 import ProjectInfo from "./ProjectInfo/ProjectInfo";
 import EpisodeType from "@/types/EpisodeType";
 import HorizontalProgressBar from "@/components/common/HorizontalProgressBar";
+import ButtonController from "../ButtonController";
 
 /**
  * /project/make 페이지 컴포넌트
@@ -30,9 +31,13 @@ function Make() {
                 />
                 <span className="left-page">{`${episode.length - step}단계 남음`}</span>
                 {render?.component}
-
+                <ButtonController
+                    step={step}
+                    lastStep={episode.length}
+                    path={"/project/make?step="}
+                    nextButtonValue={render?.nextButtonValue}
+                />
             </main>
-
         </Wrapper>
     );
 }
