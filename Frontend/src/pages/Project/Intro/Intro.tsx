@@ -1,8 +1,6 @@
-import React, { useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import React from "react";
 import Start from "./Start/Start";
 import Ready from "./Ready/Ready";
-import Button from "@/components/common/Button";
 import After from "./After/After";
 import Final from "./Final/Final";
 import HorizontalProgressBar from "@/components/common/HorizontalProgressBar";
@@ -10,6 +8,7 @@ import ProcedureNavigator from "@/components/common/Procedure/ProcedureNavigator
 import EpisodeType from "@/types/EpisodeType";
 import Wrapper from "../Wrapper";
 import useStepParam from "@/hooks/useStepParam";
+import ButtonController from "../ButtonController";
 
 /**
  * /project/make 페이지 컴포넌트
@@ -18,7 +17,6 @@ import useStepParam from "@/hooks/useStepParam";
  */
 function Intro() {
     const step = useStepParam();
-    const navigator = useNavigate();
     const episode: EpisodeType[] = [
         { step: 1, component: <Start />, nextButtonValue: "좋아요", name: "시작하기" },
         { step: 2, component: <Ready />, nextButtonValue: "다음", name: "프로젝트 생성 진행단계" },
@@ -26,19 +24,6 @@ function Intro() {
         { step: 4, component: <Final />, nextButtonValue: "시작하기", name: "정산" },
     ];
     const render = episode.find((item) => item.step === step);// step에 해당하는 컴포넌트를 렌더링  
-
-    const goNextStepHandler = useCallback(() => {
-        if (step === episode.length) {
-            console.log("시작하기");
-        }
-        if (episode.length > step)
-            navigator(`/project/intro?step=${step + 1}`);
-    }, [episode.length, navigator, step]);
-
-    const prevStepHandler = useCallback(() => {
-        if (step !== 1)
-            navigator(`/project/intro?step=${step - 1}`);
-    }, [navigator, step]);
 
     return (
         <Wrapper>
@@ -55,20 +40,12 @@ function Intro() {
                 />
                 <span className="left-page">{`${(episode.length) - render!.step}단계 남음`}</span>
                 {render?.component}
-                <article className="button">
-                    {render?.step !== 1 &&
-                        <Button
-                            className="prev"
-                            onClick={prevStepHandler}
-                            value="< 이전"
-                        />
-                    }
-                    <Button
-                        className="next"
-                        onClick={goNextStepHandler}
-                        value={render?.nextButtonValue ?? ""}
-                    />
-                </article>
+                <ButtonController
+                    step={step}
+                    lastStep={episode.length}
+                    path={"/project/intro?step="}
+                    nextButtonValue={render?.nextButtonValue}
+                />
             </main>
         </Wrapper>
     );
