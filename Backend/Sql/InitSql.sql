@@ -104,7 +104,7 @@ CREATE TABLE `article` (
 
 CREATE TABLE `thumbnail` (
 	`image` VARCHAR(100) NOT NULL PRIMARY KEY,
-	`comment` VARCHAR(1500) NULL
+	`origin_image` VARCHAR(100) NOT NULL
 );
 
 
