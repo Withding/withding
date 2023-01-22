@@ -6,6 +6,8 @@ const ProjectMakeContext = React.createContext<ProjectMakeContextProps>({
         title: "",
         category: "",
         targetAmount: 0,
+        startDate: "",
+        endDate: "",
     },
     onChangeValue: () => {}
 });

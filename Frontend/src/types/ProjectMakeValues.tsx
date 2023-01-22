@@ -4,6 +4,8 @@ interface ProjectMakeValues {
     targetAmount: number;
     bestImage?: File | null;
     prevViewImage?: null;
+    startDate: string;
+    endDate: string;
 }
 
 export default ProjectMakeValues;

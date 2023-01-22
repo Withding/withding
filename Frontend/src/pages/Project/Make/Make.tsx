@@ -23,7 +23,9 @@ function Make() {
     const [values, setValues] = useState<ProjectMakeValues>({
         title: "",
         category: "",
-        targetAmount: 0
+        targetAmount: 0,
+        startDate: new Date().toString(),
+        endDate: new Date().toString(),
     });
 
     const onChangeValue = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
