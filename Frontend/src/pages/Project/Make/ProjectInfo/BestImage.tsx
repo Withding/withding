@@ -98,6 +98,11 @@ const style = css`
 const prevViewImageStyle = css`
     width: 100%;
     display: inline-flex;
+    img {
+        width: 100%;
+        height: auto;
+        object-fit: fill;
+    }
     svg {
         margin-left: 1rem;
         cursor: pointer;

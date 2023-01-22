@@ -7,6 +7,7 @@ import { css } from "@emotion/react";
  * @returns 
  */
 function Duration() {
+
     return (
         <section css={style}>
             <label>
