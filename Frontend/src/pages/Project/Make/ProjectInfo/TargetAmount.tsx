@@ -1,12 +1,27 @@
 import Input from "@/components/common/Input";
+import ProjectMakeContext from "@/store/ProjectMakeContext";
 import { css } from "@emotion/react";
-import React from "react";
+import React, { useCallback, useContext, useState } from "react";
 
 /**
  * 프로젝트 목표 금액을 작성하는 컴포넌트
  * @returns 
  */
 function TargetAmount() {
+    const { onChangeValue } = useContext(ProjectMakeContext);
+    const [newAmount, setNewAmount] = useState("");
+
+    const onChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+        const { value } = e.target;
+        if (!parseInt(value)) {
+            return;
+        }
+        const newValue = value.replaceAll(",", "");
+        setNewAmount(() => parseInt(newValue).toLocaleString("ko-KR"));
+        e.target.value = newValue;
+        onChangeValue(e);
+    }, [onChangeValue]);
+
     return (
         <section css={style}>
             <label>
@@ -17,6 +32,9 @@ function TargetAmount() {
                 <Input
                     type="text"
                     placeholder="목표 금액을 입력해주세요"
+                    value={newAmount}
+                    onChange={onChange}
+                    name={"targetAmount"}
                 />
             </label>
         </section>

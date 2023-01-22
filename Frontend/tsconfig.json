@@ -16,6 +16,9 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"] // @로 시작하는 경로를 src로 시작하는 경로로 매핑
-    }
+    },
+    "lib": ["ES2021.String", "DOM", "DOM.Iterable", "ScriptHost"]
+    // lib 옵션은 컴파일러가 어떤 라이브러리를 사용할지 정의
+    // target: es5 지만 ES2021.String을 사용하고 싶다면 lib에 추가해줘야함
   }
 }
