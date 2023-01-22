@@ -29,13 +29,17 @@ function TargetAmount() {
                 <span className="sub-description">
                     {"목표 금액은 1,000원 이상 10,000,0000원 이하로 설정해주세요."}
                 </span>
-                <Input
-                    type="text"
-                    placeholder="목표 금액을 입력해주세요"
-                    value={newAmount}
-                    onChange={onChange}
-                    name={"targetAmount"}
-                />
+                <div className="">
+                    <Input
+                        type="text"
+                        placeholder="목표 금액을 입력해주세요"
+                        value={newAmount}
+                        onChange={onChange}
+                        name={"targetAmount"}
+                    />
+                    <span>{"원"}</span>
+                </div>
+
             </label>
         </section>
     );
@@ -44,6 +48,14 @@ function TargetAmount() {
 const style = css`
     .sub-description {
         margin-top: 1rem;
+    }
+
+    div {
+        display: inline-flex;
+        align-items: center;
+        span {
+            margin-left: 0.5rem;
+        }
     }
 `;
 
