@@ -1,3 +1,4 @@
+import AlertBox from "@/components/common/AlertBox";
 import ProcedureList from "@/components/common/Procedure/ProcedureList";
 import ProcedureType from "@/types/ProcedureType";
 import { css } from "@emotion/react";
@@ -19,9 +20,9 @@ function Ready() {
         <article css={style}>
             <h1>{`프로젝트는 총 ${procedures.length}단계로 생성돼요`}</h1>
             <p className="description">멋진 프로젝트를 완성시키기 위해 필요한 단계들이랍니다.</p>
-            <section>
-                <span><IoAlertCircle /><p>모든 단계를 거쳐야 성공적으로 등록할 수 있어요</p></span>
-            </section>
+            <AlertBox
+                value={"모든 단계를 거쳐야 성공적으로 등록할 수 있어요"}
+            />
             <ProcedureList
                 list={procedures}
             />
@@ -31,20 +32,6 @@ function Ready() {
 
 const style = css`
     max-width: 600px;
-    section {
-        margin-top: 1rem;
-        font-size: 0.8rem;
-        color: var(--grey-500);
-        span {
-            display: inline-flex;
-        }
-        svg {
-            font-size: 1.1rem;
-            margin-right: 0.5rem;
-        }
-        padding: 1rem;
-        background-color: var(--grey-100);
-    }
 `;
 
 export default Ready;
