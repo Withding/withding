@@ -28,22 +28,23 @@ function Make() {
         endDate: new Date().toString(),
     });
 
-    const onChangeValue = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        if (name === "bestImage") {
-            const { files } = e.target;
-            const file = files?.[0];
+    const onChangeValue = useCallback(
+        (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
+            const { name, value } = e.target;
+            if (name === "bestImage") {
+                const { files } = (e.target as HTMLInputElement);
+                const file = files?.[0];
+                setValues({
+                    ...values,
+                    bestImage: file
+                });
+                return;
+            }
             setValues({
                 ...values,
-                bestImage: file
+                [name]: value
             });
-            return;
-        }
-        setValues({
-            ...values,
-            [name]: value
-        });
-    }, [values]);
+        }, [values]);
 
     return (
         <Wrapper>

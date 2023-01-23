@@ -4,7 +4,7 @@ import React from "react";
 
 interface ProjectMakeContextProps {
     values: ProjectMakeValues;
-    onChangeValue: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    onChangeValue: (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
 export default ProjectMakeContextProps;

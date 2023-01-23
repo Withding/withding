@@ -1,24 +1,29 @@
 import Category from "@/types/Category";
 import fetchCategorys from "@/utils/RequestApis/category/fetchCategorys";
 import { css } from "@emotion/react";
-import React from "react";
+import React, { useContext } from "react";
 import { useQuery } from "react-query";
+import ProjectMakeContext from "@/store/ProjectMakeContext";
 
 /**
  * 프로젝트 카테고리 선택 컴포넌트
  * @returns 
  */
 function SelectCategory() {
+    const { onChangeValue } = useContext(ProjectMakeContext);
     const { data } = useQuery(["makeCategory"], () => fetchCategorys(), {
         suspense: false,
         useErrorBoundary: false
     });
+
     return (
         <section>
             <label>
                 <span>카테고리</span>
                 <select
                     css={style}
+                    onChange={onChangeValue}
+                    name="category"
                 >
                     <option value="0">카테고리</option>
                     {data?.categoryList.map((item: Category) => (
