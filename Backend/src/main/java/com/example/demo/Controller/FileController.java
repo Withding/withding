@@ -37,15 +37,28 @@ public class FileController {
 
 
     /**
-     * User 프로필 이미지 호출하는 컨트롤러
+     * 모든 이미지를 담당하는 컨트롤러
+     * @param type 호출할 이미지 타입 (UserProfile, thumbnail, 등등)
      * @param imageName 호출할 파일 이름
      * @return 호출한 이미지
      * @throws IOException
      */
-    @RequestMapping(value = "/user/image/{fileName}", method = RequestMethod.GET, produces = MediaType.IMAGE_JPEG_VALUE)
-    public ResponseEntity<byte[]> sendImage(@PathVariable("fileName") final String imageName) throws IOException
+    @RequestMapping(value = "/{type}/image/{fileName}", method = RequestMethod.GET, produces = MediaType.IMAGE_JPEG_VALUE)
+    public ResponseEntity<byte[]> sendImage(
+            @PathVariable("type") final String type,
+            @PathVariable("fileName") final String imageName) throws IOException
     {
-        InputStream imageStream = new FileInputStream(beanConfig.PROFILE_IMAGE_PATH + imageName);
+        InputStream imageStream;
+        switch (type){
+            case "user":
+                imageStream = new FileInputStream(beanConfig.PROFILE_IMAGE_PATH + imageName);
+                break;
+            case "thumbnail":
+                imageStream = new FileInputStream(beanConfig.THUMBNAIL_IMAGE_PATH + imageName);
+                break;
+            default:
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         byte[] imageByteArray = IOUtils.toByteArray(imageStream);
         imageStream.close();
         return new ResponseEntity<>(imageByteArray, HttpStatus.OK);

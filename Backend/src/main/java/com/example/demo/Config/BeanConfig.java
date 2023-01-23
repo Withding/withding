@@ -19,8 +19,12 @@ import java.util.Properties;
 public class BeanConfig {
 
 
-    public final String PROFILE_IMAGE_URL = "/user/image/";
-    public final String PROFILE_IMAGE_PATH = System.getProperty("user.dir") + File.separator + "profileImages/";
+    public final String PROFILE_IMAGE_URL = "/user/image/";                                                             // 유저 프로필 호출 URL
+    public final String PROFILE_IMAGE_PATH = System.getProperty("user.dir") + File.separator + "profileImages/";        // 유저 이미지 파일 저장 경로
+
+    public final String THUMBNAIL_IMAGE_URL = "/thumbnail/image/";
+
+    public final String THUMBNAIL_IMAGE_PATH = System.getProperty("user.dir") + File.separator + "thumbnailImages/";
 
 
     @Value("${server.url}")
@@ -55,11 +59,13 @@ public class BeanConfig {
     }
 
     @Bean
+    //@PersistenceContext
     public EntityManager em(){
         return this.emf().createEntityManager();
     }
 
     @Bean
+    //@PersistenceContext
     public EntityTransaction tr(){
         return em().getTransaction();
     }

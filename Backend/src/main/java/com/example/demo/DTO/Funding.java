@@ -2,6 +2,7 @@ package com.example.demo.DTO;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
@@ -27,7 +28,7 @@ public class Funding {
 
     private String title;                   // 제목
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)   // cascade = CascadeType.PERSIST = Funding 영속성 추가할때 이 어노테이션이 달린 객체도 같이 영속성에 추가하는 것
     @JoinColumn(name = "image")
     private Thumbnail thumbnail;
 
@@ -39,8 +40,6 @@ public class Funding {
     @Column(name = "now_amount")
     private Long nowAmount;                 // 현재 금액
 
-    private String deadline;                // 마감기간
-
     @Column(name = "view_count")
     private int view;                       // 조회수
 
@@ -51,13 +50,15 @@ public class Funding {
     private String createdAt;               // 작성시간
 
     @Column(name = "open_at")
-    private String openAt;                  // 시작시간
+    private String startEnd;                  // 시작시간
+
+    private String deadLine;                // 마감기간
 
     @ManyToOne
     @JoinColumn(name = "funding_category_id")
     private FundingCategory fundingCategory;  // 펀딩 카테고리
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn(name = "article_id")
     private Article article_1;
 

@@ -101,4 +101,22 @@ public class FileService {
             return false;
         }
     }
+
+
+    /**
+     * 프로젝트 작성시 썸네일로 사용할 이미지를 thumbnailImage 폴더에 저장하는 함수
+     * @param thumbnailImage MultipartFile 타입의 저장할 이미지 파일
+     * @param thumbnailImageName 저장할 때 이름으로 사용할 String 객체
+     * @return
+     */
+    public boolean createThumbnailImage(MultipartFile thumbnailImage, String thumbnailImageName){
+        File newFile = new File( beanConfig.THUMBNAIL_IMAGE_PATH + thumbnailImageName);
+        try{
+            thumbnailImage.transferTo(newFile);
+            return true;
+        } catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
