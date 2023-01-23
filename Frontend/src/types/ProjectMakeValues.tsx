@@ -6,6 +6,7 @@ interface ProjectMakeValues {
     previewImage?: null;
     startDate: string;
     endDate: string;
+    content: string;
 }
 
 export default ProjectMakeValues;

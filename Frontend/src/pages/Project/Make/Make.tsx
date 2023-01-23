@@ -8,6 +8,7 @@ import ButtonController from "../ButtonController";
 import MainHeader from "../MainHeader";
 import ProjectMakeContext from "@/store/ProjectMakeContext";
 import ProjectMakeValues from "../../../types/ProjectMakeValues";
+import ProjectDetailContent from "./ProjectDetailContent/ProjectDetailContent";
 
 /**
  * /project/make 페이지 컴포넌트
@@ -17,6 +18,7 @@ function Make() {
     const step = useStepParam();
     const episode: EpisodeType[] = [
         { step: 1, component: <ProjectInfo />, nextButtonValue: "다음", name: "프로젝트 정보 입력" },
+        { step: 2, component: <ProjectDetailContent />, nextButtonValue: "다음", name: "프로젝트 상세 내용 입력" },
     ];
     const render = episode.find((item) => item.step === step);// step에 해당하는 컴포넌트를 렌더링  
 
@@ -26,7 +28,15 @@ function Make() {
         targetAmount: 0,
         startDate: new Date().toString(),
         endDate: new Date().toString(),
+        content: "",
     });
+
+    const onChangeContent = useCallback((content: string) => {
+        setValues({
+            ...values,
+            content
+        });
+    }, [values]);
 
     const onChangeValue = useCallback(
         (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
@@ -50,12 +60,13 @@ function Make() {
         <Wrapper>
             <ProjectMakeContext.Provider value={{
                 values,
-                onChangeValue
+                onChangeValue,
+                onChangeContent
             }}>
                 <ProcedureNavigator
                     list={episode}
                     path={"/project/make?step="}
-                    currnet={1}
+                    currnet={step}
                 />
                 <main>
                     <MainHeader
@@ -64,7 +75,7 @@ function Make() {
                             max: episode.length,
                             height: 3
                         }}
-                        leftPage={`${episode.length - step}단계 남음`}
+                        leftPage={`${episode.length - step}`}
                     />
                     {render?.component}
                     <ButtonController

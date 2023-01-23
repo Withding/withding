@@ -8,8 +8,10 @@ const ProjectMakeContext = React.createContext<ProjectMakeContextProps>({
         targetAmount: 0,
         startDate: "",
         endDate: "",
+        content: ""
     },
-    onChangeValue: () => {}
+    onChangeValue: () => {},
+    onChangeContent: () => {}
 });
 
 export default ProjectMakeContext;
