@@ -22,15 +22,14 @@ Insert Into funding_category VALUES(6, '여행·레져');
 Insert Into funding_category VALUES(7, '스포츠·모빌리티');
 Insert Into funding_category VALUES(8, '캐릭터·굿즈');
 Insert Into funding_category VALUES(9, '베이비·키즈');
-Insert Into funding_category VALUES(10, '베이비·키즈');
-Insert Into funding_category VALUES(11, '반려동물');
-Insert Into funding_category VALUES(12, '게임·취미');
-Insert Into funding_category VALUES(13, '컬쳐·아티스트');
-Insert Into funding_category VALUES(14, '클래스·컨설팅');
-Insert Into funding_category VALUES(15, '출판');
-Insert Into funding_category VALUES(16, '기부·캠페인');
-Insert Into funding_category VALUES(17, '후원');
-Insert Into funding_category VALUES(18, '모임');
+Insert Into funding_category VALUES(10, '반려동물');
+Insert Into funding_category VALUES(11, '게임·취미');
+Insert Into funding_category VALUES(12, '컬쳐·아티스트');
+Insert Into funding_category VALUES(13, '클래스·컨설팅');
+Insert Into funding_category VALUES(14, '출판');
+Insert Into funding_category VALUES(15, '기부·캠페인');
+Insert Into funding_category VALUES(16, '후원');
+Insert Into funding_category VALUES(17, '모임');
 
 
 CREATE TABLE `state` (
