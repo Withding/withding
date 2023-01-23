@@ -39,7 +39,7 @@ function Intro() {
                         max: episode.length,
                         height: 3
                     }}
-                    leftPage={`${episode.length - step}단계 남음`}
+                    leftPage={`${episode.length - step}`}
                 />
                 {render?.component}
                 <ButtonController
