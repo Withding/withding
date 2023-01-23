@@ -1,10 +1,11 @@
 import { css } from "@emotion/react";
-import React from "react";
-import TitleInput from "./TitleInput";
+import React, { useContext } from "react";
+import TitleInput from "../TitleInput";
 import SelectCategory from "./SelectCategory";
 import Amount from "./TargetAmount";
 import BestImage from "./BestImage";
 import Duration from "./Duration";
+import ProjectMakeContext from "@/store/ProjectMakeContext";
 
 
 /**
@@ -12,9 +13,21 @@ import Duration from "./Duration";
  * @returns 
  */
 function InputForm() {
+    const { values, onChangeValue } = useContext(ProjectMakeContext);
     return (
         <form css={style}>
-            <TitleInput />
+            <TitleInput
+                title={values.title}
+                onChangeValue={onChangeValue}
+                label={"프로젝트 제목"}
+                input={{
+                    type: "text",
+                    placeholder: "프로젝트 제목을 입력해주세요",
+                    name: "title",
+                    onChange: onChangeValue,
+                    maxLength: 40,
+                }}
+            />
             <BestImage />
             <SelectCategory />
             <Amount />

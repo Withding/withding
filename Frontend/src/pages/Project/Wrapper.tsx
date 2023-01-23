@@ -26,10 +26,11 @@ const style = css`
         margin-bottom: 1rem;
     }
 
-    p[className="description"] {
+    p.description {
         font-size: 1.1rem;
         color: var(--grey-500);
         font-weight: 400;
+        margin-bottom: 1rem;
     }
 
     main {
@@ -79,6 +80,10 @@ const style = css`
         main {
             border-left: 1px solid var(--grey-200);
         }
+
+        main > article {
+            max-width: 800px;
+        }
     }
 
     @media screen and (max-width: 1095px) {
@@ -91,6 +96,10 @@ const style = css`
         }
         .prev {
             width: 20%;
+        }
+
+        main > article {
+            max-width: 100%;
         }
     }
 `;

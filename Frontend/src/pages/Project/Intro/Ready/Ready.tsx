@@ -1,3 +1,4 @@
+import AlertBox from "@/components/common/AlertBox";
 import ProcedureList from "@/components/common/Procedure/ProcedureList";
 import ProcedureType from "@/types/ProcedureType";
 import { css } from "@emotion/react";
@@ -11,17 +12,19 @@ import { IoAlertCircle } from "react-icons/io5";
  */
 function Ready() {
     const procedures: ProcedureType[] = [
-        { step: 1, title: "1단계: 프로젝트 생성", description: "필수 항목들을 작성해 제출하시면 됩니다." },
-        { step: 2, title: "2단계:프로젝트 검토", description: "작성한 내용들을 어떤식으로 게시되는지 미리 보고 검토할 수 있답니다." },
-        { step: 3, title: "3단계:프로젝트 공개", description: "모든 준비가 끝난 프로젝트를 언제 공개할지 메이커님의 최종 승인이 필요해요." },
+        { step: 1, title: "1단계: 프로젝트 기본정보 입력", description: "프로젝트 기본 정보들을 입력해주세요." },
+        { step: 2, title: "2단계: 프로젝트 상세 내용 작성", description: "프로젝트 상세 내용을 작성해 프로젝트를 설명해보세요." },
+        { step: 3, title: "3단계: 프로젝트 물품 등록", description: "판매할 물품들을 등록해주세요" },
+        { step: 4, title: "4단계: 프로젝트 검토", description: "작성한 내용들을 어떤식으로 게시되는지 미리 보고 검토할 수 있답니다." },
+        { step: 5, title: "5단계: 프로젝트 공개", description: "모든 준비가 끝난 프로젝트를 언제 공개할지 메이커님의 최종 승인이 필요해요." },
     ];
     return (
         <article css={style}>
             <h1>{`프로젝트는 총 ${procedures.length}단계로 생성돼요`}</h1>
             <p className="description">멋진 프로젝트를 완성시키기 위해 필요한 단계들이랍니다.</p>
-            <section>
-                <span><IoAlertCircle /><p>모든 단계를 거쳐야 성공적으로 등록할 수 있어요</p></span>
-            </section>
+            <AlertBox
+                value={"모든 단계를 거쳐야 성공적으로 등록할 수 있어요"}
+            />
             <ProcedureList
                 list={procedures}
             />
@@ -31,20 +34,6 @@ function Ready() {
 
 const style = css`
     max-width: 600px;
-    section {
-        margin-top: 1rem;
-        font-size: 0.8rem;
-        color: var(--grey-500);
-        span {
-            display: inline-flex;
-        }
-        svg {
-            font-size: 1.1rem;
-            margin-right: 0.5rem;
-        }
-        padding: 1rem;
-        background-color: var(--grey-100);
-    }
 `;
 
 export default Ready;
