@@ -1,7 +1,11 @@
 package com.example.demo.Service;
 
+import com.example.demo.Config.BeanConfig;
 import com.example.demo.DTO.Funding;
 import com.example.demo.DTO.FundingCategory;
+import com.example.demo.DTO.Response.GetProject_1Level;
+import com.example.demo.DTO.Thumbnail;
+import com.example.demo.DTO.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +21,13 @@ import java.util.List;
 public class ProjectService {
 
     @Autowired
+    private BeanConfig beanConfig;
+
+    @Autowired
     private EntityManager em;
 
     @Autowired
     private EntityTransaction tr;
-
-
 
 
     /**
@@ -40,64 +45,71 @@ public class ProjectService {
      * @param funding 임시저장할 객체
      * @return Long 타입의 Funding Id
      */
-    public Long createProject(Funding funding){
-        // ------------------------------------------------------ 조회 --------------------------------------------------
-        List<Funding> fundingList =
+    public boolean createProject_1Level(Funding funding){
+        // ----------------------------------------- 조회 (추후 갯수제한때 사용할 수 있음) ---------------------------------------
+        /*List<Funding> fundingList =
                 (List<Funding>) em.createQuery("SELECT f FROM Funding f WHERE f.userId.userId =: userId " +
                         "AND f.fundingStateCode.stateCode =: stateCode")
                 .setParameter("userId", funding.getUserId().getUserId())
                 .setParameter("stateCode", 4)
-                .getResultList();
+                .getResultList();*/
         // -------------------------------------------------------------------------------------------------------------
 
         try{
-            tr.begin();
+            tr.begin();                                                                                                 // 트랜잭션 시작
             // ------------------------------------------ 디비에 임시저장된 글이 없다 ------------------------------------------
-            if (fundingList.size() == 0){
+            if (funding.getId() == null){
                 em.persist(funding);                                                                                    // 새글 등록
-                //System.out.println("디비에 없음. Id = " + funding.getId());
             }
             // ---------------------------------------------------------------------------------------------------------
 
-            // ------------------------------------------ 디비에 임시저장된 글이 있다 -----------------------------------------
+            // ------------------------------------------ 디비에 임시저장된 글이 있다 ------------------------------------------
             else {
-                funding.setId(fundingList.get(0).getId());
                 //System.out.println("디비에 있음. Id =  " + funding.getId());
-                changeFundingToFundingId_UseOnlyCreateProject(funding);                                                    // 업데이트
+                Funding f = em.find(Funding.class, funding.getId());                                                    // 영속 관리 시작
+                Thumbnail t = em.find(Thumbnail.class, f.getThumbnail().getImage());                                    // 영속 관리 시작
+                FundingCategory fc = em.find(FundingCategory.class, funding.getFundingCategory().getId());              // 영속 관리 시작
+
+                em.remove(t);                                                                                           // 기존 썸네일 삭제
+                em.persist(funding.getThumbnail());                                                                     // 새로받은 썸네일 저장
+
+                f.setTitle(funding.getTitle());                                                                         // 영속 관리중인 기존 funding 수정 시작
+                f.setThumbnail(funding.getThumbnail());
+                f.setMaxAmount(funding.getMaxAmount());
+                f.setFundingCategory(fc);
+                //f.setStartEnd(funding.getStartEnd());
+                //f.setDeadLine(funding.getDeadLine());
+                f.setCreatedAt(funding.getCreatedAt());
+
             }
             // ---------------------------------------------------------------------------------------------------------
-            tr.commit();
-            return funding.getId();
+            tr.commit();                                                                                                // 트랜잭션 시작
+            return true;
         } catch (Exception e){
             tr.rollback();
             e.printStackTrace();
-            return null;
+            return false;
         }
     }
 
 
     /**
-     * 프로젝트 1단계 임시저장에서 저장할 Funding 객체를 넘겨받아 업데이트 진행
-     * 오직 프로젝트 1단계 저장에서만 사용해야함
-     * @param funding 저장할 Funding 객체
+     * 프로젝트 작성 1단계 호출
+     * @param projectId 호출할 프로젝트 번호
+     * @return
      */
-    private void changeFundingToFundingId_UseOnlyCreateProject(Funding funding) {
-        em.createQuery("UPDATE Funding f SET " +
-                        "f.title =: title, " +
-                        "f.thumbnail =: thumbnail," +
-                        "f.maxAmount =: maxAmount," +
-                        //"f.startEnd =: startEnd," +
-                        //"f.deadline =: deadLine," +
-                        "f.createdAt =: createdAt " +
-                        "WHERE f.id =: id")
-                .setParameter("title", funding.getTitle())
-                .setParameter("thumbnail", funding.getThumbnail())
-                .setParameter("maxAmount", funding.getMaxAmount())
-                //.setParameter("startEnd", funding.getStartEnd())
-                //.setParameter("deadLine", funding.getDeadline())
-                .setParameter("createdAt", funding.getCreatedAt())
-                .setParameter("id", funding.getId())
-                .executeUpdate();
+    public GetProject_1Level getProject_1Level(Long projectId) {
+        try {
+            tr.begin();                                                                                                 // 트랜젝션 시작
+            Funding funding = em.find(Funding.class, projectId);                                                        // 영속성 등록 (persist 말고도 find로 조회해도 영속성으로 관리됨)
+            tr.commit();                                                                                                // 트랜젝션 종료
+            return new GetProject_1Level(funding.getTitle(), funding.getFundingCategory().getCategory(),
+                    funding.getMaxAmount(),null, null,
+                    beanConfig.SERVER_URL + ":" + beanConfig.SERVER_PORT +  beanConfig.THUMBNAIL_IMAGE_URL + funding.getThumbnail().getImage());
+        } catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }

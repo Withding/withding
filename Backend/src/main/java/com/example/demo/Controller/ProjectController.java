@@ -2,6 +2,7 @@ package com.example.demo.Controller;
 
 import com.example.demo.DTO.Funding;
 import com.example.demo.DTO.FundingCategory;
+import com.example.demo.DTO.Response.GetProject_1Level;
 import com.example.demo.DTO.Response.ProjectCategory;
 import com.example.demo.DTO.Thumbnail;
 import com.example.demo.DTO.User;
@@ -35,16 +36,33 @@ public class ProjectController {
     private FileService fileService;
 
     /**
+     * 프로젝트 1단계 호출 {projectNum} 부분에는 호출할 프로젝트 Id
+     * @return
+     */
+    @RequestMapping(value = "/project/{projectNum}", method = RequestMethod.GET)
+    public ResponseEntity<Object> getProject_1Level(@PathVariable("projectNum") final Long projectId){
+        GetProject_1Level getProject_1Level = projectService.getProject_1Level(projectId);
+        if (getProject_1Level != null){
+            return new ResponseEntity<>(getProject_1Level, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
+
+
+    /**
      * 프로젝트 작성 1단계
      * @param request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
      * @return
      */
     @RequestMapping(value = "/project", method = RequestMethod.POST)
-    public ResponseEntity<Object> createProject(
+    public ResponseEntity<Object> createProject_1Level(
             @RequestParam(value = "Id", required = false) Long id,                                                      // 프로젝트 번호
             @RequestParam("title") String title,                                                                        // 프로젝트 이름
             @RequestParam("bestImage") MultipartFile thumbnailImage,                                                    // 프로젝트 썸네일
-            @RequestParam("category") int fundingCategory,                                                              // 프로젝트 카테고리
+            @RequestParam("category") Long fundingCategoryId,                                                           // 프로젝트 카테고리
             @RequestParam("targetAmount") Long maxAmount,                                                               // 프로잭트 목표 금액
             //@RequestParam("startDate") Long start,                                                                    // 프로젝트 시작 일자
             //@RequestParam("endDate") Long dead,                                                                       // 프로젝트 종료 일자
@@ -78,7 +96,7 @@ public class ProjectController {
         funding.setId(id);
         funding.setUserId(user);
         funding.setTitle(title);
-        funding.setFundingCategory(new FundingCategory(fundingCategory));
+        funding.setFundingCategory(new FundingCategory(fundingCategoryId));
         funding.setThumbnail(new Thumbnail(thumbnailImageName, thumbnailImage.getOriginalFilename()));
         funding.setMaxAmount(maxAmount);
         //funding.setStartEnd(dateFormat.format(startEnd));
@@ -86,12 +104,10 @@ public class ProjectController {
         funding.setCreatedAt(dateFormat.format(nowTime));
         // -------------------------------------------------------------------------------------------------------------
 
-        Long projectId = projectService.createProject(funding);                                                         // 프로젝트 저장 및 덮어쓰기
-        if ( (projectId != null) &&
-                fileService.createThumbnailImage(thumbnailImage, thumbnailImageName)) {                                 //  && 썸네일 이미지 저장
-            return new ResponseEntity<>(
-                    projectId,
-                    HttpStatus.OK);
+
+        if ( projectService.createProject_1Level(funding) &&                                                           // 프로젝트 저장 및 덮어쓰기
+                fileService.createThumbnailImage(thumbnailImage, thumbnailImageName)) {                                 // && 썸네일 이미지 저장
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
             return new ResponseEntity<>(funding,HttpStatus.BAD_REQUEST);
         }

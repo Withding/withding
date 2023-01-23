@@ -28,7 +28,7 @@ public class Funding {
 
     private String title;                   // 제목
 
-    @ManyToOne(cascade = CascadeType.PERSIST)   // cascade = CascadeType.PERSIST = Funding 영속성 추가할때 이 어노테이션이 달린 객체도 같이 영속성에 추가하는 것
+    @ManyToOne(cascade = CascadeType.ALL)   // cascade = CascadeType.PERSIST = Funding 영속성 추가할때 이 어노테이션이 달린 객체도 같이 영속성에 추가하는 것
     @JoinColumn(name = "image")
     private Thumbnail thumbnail;
 
@@ -58,7 +58,7 @@ public class Funding {
     @JoinColumn(name = "funding_category_id")
     private FundingCategory fundingCategory;  // 펀딩 카테고리
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne(cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn(name = "article_id")
     private Article article_1;
 
