@@ -6,7 +6,6 @@ import { useMutation } from "react-query";
 import replaceProfileImage from "@/utils/RequestApis/mypage/replaceProfileImage";
 import deleteProfileImage from "@/utils/RequestApis/mypage/deleteProfileImage";
 
-
 /**
  * 마이페이지 프로필 수정에 사용되는 프로필 이미지 수정 컴포넌트
  * @returns 

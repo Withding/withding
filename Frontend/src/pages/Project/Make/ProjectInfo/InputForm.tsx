@@ -1,7 +1,7 @@
 import { css } from "@emotion/react";
 import React from "react";
 import TitleInput from "./TitleInput";
-import Category from "./Category";
+import SelectCategory from "./SelectCategory";
 import Amount from "./TargetAmount";
 import BestImage from "./BestImage";
 import Duration from "./Duration";
@@ -16,7 +16,7 @@ function InputForm() {
         <form css={style}>
             <TitleInput />
             <BestImage />
-            <Category />
+            <SelectCategory />
             <Amount />
             <Duration />
         </form>
