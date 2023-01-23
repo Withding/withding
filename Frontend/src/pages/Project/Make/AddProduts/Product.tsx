@@ -1,7 +1,7 @@
 import React from "react";
 import LabelInput from "@/components/common/LabelInput";
 import { css } from "@emotion/react";
-import TitleInput from "../TitleInput";
+import TitleInput from "../../../../components/common/LimitTextInput";
 
 /**
  * 프로젝트 생성시 상품 컴포넌트
@@ -11,12 +11,12 @@ function Product() {
     return (
         <li css={style}>
             <TitleInput
-                title={""}
                 label="상품명"
                 input={{
                     type: "text",
                     placeholder: "상품명을 입력해주세요",
                     name: "name",
+                    value: "",
                     maxLength: 40,
                     onChange: () => { },
                 }} />

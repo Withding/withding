@@ -2,25 +2,28 @@ import React, { useMemo } from "react";
 import LabelInput from "@/components/common/LabelInput";
 import InputProps from "@/types/InputProps";
 import { css } from "@emotion/react";
+import BaseProps from "@/types/BaseProps";
 
 /**
- * 제목을 입력하는 컴포넌트
+ * 제한된 글자를 입력하는 컴포넌트
  * @returns 
  */
-function TitleInput(props: {
+function LimitTextInput(props: {
     label: string;
     input?: InputProps;
-    title: string;
     onChangeValue?: (e: any) => void;
-}) {
+} & BaseProps) {
     const MAX_LENGTH = useMemo(() => props.input?.maxLength ?? 0, [props.input?.maxLength]);
     return (
-        <section css={style}>
+        <section
+            className={props?.className}
+            css={style}
+        >
             <LabelInput
                 label={props.label}
-                input={{ ...props.input, value: props.title, onChange: props.onChangeValue }}
+                input={{ ...props.input, onChange: props.onChangeValue }}
             />
-            <span className="sub-description">{`${MAX_LENGTH - props.title.length}자 남음`}</span>
+            <span className="sub-description">{`${MAX_LENGTH - props.input!.value!.length}자 남음`}</span>
         </section>
     );
 }
@@ -50,4 +53,4 @@ const style = css`
     }
 `;
 
-export default TitleInput;
+export default LimitTextInput;

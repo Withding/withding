@@ -1,6 +1,6 @@
 import { css } from "@emotion/react";
 import React, { useContext } from "react";
-import TitleInput from "../TitleInput";
+import TitleInput from "../../../../components/common/LimitTextInput";
 import SelectCategory from "./SelectCategory";
 import Amount from "./TargetAmount";
 import BestImage from "./BestImage";
@@ -17,13 +17,13 @@ function InputForm() {
     return (
         <form css={style}>
             <TitleInput
-                title={values.title}
                 onChangeValue={onChangeValue}
                 label={"프로젝트 제목"}
                 input={{
                     type: "text",
                     placeholder: "프로젝트 제목을 입력해주세요",
                     name: "title",
+                    value: values.title,
                     onChange: onChangeValue,
                     maxLength: 40,
                 }}
