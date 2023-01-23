@@ -18,7 +18,7 @@ function PrevViewImageWrapper({ image, onRemove }: { image?: string, onRemove: (
 function BestImage() {
     const { onChangeValue } = useContext(ProjectMakeContext);
     const imageRef = useRef<HTMLInputElement>(null);
-    const [prevViewImage, setPrevViewImage] = useState<string | null>(null);
+    const [preViewImage, setPreViewImage] = useState<string | null>(null);
     const registerImageButtonClickHandler = useCallback(() => {
         imageRef.current?.click();
     }, []);
@@ -28,12 +28,12 @@ function BestImage() {
         if (!files) return;
         const file = files[0];
         const blob = new Blob([file], { type: file.type });
-        setPrevViewImage(() => window.URL.createObjectURL(blob));
+        setPreViewImage(() => window.URL.createObjectURL(blob));
         onChangeValue(e);
     }, [onChangeValue]);
 
     const removePrevViewImageHandler = useCallback(() => {
-        setPrevViewImage(() => null);
+        setPreViewImage(() => null);
         imageRef.current!.value = "";
     }, []);
     return (
@@ -45,9 +45,9 @@ function BestImage() {
                 {"작은 이미지를 넣게되면 이미지가 이상하게 보일수도 있습니다."}
             </span>
             {
-                prevViewImage ?
+                preViewImage ?
                     <PrevViewImageWrapper
-                        image={prevViewImage}
+                        image={preViewImage}
                         onRemove={removePrevViewImageHandler}
                     />
                     :

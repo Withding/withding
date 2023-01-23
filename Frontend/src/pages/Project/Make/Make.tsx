@@ -16,7 +16,7 @@ import ProjectMakeValues from "../../../types/ProjectMakeValues";
 function Make() {
     const step = useStepParam();
     const episode: EpisodeType[] = [
-        { step: 1, component: <ProjectInfo />, nextButtonValue: "검토하기", name: "프로젝트 정보 입력" },
+        { step: 1, component: <ProjectInfo />, nextButtonValue: "다음", name: "프로젝트 정보 입력" },
     ];
     const render = episode.find((item) => item.step === step);// step에 해당하는 컴포넌트를 렌더링  
 

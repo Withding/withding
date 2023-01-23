@@ -3,7 +3,7 @@ interface ProjectMakeValues {
     category: string;
     targetAmount: number;
     bestImage?: File | null;
-    prevViewImage?: null;
+    previewImage?: null;
     startDate: string;
     endDate: string;
 }
