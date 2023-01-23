@@ -9,6 +9,7 @@ import MainHeader from "../MainHeader";
 import ProjectMakeContext from "@/store/ProjectMakeContext";
 import ProjectMakeValues from "../../../types/ProjectMakeValues";
 import ProjectDetailContent from "./ProjectDetailContent/ProjectDetailContent";
+import AddProducts from "./AddProduts/AddProducts";
 
 /**
  * /project/make 페이지 컴포넌트
@@ -19,6 +20,7 @@ function Make() {
     const episode: EpisodeType[] = [
         { step: 1, component: <ProjectInfo />, nextButtonValue: "다음", name: "프로젝트 정보 입력" },
         { step: 2, component: <ProjectDetailContent />, nextButtonValue: "다음", name: "프로젝트 상세 내용 입력" },
+        { step: 3, component: <AddProducts />, nextButtonValue: "다음", name: "상품 등록" },
     ];
     const render = episode.find((item) => item.step === step);// step에 해당하는 컴포넌트를 렌더링  
 
