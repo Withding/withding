@@ -12,9 +12,11 @@ import { IoAlertCircle } from "react-icons/io5";
  */
 function Ready() {
     const procedures: ProcedureType[] = [
-        { step: 1, title: "1단계: 프로젝트 생성", description: "필수 항목들을 작성해 제출하시면 됩니다." },
-        { step: 2, title: "2단계:프로젝트 검토", description: "작성한 내용들을 어떤식으로 게시되는지 미리 보고 검토할 수 있답니다." },
-        { step: 3, title: "3단계:프로젝트 공개", description: "모든 준비가 끝난 프로젝트를 언제 공개할지 메이커님의 최종 승인이 필요해요." },
+        { step: 1, title: "1단계: 프로젝트 기본정보 입력", description: "프로젝트 기본 정보들을 입력해주세요." },
+        { step: 2, title: "2단계: 프로젝트 상세 내용 작성", description: "프로젝트 상세 내용을 작성해 프로젝트를 설명해보세요." },
+        { step: 3, title: "3단계: 프로젝트 물품 등록", description: "판매할 물품들을 등록해주세요" },
+        { step: 4, title: "4단계: 프로젝트 검토", description: "작성한 내용들을 어떤식으로 게시되는지 미리 보고 검토할 수 있답니다." },
+        { step: 5, title: "5단계: 프로젝트 공개", description: "모든 준비가 끝난 프로젝트를 언제 공개할지 메이커님의 최종 승인이 필요해요." },
     ];
     return (
         <article css={style}>
