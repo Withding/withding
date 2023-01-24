@@ -6,8 +6,8 @@ import BaseProps from "@/types/BaseProps";
 
 interface NumberInputProps {
     label: string;
-    MAX_AMOUNT: number;
-    MIN_AMOUNT: number;
+    MAX: number;
+    MIN: number;
     onChangeValue: (e: React.ChangeEvent<HTMLInputElement>) => void;
     input: {
         name: string;
@@ -24,8 +24,8 @@ interface NumberInputProps {
  */
 function NumberInput(props: NumberInputProps & BaseProps) {
     const [newAmount, setNewAmount] = useState<string>("");
-    const MAX_AMOUNT = useMemo(() => props.MAX_AMOUNT, [props.MAX_AMOUNT]);
-    const MIN_AMOUNT = useMemo(() => props.MIN_AMOUNT, [props.MIN_AMOUNT]);
+    const MAX = useMemo(() => props.MAX, [props.MAX]);
+    const MIN = useMemo(() => props.MIN, [props.MIN]);
     const [error, setError] = useState(false);
 
     const onChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,26 +34,26 @@ function NumberInput(props: NumberInputProps & BaseProps) {
         if (!parseInt(value)) {
             return;
         }
-        if (parseInt(newValue) > MAX_AMOUNT) {
-            setNewAmount(() => MAX_AMOUNT.toLocaleString("ko-KR"));
-            e.target.value = MAX_AMOUNT.toString();
+        if (parseInt(newValue) > MAX) {
+            setNewAmount(() => MAX.toLocaleString("ko-KR"));
+            e.target.value = MAX.toString();
             props.onChangeValue(e);
             return;
         }
-        if (parseInt(newValue) >= MIN_AMOUNT) setError(() => false);
+        if (parseInt(newValue) >= MIN) setError(() => false);
         setNewAmount(() => parseInt(newValue).toLocaleString("ko-KR"));
         e.target.value = newValue;
         props.onChangeValue(e);
-    }, [MAX_AMOUNT, MIN_AMOUNT, props]);
+    }, [MAX, MIN, props]);
 
 
     const onBlur = useCallback((e: React.FocusEvent<HTMLInputElement>) => {
-        if (props.input.value < MIN_AMOUNT) {
+        if (props.input.value < MIN) {
             setError(() => true);
         } else {
             setError(() => false);
         }
-    }, [MIN_AMOUNT, props.input.value]);
+    }, [MIN, props.input.value]);
 
     return (
         <section css={style} className={props?.className}>
