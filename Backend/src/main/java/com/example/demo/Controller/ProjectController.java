@@ -42,7 +42,7 @@ public class ProjectController {
      * @param request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
      * @return
      */
-    @RequestMapping(value = "/project", method = RequestMethod.GET)
+    @RequestMapping(value = "/projects", method = RequestMethod.POST)
     public ResponseEntity<Object> createProject_0Level(HttpServletRequest request){
         User user = userService.setUserToHttpServletRequestAttribute(request);
         GetProject_0Level getProject_0Level = new GetProject_0Level(projectService.createProject_0Level(user));
@@ -58,7 +58,7 @@ public class ProjectController {
      * 프로젝트 1단계 호출 {projectNum} 부분에는 호출할 프로젝트 Id
      * @return
      */
-    @RequestMapping(value = "/project/{projectNum}", method = RequestMethod.GET)
+    @RequestMapping(value = "/projects/{projectNum}", method = RequestMethod.GET)
     public ResponseEntity<Object> getProject_1Level(@PathVariable("projectNum") final Long projectId,
                                                     HttpServletRequest request){
         User user = userService.setUserToHttpServletRequestAttribute(request);
@@ -78,7 +78,7 @@ public class ProjectController {
      * @param request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
      * @return
      */
-    @RequestMapping(value = "/project", method = RequestMethod.POST)
+    @RequestMapping(value = "/projects", method = RequestMethod.PUT)
     public ResponseEntity<Object> createProject_1Level(
             @RequestParam(value = "Id", required = false) Long id,                                                      // 프로젝트 번호
             @RequestParam("title") String title,                                                                        // 프로젝트 이름
@@ -145,7 +145,7 @@ public class ProjectController {
      * 프로젝트 카테고리 호출
      * @return 정상 = 200 + 카테고리 목록, 비정상 = 400
      */
-    @RequestMapping(value = "/category", method = RequestMethod.GET)
+    @RequestMapping(value = "/categorys", method = RequestMethod.GET)
     public ResponseEntity<Object> getCategory(){
         ProjectCategory category = new ProjectCategory();
         category.setCategoryList(projectService.getCategoryList());
