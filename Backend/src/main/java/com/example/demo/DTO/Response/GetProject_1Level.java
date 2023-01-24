@@ -9,9 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class GetProject_1Level {
-
     private String title;                   // 제목
     private String category;                // 카테고라
     private Long targetAmount;              // 목표 금액

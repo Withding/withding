@@ -122,12 +122,26 @@ public class ProjectService {
             tr.begin();                                                                                                 // 트랜젝션 시작
             Funding funding = em.find(Funding.class, projectId);                                                        // 영속성 등록 (persist 말고도 find로 조회해도 영속성으로 관리됨)
             tr.commit();                                                                                                // 트랜젝션 종료
-            return new GetProject_1Level(funding.getTitle(), funding.getFundingCategory().getCategory(),
-                    funding.getMaxAmount(),null, null,
-                    beanConfig.SERVER_URL + ":" + beanConfig.SERVER_PORT +  beanConfig.THUMBNAIL_IMAGE_URL + funding.getThumbnail().getImage(),
-                    funding.getContent(),
-                    funding.getUserId().getUserId()
-                    );
+            if (funding.getTitle() == null){
+                return new GetProject_1Level(                                                                           // 깡통 펀딩 글 반환
+                        "",
+                        "",
+                        0L,
+                        "",
+                        "",
+                        "",
+                        "",
+                        funding.getUserId().getUserId());
+            } else {
+                return new GetProject_1Level(funding.getTitle(), funding.getFundingCategory().getCategory(),            // 임시작성된 펀딩 글 반환
+                        funding.getMaxAmount(),
+                        null,
+                        null,
+                        beanConfig.SERVER_URL + ":" + beanConfig.SERVER_PORT + beanConfig.THUMBNAIL_IMAGE_URL + funding.getThumbnail().getImage(),
+                        funding.getContent(),
+                        funding.getUserId().getUserId()
+                );
+            }
         } catch (Exception e){
             e.printStackTrace();
             return null;

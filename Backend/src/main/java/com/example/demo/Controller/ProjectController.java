@@ -76,7 +76,9 @@ public class ProjectController {
         // -------------------------------------------------------------------------------------------------------------
 
         GetProject_1Level getProject_1Level = projectService.getProject_1Level(projectId);
-        if (getProject_1Level.getUserId() != user.getUserId()){
+        if (getProject_1Level.getUserId() != user.getUserId()){                                                         // 작성자가 다름
+            System.out.println("user.getUserId = " + user.getUserId());
+            System.out.println("getProject_1Level.getUserId() = " + getProject_1Level.getUserId());
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         } else if (getProject_1Level != null ) {
             getProject_1Level.setUserId(null);
