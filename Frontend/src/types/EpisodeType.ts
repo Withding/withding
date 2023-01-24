@@ -5,6 +5,7 @@ interface EpisodeType {
     component: EmotionJSX.Element;
     nextButtonValue: string;
     name: string;
+    clickEvent?: () => void;
 } 
 
 export default EpisodeType;

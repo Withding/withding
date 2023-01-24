@@ -8,18 +8,18 @@ interface ButtonControllerProps {
     step: number;
     path: string;
     lastStep: number;
+    onClick?: () => void;
 }
 
 function ButtonController(props: BaseProps & ButtonControllerProps) {
     const { step, path, nextButtonValue, lastStep } = props;
     const navigator = useNavigate();
     const goNextStepHandler = useCallback(() => {
-        if (step === lastStep) {
-            console.log("시작하기");
-        }
         if (lastStep > step)
             navigator(`${path}${step + 1}`);
-    }, [lastStep, navigator, path, step]);
+        console.log("aa");
+        props?.onClick?.();
+    }, [lastStep, navigator, path, props, step]);
 
     const prevStepHandler = useCallback(() => {
         if (step !== 1)
