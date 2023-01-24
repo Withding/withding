@@ -38,10 +38,14 @@ public class ProjectService {
      * @return 작성자가 맞으면 true, 아니면 false
      */
     public boolean isUserToProject(User requestUser, Long id) {
-        User findUser = em.find(Funding.class, id).getUserId();
-        if (requestUser.getUserId() == findUser.getUserId()){
-            return true;
-        } else {
+        try{
+            User findUser = em.find(Funding.class, id).getUserId();
+            if (requestUser.getUserId() == findUser.getUserId()){
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e){
             return false;
         }
     }
@@ -75,33 +79,30 @@ public class ProjectService {
 
         try{
             tr.begin();                                                                                                 // 트랜잭션 시작
-            // ------------------------------------------ 디비에 임시저장된 글이 없다 ------------------------------------------
-            if (funding.getId() == null){
-                em.persist(funding);                                                                                    // 새글 등록
-            }
-            // ---------------------------------------------------------------------------------------------------------
 
             // ------------------------------------------ 디비에 임시저장된 글이 있다 ------------------------------------------
-            else {
-                //System.out.println("디비에 있음. Id =  " + funding.getId());
-                Funding f = em.find(Funding.class, funding.getId());                                                    // 영속 관리 시작
-                Thumbnail t = em.find(Thumbnail.class, f.getThumbnail().getImage());                                    // 영속 관리 시작
-                FundingCategory fc = em.find(FundingCategory.class, funding.getFundingCategory().getId());              // 영속 관리 시작
+            Thumbnail t;
+            Funding f = em.find(Funding.class, funding.getId());                                                        // 영속 관리 시작
 
+            if (f.getThumbnail() == null){
+                em.persist(funding.getThumbnail());                                                                     // 임시저장된 글이 없는 경우 생성
+            } else {
+                t = em.find(Thumbnail.class, f.getThumbnail().getImage());                                              // 영속 관리 시작
                 em.remove(t);                                                                                           // 기존 썸네일 삭제
                 em.persist(funding.getThumbnail());                                                                     // 새로받은 썸네일 저장
-
-                f.setTitle(funding.getTitle());                                                                         // 영속 관리중인 기존 funding 수정 시작
-                f.setThumbnail(funding.getThumbnail());
-                f.setMaxAmount(funding.getMaxAmount());
-                f.setFundingCategory(fc);
-                //f.setStartEnd(funding.getStartEnd());
-                //f.setDeadLine(funding.getDeadLine());
-                f.setCreatedAt(funding.getCreatedAt());
-
             }
+            FundingCategory fc = em.find(FundingCategory.class, funding.getFundingCategory().getId());                  // 영속 관리 시작
+
+            f.setTitle(funding.getTitle());                                                                             // 영속 관리중인 기존 funding 수정 시작
+            f.setThumbnail(funding.getThumbnail());
+            f.setMaxAmount(funding.getMaxAmount());
+            f.setFundingCategory(fc);
+            //f.setStartEnd(funding.getStartEnd());
+            //f.setDeadLine(funding.getDeadLine());
+            f.setCreatedAt(funding.getCreatedAt());
             // ---------------------------------------------------------------------------------------------------------
-            tr.commit();                                                                                                // 트랜잭션 시작
+
+            tr.commit();                                                                                                // 트랜잭션 적용
             return true;
         } catch (Exception e){
             tr.rollback();

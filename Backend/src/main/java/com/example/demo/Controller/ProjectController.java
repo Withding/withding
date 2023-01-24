@@ -44,10 +44,13 @@ public class ProjectController {
      */
     @RequestMapping(value = "/projects", method = RequestMethod.POST)
     public ResponseEntity<Object> createProject_0Level(HttpServletRequest request){
-        if (request.getAttribute("userNum") == null){
+
+        // ------------------------------ 인증 --------------------------------------------------------------------------
+        User user = userService.setUserToHttpServletRequestAttribute(request);
+        if (user == null){
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        User user = userService.setUserToHttpServletRequestAttribute(request);
+        // -------------------------------------------------------------------------------------------------------------
         GetProject_0Level getProject_0Level = new GetProject_0Level(projectService.createProject_0Level(user));
 
         if (getProject_0Level != null) {
@@ -65,11 +68,13 @@ public class ProjectController {
     @RequestMapping(value = "/projects/{projectNum}", method = RequestMethod.GET)
     public ResponseEntity<Object> getProject_1Level(@PathVariable("projectNum") final Long projectId,
                                                     HttpServletRequest request){
-        if (request.getAttribute("userNum") == null){
+        // ------------------------------ 인증 --------------------------------------------------------------------------
+        User user = userService.setUserToHttpServletRequestAttribute(request);
+        if (user == null){
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
+        // -------------------------------------------------------------------------------------------------------------
 
-        User user = userService.setUserToHttpServletRequestAttribute(request);
         GetProject_1Level getProject_1Level = projectService.getProject_1Level(projectId);
         if (getProject_1Level.getUserId() != user.getUserId()){
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -98,13 +103,17 @@ public class ProjectController {
             @RequestParam("Content") String content,                                                                    // 프로젝트 내용
             HttpServletRequest request)
     {
+        Timestamp nowTime = new Timestamp(System.currentTimeMillis());                                                  // 현재 시간
         //Timestamp startEnd = new Timestamp(start);
         //Timestamp deadLine = new Timestamp(dead);
 
-        Timestamp nowTime = new Timestamp(System.currentTimeMillis());                                                  // 현재 시간
-        if (request.getAttribute("userNum") == null){
+
+        // ------------------------------ 인증 --------------------------------------------------------------------------
+        User user = userService.setUserToHttpServletRequestAttribute(request);
+        if ((user == null) || (projectService.isUserToProject(user, id) == false) ){                                    // 인증 || 기존에 글을 작성하던 작성자인지 확인 해당 함수
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
+        // -------------------------------------------------------------------------------------------------------------
         //else if (nowTime.before(startEnd) || nowTime.before(deadLine)){                                               // 프론트에서 한번 걸러주겠지만 혹시나 과거의 시간을 설정할 경우를 대비
         //  return new ResponseEntity<>(HttpStatus.CONFLICT);
         //}
@@ -112,12 +121,7 @@ public class ProjectController {
             // 형식상 else 둠
         }
 
-        User user = userService.setUserToHttpServletRequestAttribute(request);
-        if (projectService.isUserToProject(user, id) == false) {                                                        // 기존에 글을 작성하던 작성자인지 확인 해당 함수
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");                               // 썸네일 파일 저장에 사용할 양식 획득
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");                              // 썸네일 파일 저장에 사용할 양식 획득
         String thumbnailImageName =                                                                                     // 썸네일 저장할 때 사용할 이름
                 dateFormat.format(nowTime)
                 + "_"

@@ -18,3 +18,5 @@ ALTER TABLE `user` ADD CONSTRAINT `FK_state_TO_user_1` FOREIGN KEY (
 REFERENCES `state` (
 	`state_code`
 );
+
+INSERT INTO `user` VALUES(1, '0mFYBZug7mDw6/ST5H+o8msxk3VjU+lQu+xSwq8+1lw=', 0, '$2a$10$OzYF7ZFqL4mP.riwtL5GsOD.IC5jHw6Avl8G32Ed6kV0AVdToGqzK', '전국노예자랑', 'default.png', '2023-01-24 20:47:19', null, 0, 0);
