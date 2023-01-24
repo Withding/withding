@@ -2,6 +2,7 @@ package com.example.demo.Controller;
 
 import com.example.demo.DTO.Funding;
 import com.example.demo.DTO.FundingCategory;
+import com.example.demo.DTO.Response.GetProject_0Level;
 import com.example.demo.DTO.Response.GetProject_1Level;
 import com.example.demo.DTO.Response.ProjectCategory;
 import com.example.demo.DTO.Thumbnail;
@@ -35,22 +36,42 @@ public class ProjectController {
     @Autowired
     private FileService fileService;
 
+
     /**
-     * 프로젝트 1단계 호출 {projectNum} 부분에는 호출할 프로젝트 Id
+     * 프로젝트 작성 0단계
+     * @param request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
      * @return
      */
-    @RequestMapping(value = "/project/{projectNum}", method = RequestMethod.GET)
-    public ResponseEntity<Object> getProject_1Level(@PathVariable("projectNum") final Long projectId){
-        GetProject_1Level getProject_1Level = projectService.getProject_1Level(projectId);
-        if (getProject_1Level != null){
-            return new ResponseEntity<>(getProject_1Level, HttpStatus.OK);
+    @RequestMapping(value = "/project", method = RequestMethod.GET)
+    public ResponseEntity<Object> createProject_0Level(HttpServletRequest request){
+        User user = userService.setUserToHttpServletRequestAttribute(request);
+        GetProject_0Level getProject_0Level = new GetProject_0Level(projectService.createProject_0Level(user));
+        if (getProject_0Level != null){
+            return new ResponseEntity<>(getProject_0Level ,HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
 
-
+    /**
+     * 프로젝트 1단계 호출 {projectNum} 부분에는 호출할 프로젝트 Id
+     * @return
+     */
+    @RequestMapping(value = "/project/{projectNum}", method = RequestMethod.GET)
+    public ResponseEntity<Object> getProject_1Level(@PathVariable("projectNum") final Long projectId,
+                                                    HttpServletRequest request){
+        User user = userService.setUserToHttpServletRequestAttribute(request);
+        GetProject_1Level getProject_1Level = projectService.getProject_1Level(projectId);
+        if (getProject_1Level.getUserId() != user.getUserId()){
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        } else if (getProject_1Level != null ) {
+            return new ResponseEntity<>(getProject_1Level, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+    
 
     /**
      * 프로젝트 작성 1단계
@@ -81,15 +102,21 @@ public class ProjectController {
         else {
             // 형식상 else 둠
         }
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");                               // 썸네일 파일 저장에 사용할 시간 획득
+
+        User user = userService.setUserToHttpServletRequestAttribute(request);
+        if (projectService.isUserToProject(user, id) == false) {                                                         // 기존에 글을 작성하던 작성자인지 확인 해당 함수
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");                               // 썸네일 파일 저장에 사용할 양식 획득
         String thumbnailImageName =                                                                                     // 썸네일 저장할 때 사용할 이름
                 dateFormat.format(nowTime)
                 + "_"
                 + thumbnailImage.getOriginalFilename().replaceAll(" ","");
 
-        User user = userService.setUserToHttpServletRequestAttribute(request);
 
-        dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");                                                // 기존의 파일 양식을 DB에 저장할 양식으로 교체
         //System.out.println(startEnd.getTime());
         // ---------------------------------- 펀딩 세팅 -------------------------------------------------------------------
         Funding funding = new Funding();
@@ -105,7 +132,7 @@ public class ProjectController {
         // -------------------------------------------------------------------------------------------------------------
 
 
-        if ( projectService.createProject_1Level(funding) &&                                                           // 프로젝트 저장 및 덮어쓰기
+        if (projectService.createProject_1Level(funding) &&                                                           // 프로젝트 저장 및 덮어쓰기
                 fileService.createThumbnailImage(thumbnailImage, thumbnailImageName)) {                                 // && 썸네일 이미지 저장
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
