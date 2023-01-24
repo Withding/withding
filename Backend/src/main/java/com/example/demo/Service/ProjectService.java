@@ -3,6 +3,7 @@ package com.example.demo.Service;
 import com.example.demo.Config.BeanConfig;
 import com.example.demo.DTO.Funding;
 import com.example.demo.DTO.FundingCategory;
+import com.example.demo.DTO.Response.GetProject_0Level;
 import com.example.demo.DTO.Response.GetProject_1Level;
 import com.example.demo.DTO.Thumbnail;
 import com.example.demo.DTO.User;
@@ -28,6 +29,23 @@ public class ProjectService {
 
     @Autowired
     private EntityTransaction tr;
+
+
+    /**
+     * 해당 유저가 글을 작성하던 유저인지 확인
+     * @param requestUser 작성을 요청한 유저
+     * @param id 작성 요청한 프로젝트 Id
+     * @return 작성자가 맞으면 true, 아니면 false
+     */
+    public boolean isUserToProject(User requestUser, Long id) {
+        User findUser = em.find(Funding.class, id).getUserId();
+        if (requestUser.getUserId() == findUser.getUserId()){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 
 
     /**
@@ -105,11 +123,35 @@ public class ProjectService {
             tr.commit();                                                                                                // 트랜젝션 종료
             return new GetProject_1Level(funding.getTitle(), funding.getFundingCategory().getCategory(),
                     funding.getMaxAmount(),null, null,
-                    beanConfig.SERVER_URL + ":" + beanConfig.SERVER_PORT +  beanConfig.THUMBNAIL_IMAGE_URL + funding.getThumbnail().getImage());
+                    beanConfig.SERVER_URL + ":" + beanConfig.SERVER_PORT +  beanConfig.THUMBNAIL_IMAGE_URL + funding.getThumbnail().getImage(),
+                    funding.getUserId().getUserId());
         } catch (Exception e){
             e.printStackTrace();
             return null;
         }
     }
+
+
+    /**
+     * 프로젝트 작성 0단계 호출시 깡통 Funding 테이블을 만들어서 해당 프로젝트의 Id를 반환
+     * @param user 세팅할 User 객체
+     * @return 깡통으로 생성한 프로젝트 Id
+     */
+    public Long createProject_0Level(User user) {
+        try {
+            tr.begin();
+            Funding funding = new Funding();
+            funding.setUserId(user);
+            em.persist(funding);
+            tr.commit();
+            return funding.getId();
+        } catch (Exception e){
+            tr.rollback();
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
 
 }
