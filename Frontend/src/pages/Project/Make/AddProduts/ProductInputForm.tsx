@@ -1,5 +1,5 @@
 import LimitTextInput from "@/components/common/LimitTextInput";
-import PriceInput from "@/components/common/PriceInput";
+import NumberInput from "@/components/common/NumberInput";
 import React from "react";
 import SectionStyle from "../SectionStyle";
 
@@ -30,7 +30,7 @@ function ProductInputForm() {
                     maxLength: 40,
                     onChange: () => { },
                 }} />
-            <PriceInput
+            < NumberInput
                 label="상품 가격"
                 MAX_AMOUNT={5000000}
                 MIN_AMOUNT={1000}
@@ -41,7 +41,7 @@ function ProductInputForm() {
                     value: "",
                 }}
             />
-            <PriceInput
+            < NumberInput
                 label="배송비"
                 MAX_AMOUNT={30000}
                 MIN_AMOUNT={0}

@@ -1,4 +1,4 @@
-import PriceInput from "@/components/common/PriceInput";
+import NumberInput from "@/components/common/NumberInput";
 import ProjectMakeContext from "@/store/ProjectMakeContext";
 import React, { useContext, } from "react";
 
@@ -10,7 +10,7 @@ function TargetAmount() {
     const { values, onChangeValue } = useContext(ProjectMakeContext);
 
     return (
-        <PriceInput
+        <NumberInput
             label="목표 금액"
             MAX_AMOUNT={1000000000}
             MIN_AMOUNT={1000}

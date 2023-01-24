@@ -4,7 +4,7 @@ import Input from "./Input";
 import BaseProps from "@/types/BaseProps";
 
 
-interface PriceInputProps {
+interface NumberInputProps {
     label: string;
     MAX_AMOUNT: number;
     MIN_AMOUNT: number;
@@ -20,7 +20,7 @@ interface PriceInputProps {
  * 가격을 입력하는 컴포넌트
  * @returns 
  */
-function PriceInput(props: PriceInputProps & BaseProps) {
+function NumberInput(props: NumberInputProps & BaseProps) {
     const [newAmount, setNewAmount] = useState<string>("");
     const MAX_AMOUNT = useMemo(() => props.MAX_AMOUNT, [props.MAX_AMOUNT]);
     const MIN_AMOUNT = useMemo(() => props.MIN_AMOUNT, [props.MIN_AMOUNT]);
@@ -99,4 +99,4 @@ const style = css`
 `;
 
 
-export default PriceInput;
+export default NumberInput;
