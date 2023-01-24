@@ -6,6 +6,7 @@ import Amount from "./TargetAmount";
 import BestImage from "./BestImage";
 import Duration from "./Duration";
 import ProjectMakeContext from "@/store/ProjectMakeContext";
+import SectionStyle from "../SectionStyle";
 
 
 /**
@@ -15,7 +16,7 @@ import ProjectMakeContext from "@/store/ProjectMakeContext";
 function InputForm() {
     const { values, onChangeValue } = useContext(ProjectMakeContext);
     return (
-        <form css={style}>
+        <form css={SectionStyle}>
             <TitleInput
                 onChangeValue={onChangeValue}
                 label={"프로젝트 제목"}
@@ -36,31 +37,5 @@ function InputForm() {
     );
 }
 
-const style = css`
-    width: 100%;
-    section {
-        margin-bottom: 2rem;
-    }
-    label {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        span {
-            font-size: 1.2rem;
-            color: var(--grey-500);
-        }
-        input {
-            margin-top: 0.5rem;
-            min-height: 48px;
-            padding: 0 1rem;
-            font-size: 1rem;
-        }
-    }
-
-    .sub-description {
-        font-size: 0.8rem;
-        color: var(--grey-400); 
-    }
-`;
 
 export default InputForm;

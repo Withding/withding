@@ -1,3 +1,4 @@
+import { css } from "@emotion/react";
 import React from "react";
 import Product from "./Product";
 
@@ -7,10 +8,14 @@ import Product from "./Product";
  */
 function Products() {
     return (
-        <ul>
+        <ul css={style}>
             <Product />
         </ul>
     );
 }
+
+const style = css`
+    margin-top: 1rem;
+`;
 
 export default Products;
