@@ -44,9 +44,13 @@ public class ProjectController {
      */
     @RequestMapping(value = "/projects", method = RequestMethod.POST)
     public ResponseEntity<Object> createProject_0Level(HttpServletRequest request){
+        if (request.getAttribute("userNum") == null){
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
         User user = userService.setUserToHttpServletRequestAttribute(request);
         GetProject_0Level getProject_0Level = new GetProject_0Level(projectService.createProject_0Level(user));
-        if (getProject_0Level != null){
+
+        if (getProject_0Level != null) {
             return new ResponseEntity<>(getProject_0Level ,HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -61,6 +65,10 @@ public class ProjectController {
     @RequestMapping(value = "/projects/{projectNum}", method = RequestMethod.GET)
     public ResponseEntity<Object> getProject_1Level(@PathVariable("projectNum") final Long projectId,
                                                     HttpServletRequest request){
+        if (request.getAttribute("userNum") == null){
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
         User user = userService.setUserToHttpServletRequestAttribute(request);
         GetProject_1Level getProject_1Level = projectService.getProject_1Level(projectId);
         if (getProject_1Level.getUserId() != user.getUserId()){
@@ -87,6 +95,7 @@ public class ProjectController {
             @RequestParam("targetAmount") Long maxAmount,                                                               // 프로잭트 목표 금액
             //@RequestParam("startDate") Long start,                                                                    // 프로젝트 시작 일자
             //@RequestParam("endDate") Long dead,                                                                       // 프로젝트 종료 일자
+            @RequestParam("Content") String content,                                                                    // 프로젝트 내용
             HttpServletRequest request)
     {
         //Timestamp startEnd = new Timestamp(start);
@@ -104,7 +113,7 @@ public class ProjectController {
         }
 
         User user = userService.setUserToHttpServletRequestAttribute(request);
-        if (projectService.isUserToProject(user, id) == false) {                                                         // 기존에 글을 작성하던 작성자인지 확인 해당 함수
+        if (projectService.isUserToProject(user, id) == false) {                                                        // 기존에 글을 작성하던 작성자인지 확인 해당 함수
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
@@ -129,6 +138,7 @@ public class ProjectController {
         //funding.setStartEnd(dateFormat.format(startEnd));
         //funding.setDeadline(dateFormat.format(deadLine));
         funding.setCreatedAt(dateFormat.format(nowTime));
+        funding.setContent(content);
         // -------------------------------------------------------------------------------------------------------------
 
 

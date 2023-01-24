@@ -117,7 +117,7 @@ CREATE TABLE `funding` (
 	`now_amount` BIGINT(2) NOT NULL DEFAULT 0,
 	`view_count` INT NOT NULL DEFAULT 0,
 	`vote_count` INT NOT NULL DEFAULT 0,
-	`user_id` INT(10) NOT NULL,
+	`user_id` INT(10) NULL DEFAULT null,
 	`created_at` TimeStamp NULL,
 	`open_at` TimeStamp NULL,
 	`deadline` TimeStamp NULL,
