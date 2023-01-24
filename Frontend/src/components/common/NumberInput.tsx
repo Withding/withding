@@ -14,6 +14,8 @@ interface NumberInputProps {
         placeholder: string;
         value: number | string;
     }
+    subDescription?: string;
+    unit?: string;
 }
 
 /**
@@ -57,10 +59,11 @@ function NumberInput(props: NumberInputProps & BaseProps) {
         <section css={style} className={props?.className}>
             <label>
                 <span>{props.label}</span>
-                <span className="sub-description">
-                    {`금액은 ${MIN_AMOUNT.toLocaleString("ko-KR")}원 이상
-                ${MAX_AMOUNT.toLocaleString("ko-KR")}원 이하로 설정해주세요.`}
-                </span>
+                {props.subDescription &&
+                    <span className="sub-description">
+                        {props.subDescription}
+                    </span>
+                }
                 <div>
                     <Input
                         className={`${error ? "error" : ""}`}
@@ -71,7 +74,8 @@ function NumberInput(props: NumberInputProps & BaseProps) {
                         name={props.input.name}
                         onBlur={onBlur}
                     />
-                    <span>{"원"}</span>
+                    {props.unit && <span>{props.unit}</span>}
+
                 </div>
             </label>
         </section>
