@@ -7,9 +7,12 @@ import EpisodeType from "@/types/EpisodeType";
 import ButtonController from "../ButtonController";
 import MainHeader from "../MainHeader";
 import ProjectMakeContext from "@/store/ProjectMakeContext";
-import ProjectMakeValues from "../../../types/ProjectMakeValues";
+import ProjectMakeValues from "@/types/ProjectMakeValues";
 import ProjectDetailContent from "./ProjectDetailContent/ProjectDetailContent";
 import AddProducts from "./AddProduts/AddProducts";
+import useProjectParam from "@/hooks/useProjectParam";
+import { useQuery } from "react-query";
+import fetchProjectInfo from "@/utils/RequestApis/projectmake/fetchProjectInfo";
 
 /**
  * /project/make 페이지 컴포넌트
@@ -17,6 +20,10 @@ import AddProducts from "./AddProduts/AddProducts";
  */
 function Make() {
     const step = useStepParam();
+    const project = useProjectParam();
+
+    const { data } = useQuery(["fetchStep1Values"], () => fetchProjectInfo(project));
+
     const episode: EpisodeType[] = [
         { step: 1, component: <ProjectInfo />, nextButtonValue: "다음", name: "프로젝트 정보 입력" },
         { step: 2, component: <ProjectDetailContent />, nextButtonValue: "다음", name: "프로젝트 상세 내용 입력" },
@@ -24,7 +31,7 @@ function Make() {
     ];
     const render = episode.find((item) => item.step === step);// step에 해당하는 컴포넌트를 렌더링  
 
-    const [values, setValues] = useState<ProjectMakeValues>({
+    const [values, setValues] = useState<ProjectMakeValues>(data ?? {
         title: "",
         category: "",
         targetAmount: 0,
