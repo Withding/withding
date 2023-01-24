@@ -18,6 +18,7 @@ public class GetProject_1Level {
     private String startDate;               // 시작일
     private String endDate;                 // 마감일
     private String preViewImage;            // 썸네일 호출 API
+    private String content;
 
     private Long userId;                    // 작성자 Id
 }

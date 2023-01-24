@@ -65,7 +65,7 @@ public class ProjectController {
      * 프로젝트 1단계 호출 {projectNum} 부분에는 호출할 프로젝트 Id
      * @return
      */
-    @RequestMapping(value = "/projects/{projectNum}", method = RequestMethod.GET)
+    @RequestMapping(value = "/projects/1/{projectNum}", method = RequestMethod.GET)
     public ResponseEntity<Object> getProject_1Level(@PathVariable("projectNum") final Long projectId,
                                                     HttpServletRequest request){
         // ------------------------------ 인증 --------------------------------------------------------------------------
@@ -79,6 +79,7 @@ public class ProjectController {
         if (getProject_1Level.getUserId() != user.getUserId()){
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         } else if (getProject_1Level != null ) {
+            getProject_1Level.setUserId(null);
             return new ResponseEntity<>(getProject_1Level, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -91,7 +92,7 @@ public class ProjectController {
      * @param request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
      * @return
      */
-    @RequestMapping(value = "/projects", method = RequestMethod.PUT)
+    @RequestMapping(value = "/projects/1", method = RequestMethod.PUT)
     public ResponseEntity<Object> createProject_1Level(
             @RequestParam(value = "Id", required = false) Long id,                                                      // 프로젝트 번호
             @RequestParam("title") String title,                                                                        // 프로젝트 이름

@@ -125,7 +125,9 @@ public class ProjectService {
             return new GetProject_1Level(funding.getTitle(), funding.getFundingCategory().getCategory(),
                     funding.getMaxAmount(),null, null,
                     beanConfig.SERVER_URL + ":" + beanConfig.SERVER_PORT +  beanConfig.THUMBNAIL_IMAGE_URL + funding.getThumbnail().getImage(),
-                    funding.getUserId().getUserId());
+                    funding.getContent(),
+                    funding.getUserId().getUserId()
+                    );
         } catch (Exception e){
             e.printStackTrace();
             return null;
