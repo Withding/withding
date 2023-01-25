@@ -92,7 +92,7 @@ public class ProjectController {
      */
     @RequestMapping(value = "/projects/1", method = RequestMethod.PUT)
     public ResponseEntity<Object> createProject_1Level(
-            @RequestParam(value = "Id") Long id,                                                                        // 프로젝트 번호
+            @RequestParam("id") Long id,                                                                        // 프로젝트 번호
             @RequestParam("title") String title,                                                                        // 프로젝트 이름
             @RequestParam("bestImage") MultipartFile thumbnailImage,                                                    // 프로젝트 썸네일
             @RequestParam("category") Long fundingCategoryId,                                                           // 프로젝트 카테고리
