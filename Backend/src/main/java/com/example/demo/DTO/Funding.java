@@ -54,7 +54,7 @@ public class Funding {
 
     private String deadLine;                // 마감기간
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "funding_category_id")
     private FundingCategory fundingCategory;  // 펀딩 카테고리
 

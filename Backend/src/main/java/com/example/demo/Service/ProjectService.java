@@ -122,7 +122,7 @@ public class ProjectService {
     public GetProject_1Level getProject_1Level(Long projectId) {
         try {
             Funding funding = em.find(Funding.class, projectId);                                                        // 영속성 등록 (persist 말고도 find로 조회해도 영속성으로 관리됨)
-
+            System.out.println("funding = " + funding);
             GetProject_1Level getProject_1Level = new GetProject_1Level();
             getProject_1Level.setUserId(funding.getUserId().getUserId());
             getProject_1Level.setTitle(funding.getTitle());
@@ -152,7 +152,7 @@ public class ProjectService {
      */
     public Long createProject_0Level(User user) {
         try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String now = dateFormat.format(new Timestamp(System.currentTimeMillis()));
             tr.begin();
             Funding funding = new Funding();
@@ -160,7 +160,6 @@ public class ProjectService {
             funding.setCreatedAt(now);
             funding.setStartEnd(now);
             funding.setDeadLine(now);
-            funding.setThumbnail(null);
             em.persist(funding);
             tr.commit();
             return funding.getId();
