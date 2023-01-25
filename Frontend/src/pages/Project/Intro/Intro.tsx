@@ -22,7 +22,7 @@ function Intro() {
     const navigate = useNavigate();
     const step = useStepParam();
 
-    const { mutate } = useMutation(() => createProject(), {
+    const { mutate } = useMutation(createProject, {
         onSuccess: (data) => {
             navigate(`/project/make?step=1&project=${data.id}`);
         }
