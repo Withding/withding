@@ -21,7 +21,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.List;
 
 @Controller
 @CrossOrigin("*")
@@ -44,7 +43,6 @@ public class ProjectController {
      */
     @RequestMapping(value = "/projects", method = RequestMethod.POST)
     public ResponseEntity<Object> createProject_0Level(HttpServletRequest request){
-
         // ------------------------------ 인증 --------------------------------------------------------------------------
         User user = userService.setUserToHttpServletRequestAttribute(request);
         if (user == null){
@@ -77,13 +75,11 @@ public class ProjectController {
 
         GetProject_1Level getProject_1Level = projectService.getProject_1Level(projectId);
         if (getProject_1Level.getUserId() != user.getUserId()){                                                         // 작성자가 다름
-            System.out.println("user.getUserId = " + user.getUserId());
-            System.out.println("getProject_1Level.getUserId() = " + getProject_1Level.getUserId());
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        } else if (getProject_1Level != null ) {
+        } else if (getProject_1Level != null ) {                                                                        // 정상
             getProject_1Level.setUserId(null);
             return new ResponseEntity<>(getProject_1Level, HttpStatus.OK);
-        } else {
+        } else {                                                                                                        // 그 외에 모든 경우
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -96,14 +92,14 @@ public class ProjectController {
      */
     @RequestMapping(value = "/projects/1", method = RequestMethod.PUT)
     public ResponseEntity<Object> createProject_1Level(
-            @RequestParam(value = "Id", required = false) Long id,                                                      // 프로젝트 번호
+            @RequestParam(value = "Id") Long id,                                                                        // 프로젝트 번호
             @RequestParam("title") String title,                                                                        // 프로젝트 이름
             @RequestParam("bestImage") MultipartFile thumbnailImage,                                                    // 프로젝트 썸네일
             @RequestParam("category") Long fundingCategoryId,                                                           // 프로젝트 카테고리
             @RequestParam("targetAmount") Long maxAmount,                                                               // 프로잭트 목표 금액
             //@RequestParam("startDate") Long start,                                                                    // 프로젝트 시작 일자
             //@RequestParam("endDate") Long dead,                                                                       // 프로젝트 종료 일자
-            @RequestParam("Content") String content,                                                                    // 프로젝트 내용
+            @RequestParam("content") String content,                                                                    // 프로젝트 내용
             HttpServletRequest request)
     {
         Timestamp nowTime = new Timestamp(System.currentTimeMillis());                                                  // 현재 시간
@@ -149,7 +145,7 @@ public class ProjectController {
         // -------------------------------------------------------------------------------------------------------------
 
 
-        if (projectService.createProject_1Level(funding) &&                                                           // 프로젝트 저장 및 덮어쓰기
+        if (projectService.createProject_1Level(funding) &&                                                             // 프로젝트 저장 및 덮어쓰기
                 fileService.createThumbnailImage(thumbnailImage, thumbnailImageName)) {                                 // && 썸네일 이미지 저장
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {

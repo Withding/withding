@@ -111,10 +111,10 @@ CREATE TABLE `thumbnail` (
 
 CREATE TABLE `funding` (
 	`funding_id` INT(10) auto_increment NOT NULL PRIMARY KEY,
-	`funding_category_id` TINYINT(1) NULL,
-	`title` VARCHAR(100) NULL,
-	`content` VARCHAR(1000) NULL,
-	`image` VARCHAR(100) NULL,
+	`funding_category_id` TINYINT(1) NULL DEFAULT 0,
+	`title` VARCHAR(100) NULL DEFAULT '',
+	`content` VARCHAR(1000) NULL DEFAULT '',
+	`image` VARCHAR(100) NULL DEFAULT NULL,
 	`max_amount` BIGINT(2) NOT NULL DEFAULT 0,
 	`now_amount` BIGINT(2) NOT NULL DEFAULT 0,
 	`view_count` INT NOT NULL DEFAULT 0,

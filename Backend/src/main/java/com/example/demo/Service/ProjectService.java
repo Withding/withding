@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 @Service
@@ -119,29 +121,23 @@ public class ProjectService {
      */
     public GetProject_1Level getProject_1Level(Long projectId) {
         try {
-            tr.begin();                                                                                                 // 트랜젝션 시작
             Funding funding = em.find(Funding.class, projectId);                                                        // 영속성 등록 (persist 말고도 find로 조회해도 영속성으로 관리됨)
-            tr.commit();                                                                                                // 트랜젝션 종료
-            if (funding.getTitle() == null){
-                return new GetProject_1Level(                                                                           // 깡통 펀딩 글 반환
-                        "",
-                        "",
-                        0L,
-                        "",
-                        "",
-                        "",
-                        "",
-                        funding.getUserId().getUserId());
+
+            GetProject_1Level getProject_1Level = new GetProject_1Level();
+            getProject_1Level.setUserId(funding.getUserId().getUserId());
+            getProject_1Level.setTitle(funding.getTitle());
+            getProject_1Level.setContent(funding.getContent());
+            getProject_1Level.setCategory(funding.getFundingCategory().getCategory());
+            getProject_1Level.setTargetAmount(funding.getMaxAmount());
+            getProject_1Level.setStartDate(funding.getStartEnd());
+            getProject_1Level.setEndDate(funding.getDeadLine());
+
+            if (funding.getThumbnail() != null) {
+                getProject_1Level.setPreViewImage(beanConfig.SERVER_URL + ":" + beanConfig.SERVER_PORT + beanConfig.THUMBNAIL_IMAGE_URL + funding.getThumbnail().getImage());
             } else {
-                return new GetProject_1Level(funding.getTitle(), funding.getFundingCategory().getCategory(),            // 임시작성된 펀딩 글 반환
-                        funding.getMaxAmount(),
-                        null,
-                        null,
-                        beanConfig.SERVER_URL + ":" + beanConfig.SERVER_PORT + beanConfig.THUMBNAIL_IMAGE_URL + funding.getThumbnail().getImage(),
-                        funding.getContent(),
-                        funding.getUserId().getUserId()
-                );
+                getProject_1Level.setPreViewImage(null);
             }
+            return getProject_1Level;
         } catch (Exception e){
             e.printStackTrace();
             return null;
@@ -156,9 +152,15 @@ public class ProjectService {
      */
     public Long createProject_0Level(User user) {
         try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+            String now = dateFormat.format(new Timestamp(System.currentTimeMillis()));
             tr.begin();
             Funding funding = new Funding();
             funding.setUserId(user);
+            funding.setCreatedAt(now);
+            funding.setStartEnd(now);
+            funding.setDeadLine(now);
+            funding.setThumbnail(null);
             em.persist(funding);
             tr.commit();
             return funding.getId();
