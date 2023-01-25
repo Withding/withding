@@ -7,7 +7,7 @@ import customAxios from "@/utils/customAxios";
 function fetchCategorys(): Promise<{ categoryList: Category[]}> {
     const axios = customAxios();
     return axios({
-        url: "/category",
+        url: "/categorys",
         method: "GET",
     }).then(res => res.data);
 }
