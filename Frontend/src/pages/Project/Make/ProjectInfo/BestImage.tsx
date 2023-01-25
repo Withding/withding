@@ -16,12 +16,13 @@ function PrevViewImageWrapper({ image, onRemove }: { image?: string, onRemove: (
  * @returns 
  */
 function BestImage() {
-    const { onChangeValue } = useContext(ProjectMakeContext);
+    const { values, onChangeValue } = useContext(ProjectMakeContext);
     const imageRef = useRef<HTMLInputElement>(null);
-    const [preViewImage, setPreViewImage] = useState<string | null>(null);
+    const [preViewImage, setPreViewImage] = useState<string | null>(values.preViewImage ?? null);
     const registerImageButtonClickHandler = useCallback(() => {
         imageRef.current?.click();
     }, []);
+    console.log(preViewImage);
 
     const onChangeImage = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         const { files } = e.target;
