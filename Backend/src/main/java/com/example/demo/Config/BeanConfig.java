@@ -59,13 +59,11 @@ public class BeanConfig {
     }
 
     @Bean
-    //@PersistenceContext
     public EntityManager em(){
         return this.emf().createEntityManager();
     }
 
     @Bean
-    //@PersistenceContext
     public EntityTransaction tr(){
         return em().getTransaction();
     }
