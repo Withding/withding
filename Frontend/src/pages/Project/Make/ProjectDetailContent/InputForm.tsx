@@ -21,7 +21,7 @@ function InputForm() {
     return (
         <form css={style}>
             <Editor
-                initialValue={values.content}
+                initialValue={values.content ?? ""}
                 height="600px"
                 initialEditType="wysiwyg"
                 previewStyle="vertical"
