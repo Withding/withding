@@ -18,7 +18,6 @@ public class FundingCategory {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "funding_category_id")
     private Long id;                     // 펀딩 카테로리 번호
 
