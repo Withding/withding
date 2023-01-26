@@ -55,7 +55,7 @@ public class BeanConfig {
 
     @Bean
     public EntityManagerFactory emf(){
-        return Persistence.createEntityManagerFactory("jpabook");
+        return Persistence.createEntityManagerFactory("withding");
     }
 
     @Bean

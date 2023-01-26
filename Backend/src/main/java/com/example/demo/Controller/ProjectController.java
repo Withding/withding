@@ -92,19 +92,19 @@ public class ProjectController {
      */
     @RequestMapping(value = "/projects/1", method = RequestMethod.PUT)
     public ResponseEntity<Object> createProject_1Level(
-            @RequestParam("id") Long id,                                                                        // 프로젝트 번호
+            @RequestParam("id") Long id,                                                                                // 프로젝트 번호
             @RequestParam("title") String title,                                                                        // 프로젝트 이름
             @RequestParam("bestImage") MultipartFile thumbnailImage,                                                    // 프로젝트 썸네일
             @RequestParam("category") Long fundingCategoryId,                                                           // 프로젝트 카테고리
             @RequestParam("targetAmount") Long maxAmount,                                                               // 프로잭트 목표 금액
-            //@RequestParam("startDate") Long start,                                                                    // 프로젝트 시작 일자
-            //@RequestParam("endDate") Long dead,                                                                       // 프로젝트 종료 일자
-            @RequestParam("content") String content,                                                                    // 프로젝트 내용
+            @RequestParam("startDate") String start,                                                                      // 프로젝트 시작 일자
+            @RequestParam("endDate") String dead,                                                                         // 프로젝트 종료 일자
             HttpServletRequest request)
     {
+        System.out.println("start.getClass" + start.getClass() + ", start = " + start);
+        System.out.println("dead.getClass" + dead.getClass() + ", dead = " + dead);
         Timestamp nowTime = new Timestamp(System.currentTimeMillis());                                                  // 현재 시간
-        //Timestamp startEnd = new Timestamp(start);
-        //Timestamp deadLine = new Timestamp(dead);
+
 
 
         // ------------------------------ 인증 --------------------------------------------------------------------------
@@ -141,10 +141,7 @@ public class ProjectController {
         //funding.setStartEnd(dateFormat.format(startEnd));
         //funding.setDeadline(dateFormat.format(deadLine));
         funding.setCreatedAt(dateFormat.format(nowTime));
-        funding.setContent(content);
         // -------------------------------------------------------------------------------------------------------------
-
-
         if (projectService.createProject_1Level(funding) &&                                                             // 프로젝트 저장 및 덮어쓰기
                 fileService.createThumbnailImage(thumbnailImage, thumbnailImageName)) {                                 // && 썸네일 이미지 저장
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

@@ -122,21 +122,23 @@ public class ProjectService {
     public GetProject_1Level getProject_1Level(Long projectId) {
         try {
             Funding funding = em.find(Funding.class, projectId);                                                        // 영속성 등록 (persist 말고도 find로 조회해도 영속성으로 관리됨)
+
             System.out.println("funding = " + funding);
             GetProject_1Level getProject_1Level = new GetProject_1Level();
             getProject_1Level.setUserId(funding.getUserId().getUserId());
             getProject_1Level.setTitle(funding.getTitle());
             getProject_1Level.setContent(funding.getContent());
-            getProject_1Level.setCategory(funding.getFundingCategory().getCategory());
             getProject_1Level.setTargetAmount(funding.getMaxAmount());
             getProject_1Level.setStartDate(funding.getStartEnd());
             getProject_1Level.setEndDate(funding.getDeadLine());
+            getProject_1Level.setCategory(funding.getFundingCategory().getCategory());
 
             if (funding.getThumbnail() != null) {
                 getProject_1Level.setPreViewImage(beanConfig.SERVER_URL + ":" + beanConfig.SERVER_PORT + beanConfig.THUMBNAIL_IMAGE_URL + funding.getThumbnail().getImage());
             } else {
                 getProject_1Level.setPreViewImage(null);
             }
+
             return getProject_1Level;
         } catch (Exception e){
             e.printStackTrace();
@@ -154,13 +156,15 @@ public class ProjectService {
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String now = dateFormat.format(new Timestamp(System.currentTimeMillis()));
-            tr.begin();
             Funding funding = new Funding();
             funding.setUserId(user);
             funding.setCreatedAt(now);
             funding.setStartEnd(now);
             funding.setDeadLine(now);
+            //funding.setFundingCategory();
+            tr.begin();
             em.persist(funding);
+            em.clear();                                                                                                 // 영속성 초기화. 이거 없으면 깡통 펀딩 호출시 대부분이 null 담겨서 날라옴
             tr.commit();
             return funding.getId();
         } catch (Exception e){

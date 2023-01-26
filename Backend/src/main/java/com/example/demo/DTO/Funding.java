@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
@@ -22,13 +23,13 @@ public class Funding {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;                        // 펀딩 번호
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User userId;                    // 작성자
 
     private String title;                   // 제목
 
-    @ManyToOne(cascade = CascadeType.ALL)   // cascade = CascadeType.PERSIST = Funding 영속성 추가할때 이 어노테이션이 달린 객체도 같이 영속성에 추가하는 것
+    @ManyToOne(cascade = CascadeType.PERSIST , fetch = FetchType.LAZY)   // cascade = CascadeType.PERSIST = Funding 영속성 추가할때 이 어노테이션이 달린 객체도 같이 영속성에 추가하는 것
     @JoinColumn(name = "image")
     private Thumbnail thumbnail;
 
@@ -54,11 +55,11 @@ public class Funding {
 
     private String deadLine;                // 마감기간
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
     @JoinColumn(name = "funding_category_id")
     private FundingCategory fundingCategory;  // 펀딩 카테고리
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @PrimaryKeyJoinColumn(name = "article_id")
     private Article article_1;
 
@@ -78,7 +79,7 @@ public class Funding {
     //@JoinColumn(name = "article_id")
     //private Article article_5;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
     @JoinColumn(name = "state_code")
     private FundingStateCode fundingStateCode;  // 글 상태
 
