@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 
@@ -128,6 +129,7 @@ public class ProjectController {
 
 
 
+
         dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");                                                // 기존의 파일 양식을 DB에 저장할 양식으로 교체
         //System.out.println(startEnd.getTime());
         // ---------------------------------- 펀딩 세팅 -------------------------------------------------------------------
@@ -138,8 +140,8 @@ public class ProjectController {
         funding.setFundingCategory(new FundingCategory(fundingCategoryId));
         funding.setThumbnail(new Thumbnail(thumbnailImageName, thumbnailImage.getOriginalFilename()));
         funding.setMaxAmount(maxAmount);
-        //funding.setStartEnd(dateFormat.format(startEnd));
-        //funding.setDeadline(dateFormat.format(deadLine));
+        funding.setStartEnd(start + " 00:00:00");
+        funding.setDeadLine(dead + " 00:00:00");
         funding.setCreatedAt(dateFormat.format(nowTime));
         // -------------------------------------------------------------------------------------------------------------
         if (projectService.createProject_1Level(funding) &&                                                             // 프로젝트 저장 및 덮어쓰기

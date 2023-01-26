@@ -1,5 +1,5 @@
 CREATE TABLE `funding_category` (
-	`funding_category_id`	TINYINT NOT NULL PRIMARY KEY,
+	`funding_category_id` TINYINT NOT NULL PRIMARY KEY,
 	`category`	VARCHAR(30)	NOT NULL
 );
 

@@ -90,17 +90,17 @@ public class ProjectService {
                 em.persist(funding.getThumbnail());                                                                     // 임시저장된 글이 없는 경우 생성
             } else {
                 t = em.find(Thumbnail.class, f.getThumbnail().getImage());                                              // 영속 관리 시작
+                // 이부분에 썸네일 삭제하는 함수 넣으면 좋을것 같음
                 em.remove(t);                                                                                           // 기존 썸네일 삭제
                 em.persist(funding.getThumbnail());                                                                     // 새로받은 썸네일 저장
             }
-            FundingCategory fc = em.find(FundingCategory.class, funding.getFundingCategory().getId());                  // 영속 관리 시작
 
             f.setTitle(funding.getTitle());                                                                             // 영속 관리중인 기존 funding 수정 시작
             f.setThumbnail(funding.getThumbnail());
             f.setMaxAmount(funding.getMaxAmount());
-            f.setFundingCategory(fc);
-            //f.setStartEnd(funding.getStartEnd());
-            //f.setDeadLine(funding.getDeadLine());
+            f.setFundingCategory(funding.getFundingCategory());
+            f.setStartEnd(funding.getStartEnd());
+            f.setDeadLine(funding.getDeadLine());
             f.setCreatedAt(funding.getCreatedAt());
             // ---------------------------------------------------------------------------------------------------------
 
