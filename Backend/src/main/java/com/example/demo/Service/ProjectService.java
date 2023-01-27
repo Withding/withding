@@ -174,6 +174,23 @@ public class ProjectService {
         }
     }
 
-
-
+    /**
+     * 프로젝트 2단계 컨텐트 부분을 DB에 저장하는 함수
+     * @param projectId 저장할 프로젝트 Id
+     * @param content 저장할 프로젝트 내용
+     * @return 정상 저장시 true, 비정상 처리시 false
+     */
+    public boolean createProject_2Level(final Long projectId, final String content) {
+        try {
+            Funding funding = em.find(Funding.class, projectId);
+            tr.begin();
+            funding.setContent(content);
+            tr.commit();
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            tr.rollback();
+            return false;
+        }
+    }
 }

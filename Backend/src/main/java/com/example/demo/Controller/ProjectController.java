@@ -2,6 +2,7 @@ package com.example.demo.Controller;
 
 import com.example.demo.DTO.Funding;
 import com.example.demo.DTO.FundingCategory;
+import com.example.demo.DTO.Request.createProject_2Level;
 import com.example.demo.DTO.Response.GetProject_0Level;
 import com.example.demo.DTO.Response.GetProject_1Level;
 import com.example.demo.DTO.Response.ProjectCategory;
@@ -62,7 +63,7 @@ public class ProjectController {
 
     /**
      * 프로젝트 1단계 호출 {projectNum} 부분에는 호출할 프로젝트 Id
-     * @return
+     * @return 인증 실패 401, 정상 처리
      */
     @RequestMapping(value = "/projects/1/{projectNum}", method = RequestMethod.GET)
     public ResponseEntity<Object> getProject_1Level(@PathVariable("projectNum") final Long projectId,
@@ -89,7 +90,7 @@ public class ProjectController {
     /**
      * 프로젝트 작성 1단계
      * @param request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
-     * @return
+     * @return 인증실패 401, 정상 처리 204, 비정상 처리 400
      */
     @RequestMapping(value = "/projects/1", method = RequestMethod.PUT)
     public ResponseEntity<Object> createProject_1Level(
@@ -151,6 +152,36 @@ public class ProjectController {
             return new ResponseEntity<>(funding,HttpStatus.BAD_REQUEST);
         }
     }
+
+    
+
+    /**
+     * 프로젝트 2단계를 작성하는 컨트롤러
+     * @param projectId 저장할 프로젝트 Id
+     * @param project2Level 저장할 내용이 담긴 객체
+     * @param request request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
+     * @return 인증실패 401, 정상 처리 204, 비정상 처리 400
+     */
+    @RequestMapping(value = "/projects/2/{projectNum}", method = RequestMethod.PUT)
+    public ResponseEntity<Object> create_2Level(@PathVariable("projectNum") Long projectId,
+                                                @RequestBody createProject_2Level project2Level,
+                                                HttpServletRequest request)
+    {
+        // ------------------------------ 인증 --------------------------------------------------------------------------
+        User user = userService.setUserToHttpServletRequestAttribute(request);
+        if ((user == null) || (projectService.isUserToProject(user, projectId) == false) ){                                    // 인증 || 기존에 글을 작성하던 작성자인지 확인 해당 함수
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        // -------------------------------------------------------------------------------------------------------------
+
+        if (projectService.createProject_2Level(projectId, project2Level.getContent()) == true){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
 
 
     /**
