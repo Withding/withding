@@ -13,8 +13,8 @@ import AddProducts from "./AddProduts/AddProducts";
 import useProjectParam from "@/hooks/useProjectParam";
 import { useMutation, useQuery } from "react-query";
 import fetchProjectInfo from "@/utils/RequestApis/projectmake/fetchProjectInfo";
+import generateProjectContent from "@/utils/RequestApis/projectmake/generateProjectContent";
 import generateProjectInfo from "@/utils/RequestApis/projectmake/generateProjectInfo";
-
 /**
  * /project/make 페이지 컴포넌트
  * @returns 
@@ -24,7 +24,7 @@ function Make() {
     const project = useProjectParam();
     const { data } = useQuery(["fetchStep1Values"], () => fetchProjectInfo(project));
     const { mutate: projectInfoMutate } = useMutation(generateProjectInfo);
-    // const { mutate: projectContentMutate } = useMutation(generateProjectInfo);
+    const { mutate: projectContentMutate } = useMutation(generateProjectContent);
     const [values, setValues] = useState<ProjectMakeValues>(data ?? {
         title: "",
         category: "",
@@ -39,6 +39,10 @@ function Make() {
         projectInfoMutate({ project, values });
     }, [project, projectInfoMutate, values]);
 
+    const generateProjectContext = useCallback(() => {
+        projectContentMutate({ content: values.content, project });
+    }, [project, projectContentMutate, values.content]);
+
     const episode: EpisodeType[] = [
         {
             step: 1,
@@ -52,6 +56,7 @@ function Make() {
             component: <ProjectDetailContent />,
             nextButtonValue: "다음",
             name: "프로젝트 상세 내용 입력",
+            clickEvent: generateProjectContext
         },
         {
             step: 3,
