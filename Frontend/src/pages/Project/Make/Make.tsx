@@ -22,8 +22,9 @@ import generateProjectInfo from "@/utils/RequestApis/projectmake/generateProject
 function Make() {
     const step = useStepParam();
     const project = useProjectParam();
-    const { data, refetch } = useQuery(["fetchStep1Values"], () => fetchProjectInfo(project));
+    const { data } = useQuery(["fetchStep1Values"], () => fetchProjectInfo(project));
     const { mutate: projectInfoMutate } = useMutation(generateProjectInfo);
+    // const { mutate: projectContentMutate } = useMutation(generateProjectInfo);
     const [values, setValues] = useState<ProjectMakeValues>(data ?? {
         title: "",
         category: "",
@@ -34,12 +35,9 @@ function Make() {
     });
 
 
-    const generateInfo = useCallback((step: number) => {
-        if (step === 2) { // 페이지 리프레쉬하면 step1 데이터들이 다날라가서 step2 에서는 기존 데이터를 다시 불러온후 보내야함
-            refetch();
-        }
+    const generateInfo = useCallback(() => {
         projectInfoMutate({ project, values });
-    }, [project, projectInfoMutate, refetch, values]);
+    }, [project, projectInfoMutate, values]);
 
     const episode: EpisodeType[] = [
         {
@@ -47,14 +45,13 @@ function Make() {
             component: <ProjectInfo />,
             nextButtonValue: "다음",
             name: "프로젝트 정보 입력",
-            clickEvent: () => generateInfo(1)
+            clickEvent: generateInfo
         },
         {
             step: 2,
             component: <ProjectDetailContent />,
             nextButtonValue: "다음",
             name: "프로젝트 상세 내용 입력",
-            clickEvent: () => generateInfo(2)
         },
         {
             step: 3,

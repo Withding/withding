@@ -15,21 +15,19 @@ function generateProjectInfo({
     const user = JSON.parse(localStorage.getItem("user") || "{}");
     const accessToken = user?.accessToken;
     return axios({
-        url: "/projects/1",
+        url: `/projects/1/${project}`,
         method: "PUT",
         headers: {
             "authorization": accessToken,
             "Content-Type": "multipart/form-data",
         },
         data: {
-            id: project,
             title: values.title,
             category: values.category,
             targetAmount: values.targetAmount,
             startDate: values.startDate,
             endDate: values.endDate,
             bestImage: values.bestImage,
-            content: values.content,
         }
     });
 }
