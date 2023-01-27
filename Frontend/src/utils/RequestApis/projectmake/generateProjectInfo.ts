@@ -2,7 +2,7 @@ import customAxios from "@/utils/customAxios";
 import { AxiosResponse } from "axios";
 import ProjectMakeValues  from "@/types/ProjectMakeValues";
 /**
- * 카테고리 목록 가져오기
+ * 프로젝트 생성시 프로젝트 정보 작성하는 API
  * @returns 
  */
 function generateProjectInfo({
