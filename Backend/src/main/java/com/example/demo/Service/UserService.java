@@ -1,12 +1,15 @@
 package com.example.demo.Service;
 
 
+import com.example.demo.Config.BeanConfig;
+import com.example.demo.DTO.ProfileImage;
 import com.example.demo.DTO.State;
 import com.example.demo.DTO.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -22,6 +25,12 @@ public class UserService {
 
     @Autowired
     private EntityTransaction tr;
+
+    @Autowired
+    private BeanConfig beanConfig;
+
+    @Autowired
+    private FileService fileService;
 
 
     /**
@@ -43,6 +52,71 @@ public class UserService {
         } catch (Exception e){
             System.out.println("UserService.setUserToHttpServletRequestAttribute()에서 인증 실패 !!!");
             return null;
+        }
+    }
+
+
+
+    /**
+     * 유저 이미지 변경 함수.
+     * 기존의 이미지 파일과 DB에서 데이터를 삭제하고 새로운 이미지 파일과 데이터를 삽입
+     * @param user
+     * @param imageFile
+     * @param imageName
+     * @return
+     */
+    public boolean changeUserImage(User user, MultipartFile imageFile, String imageName){
+        User findUser = em.find(User.class, user.getUserId());
+
+        if (!findUser.getProfileImage().getProfileImage().equals(beanConfig.DEFAULT_USER_IMAGE)){                       // 프로필 이미지가 default.png가 아닌경우
+            fileService.deleteImage(findUser.getProfileImage().getProfileImage(), beanConfig.USER_PROFILE_DIRECTORY_NAME);  // 기존 프로필 이미지 파일 삭제
+        }
+        fileService.createImage(imageFile, imageName, beanConfig.USER_PROFILE_DIRECTORY_NAME);
+
+        try {
+            tr.begin();
+            ProfileImage oldProfileImage = em.find(ProfileImage.class, findUser.getProfileImage().getProfileImage());
+
+            if (!oldProfileImage.getProfileImage().equals(beanConfig.DEFAULT_USER_IMAGE)){                              // 프로필 이미지가 default.png가 아닌경우
+                em.remove(oldProfileImage);                                                                             // 테이블에서 기존 프로필 이미지 데이터 삭제
+            }
+
+            ProfileImage newProfileImage = new ProfileImage(imageName, imageFile.getOriginalFilename());                // 새로운 프로필 이미지 생성
+            em.persist(newProfileImage);                                                                                // 테이블에 새로운 프로필 이미지 데이터 저장
+
+            findUser.setProfileImage(newProfileImage);                                                                  // user 테이블에 반영
+            tr.commit();
+            return true;
+        } catch (Exception e){
+            e.printStackTrace();
+            tr.rollback();
+            return false;
+        }
+    }
+
+
+
+    /**
+     * 사용자의 프로필 이미지를 default.png로 변경하는 함수
+     * @param userId 변경할 유저 고유 번호
+     * @return
+     */
+    public boolean deleteUserImage(Long userId) {
+
+        try{
+            User user = em.find(User.class, userId);
+            if (!user.getProfileImage().getProfileImage().equals(beanConfig.DEFAULT_USER_IMAGE)){                       // 프로필 이미지가 default.png가 아닌경우
+                fileService.deleteImage(user.getProfileImage().getProfileImage(), beanConfig.USER_PROFILE_DIRECTORY_NAME);  // 기존 프로필 이미지 파일 삭제
+                em.remove(em.find(ProfileImage.class, user.getProfileImage().getProfileImage()));                       // profileimage 테이블에서 삭제
+            }
+            tr.begin();
+            user.setProfileImage(new ProfileImage("default.png", "default.png"));             // 변경
+            tr.commit();
+            return true;
+        } catch (Exception e){
+            tr.rollback();
+            e.printStackTrace();
+            return false;
         }
     }
 }
