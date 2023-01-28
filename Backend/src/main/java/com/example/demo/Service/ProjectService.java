@@ -11,6 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -25,6 +26,9 @@ public class ProjectService {
 
     @Autowired
     private BeanConfig beanConfig;
+
+    @Autowired
+    private FileService fileService;
 
     @Autowired
     private EntityManager em;
@@ -69,7 +73,7 @@ public class ProjectService {
      * @param funding 임시저장할 객체
      * @return Long 타입의 Funding Id
      */
-    public boolean createProject_1Level(Funding funding){
+    public boolean createProject_1Level(Funding funding, MultipartFile thumbnailImage, String thumbnailImageName){
         // ----------------------------------------- 조회 (추후 갯수제한때 사용할 수 있음) ---------------------------------------
         /*List<Funding> fundingList =
                 (List<Funding>) em.createQuery("SELECT f FROM Funding f WHERE f.userId.userId =: userId " +
@@ -83,17 +87,16 @@ public class ProjectService {
             tr.begin();                                                                                                 // 트랜잭션 시작
 
             // ------------------------------------------ 디비에 임시저장된 글이 있다 ------------------------------------------
-            Thumbnail t;
             Funding f = em.find(Funding.class, funding.getId());                                                        // 영속 관리 시작
+            Thumbnail t = em.find(Thumbnail.class, f.getThumbnail().getImage());                                        // 영속 관리 시작
 
-            if (f.getThumbnail() == null){
-                em.persist(funding.getThumbnail());                                                                     // 임시저장된 글이 없는 경우 생성
-            } else {
-                t = em.find(Thumbnail.class, f.getThumbnail().getImage());                                              // 영속 관리 시작
-                // 이부분에 썸네일 삭제하는 함수 넣으면 좋을것 같음
-                em.remove(t);                                                                                           // 기존 썸네일 삭제
-                em.persist(funding.getThumbnail());                                                                     // 새로받은 썸네일 저장
+            if (!fileService.deleteImage(t.getImage(), beanConfig.THUMBNAIL_DIRECTORY_NAME)                               // 해당 썸네일 이미지 파일 삭제 실패 && 새로운 썸네일 저장 실패
+                    && !fileService.createImage(thumbnailImage, thumbnailImageName, beanConfig.THUMBNAIL_DIRECTORY_NAME)){
+                throw new Exception(); // 예외처리 발생
             }
+
+            em.remove(t);                                                                                               // 테이블에서 기존 썸네일 삭제
+            em.persist(funding.getThumbnail());                                                                         // 테이블에서 새로받은 썸네일 저장
 
             f.setTitle(funding.getTitle());                                                                             // 영속 관리중인 기존 funding 수정 시작
             f.setThumbnail(funding.getThumbnail());
@@ -103,7 +106,6 @@ public class ProjectService {
             f.setDeadLine(funding.getDeadLine());
             f.setCreatedAt(funding.getCreatedAt());
             // ---------------------------------------------------------------------------------------------------------
-
             tr.commit();                                                                                                // 트랜잭션 적용
             return true;
         } catch (Exception e){
@@ -174,6 +176,23 @@ public class ProjectService {
         }
     }
 
-
-
+    /**
+     * 프로젝트 2단계 컨텐트 부분을 DB에 저장하는 함수
+     * @param projectId 저장할 프로젝트 Id
+     * @param content 저장할 프로젝트 내용
+     * @return 정상 저장시 true, 비정상 처리시 false
+     */
+    public boolean createProject_2Level(final Long projectId, final String content) {
+        try {
+            Funding funding = em.find(Funding.class, projectId);
+            tr.begin();
+            funding.setContent(content);
+            tr.commit();
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            tr.rollback();
+            return false;
+        }
+    }
 }

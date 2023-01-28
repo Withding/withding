@@ -81,38 +81,78 @@ public class FileService {
     }
 
 
+
+
+
+
     /**
-     * 사용자의 프로필 이미지를 default.png로 변경하는 함수
-     * @param userId 변경할 유저 고유 번호
+     * 이미지 파일을 특정 디렉토리에 생성하는 함수
+     * @param imageFile 생성할 이미지 파일
+     * @param imageName 생성할 이미지 파일의 이름
+     * @param targetDirectory 생성할 이미지 파일이 저장될 디렉토리
+     *                        유저 프로필 관련 : profileImages
+     *                        썸네일 관련 : thumbnailImages
+     *                        프로젝트 컨텐츠 관련 : contentImages
+     *                        프로젝트 물품 관련 : articleImages
      * @return
      */
-    public boolean deleteUserImage(Long userId) {
-
-        try{
-            User user = em.find(User.class, userId);
-            tr.begin();
-            em.persist(user);                                                                                           // JPA에서 관리 시작
-            user.setProfileImage(new ProfileImage("default.png", "default.png"));             // 변경
-            tr.commit();
+    public boolean createImage(MultipartFile imageFile, String imageName, String targetDirectory){
+        File newFile = null;
+        switch (targetDirectory){
+            case "profileImages":
+                newFile = new File( beanConfig.PROFILE_IMAGE_PATH + imageName);
+                break;
+            case "thumbnailImages":
+                newFile = new File( beanConfig.THUMBNAIL_IMAGE_PATH + imageName);
+                break;
+            case "contentImages":
+                newFile = new File( beanConfig.CONTENT_IMAGE_PATH + imageName);
+                break;
+            case "articleImages":
+                newFile = new File( beanConfig.ARTICLE_IMAGE_PATH + imageName);
+                break;
+            default:
+                return false;
+        }
+        try {
+            imageFile.transferTo(newFile);
             return true;
         } catch (Exception e){
-            tr.rollback();
             e.printStackTrace();
             return false;
         }
     }
 
-
     /**
-     * 프로젝트 작성시 썸네일로 사용할 이미지를 thumbnailImage 폴더에 저장하는 함수
-     * @param thumbnailImage MultipartFile 타입의 저장할 이미지 파일
-     * @param thumbnailImageName 저장할 때 이름으로 사용할 String 객체
+     * 이미지 파일을 특정 디렉토리에서 삭제하는 함수
+     * @param imageName 생성할 이미지 파일의 이름
+     * @param targetDirectory 생성할 이미지 파일이 저장될 디렉토리
+     *                        유저 프로필 관련 : profileImages
+     *                        썸네일 관련 : thumbnailImages
+     *                        프로젝트 컨텐츠 관련 : contentImages
+     *                        프로젝트 물품 관련 : articleImages
      * @return
      */
-    public boolean createThumbnailImage(MultipartFile thumbnailImage, String thumbnailImageName){
-        File newFile = new File( beanConfig.THUMBNAIL_IMAGE_PATH + thumbnailImageName);
-        try{
-            thumbnailImage.transferTo(newFile);
+    public boolean deleteImage(String imageName, String targetDirectory){
+        File newFile = null;
+        switch (targetDirectory){
+            case "profileImages":
+                newFile = new File( beanConfig.PROFILE_IMAGE_PATH + imageName);
+                break;
+            case "thumbnailImages":
+                newFile = new File( beanConfig.THUMBNAIL_IMAGE_PATH + imageName);
+                break;
+            case "contentImages":
+                newFile = new File( beanConfig.CONTENT_IMAGE_PATH + imageName);
+                break;
+            case "articleImages":
+                newFile = new File( beanConfig.ARTICLE_IMAGE_PATH + imageName);
+                break;
+            default:
+                return false;
+        }
+        try {
+            newFile.delete();
             return true;
         } catch (Exception e){
             e.printStackTrace();

@@ -2,6 +2,7 @@ package com.example.demo.Controller;
 
 import com.example.demo.DTO.Funding;
 import com.example.demo.DTO.FundingCategory;
+import com.example.demo.DTO.Request.createProject_2Level;
 import com.example.demo.DTO.Response.GetProject_0Level;
 import com.example.demo.DTO.Response.GetProject_1Level;
 import com.example.demo.DTO.Response.ProjectCategory;
@@ -61,8 +62,8 @@ public class ProjectController {
 
 
     /**
-     * 프로젝트 1단계 호출 {projectNum} 부분에는 호출할 프로젝트 Id
-     * @return
+     * 프로젝트 1단계 호출
+     * @return 인증 실패 401, 정상 처리 200 + getProject_1Level, 비정상처리 400
      */
     @RequestMapping(value = "/projects/1/{projectNum}", method = RequestMethod.GET)
     public ResponseEntity<Object> getProject_1Level(@PathVariable("projectNum") final Long projectId,
@@ -87,9 +88,9 @@ public class ProjectController {
     
 
     /**
-     * 프로젝트 작성 1단계
+     * 프로젝트 1단계 저장
      * @param request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
-     * @return
+     * @return 인증실패 401, 정상 처리 204, 비정상 처리 400
      */
     @RequestMapping(value = "/projects/1", method = RequestMethod.PUT)
     public ResponseEntity<Object> createProject_1Level(
@@ -98,8 +99,8 @@ public class ProjectController {
             @RequestParam("bestImage") MultipartFile thumbnailImage,                                                    // 프로젝트 썸네일
             @RequestParam("category") Long fundingCategoryId,                                                           // 프로젝트 카테고리
             @RequestParam("targetAmount") Long maxAmount,                                                               // 프로잭트 목표 금액
-            @RequestParam("startDate") String start,                                                                      // 프로젝트 시작 일자
-            @RequestParam("endDate") String dead,                                                                         // 프로젝트 종료 일자
+            @RequestParam("startDate") String start,                                                                    // 프로젝트 시작 일자
+            @RequestParam("endDate") String dead,                                                                       // 프로젝트 종료 일자
             HttpServletRequest request)
     {
         System.out.println("start.getClass" + start.getClass() + ", start = " + start);
@@ -144,13 +145,66 @@ public class ProjectController {
         funding.setDeadLine(dead + " 00:00:00");
         funding.setCreatedAt(dateFormat.format(nowTime));
         // -------------------------------------------------------------------------------------------------------------
-        if (projectService.createProject_1Level(funding) &&                                                             // 프로젝트 저장 및 덮어쓰기
-                fileService.createThumbnailImage(thumbnailImage, thumbnailImageName)) {                                 // && 썸네일 이미지 저장
+        if (projectService.createProject_1Level(funding, thumbnailImage, thumbnailImageName)) {                         // 프로젝트 덮어쓰기, 기존 썸네일 이미지 삭제, 새로운 썸네일 이미지 저장
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
             return new ResponseEntity<>(funding,HttpStatus.BAD_REQUEST);
         }
     }
+
+
+    /**
+     * 프로젝트 2단계 저장
+     * @param projectId 저장할 프로젝트 Id
+     * @param project2Level 저장할 내용이 담긴 객체
+     * @param request request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
+     * @return 인증실패 401, 정상 처리 204, 비정상 처리 400
+     */
+    @RequestMapping(value = "/projects/2/{projectNum}", method = RequestMethod.PUT)
+    public ResponseEntity<Object> createProject_2Level(@PathVariable("projectNum") Long projectId,
+                                                @RequestBody createProject_2Level project2Level,
+                                                HttpServletRequest request)
+    {
+        // ------------------------------ 인증 --------------------------------------------------------------------------
+        User user = userService.setUserToHttpServletRequestAttribute(request);
+        if ((user == null) || (projectService.isUserToProject(user, projectId) == false) ){                                    // 인증 || 기존에 글을 작성하던 작성자인지 확인 해당 함수
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        // -------------------------------------------------------------------------------------------------------------
+
+        if (projectService.createProject_2Level(projectId, project2Level.getContent()) == true){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
+    /**
+     * 프로젝트 2단계 호출
+     * @param projectId 저장할 프로젝트 Id
+     * @param request request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
+     * @return 인증실패 401, 정상 처리 200 + content, 비정상 처리 400
+     */
+    @RequestMapping(value = "/projects/2/{projectNum}", method = RequestMethod.GET)
+    public ResponseEntity<Object> getProject_2Level(@PathVariable("projectNum") Long projectId,
+                                                    HttpServletRequest request)
+    {
+        // ------------------------------ 인증 --------------------------------------------------------------------------
+        User user = userService.setUserToHttpServletRequestAttribute(request);
+        if ((user == null) || (projectService.isUserToProject(user, projectId) == false) ){                                    // 인증 || 기존에 글을 작성하던 작성자인지 확인 해당 함수
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        // -------------------------------------------------------------------------------------------------------------
+        GetProject_1Level getProject_1Level = projectService.getProject_1Level(projectId);
+        if (getProject_1Level == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } else {
+            return new ResponseEntity<>(getProject_1Level.getContent(), HttpStatus.OK);
+        }
+    }
+
+
 
 
     /**
