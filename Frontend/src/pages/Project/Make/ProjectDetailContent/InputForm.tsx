@@ -30,8 +30,8 @@ function InputForm() {
                 hooks={{
                     addImageBlobHook: async (blob: Blob, callback: (url: string) => void) => {
                         const response = await uploadImage(blob);
-                        const { imgSrc } = response;
-                        callback(imgSrc);
+                        const { preview } = response;
+                        callback(preview);
                     }
                 }}
             />
