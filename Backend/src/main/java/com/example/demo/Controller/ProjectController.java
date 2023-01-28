@@ -1,8 +1,10 @@
 package com.example.demo.Controller;
 
+import com.example.demo.Config.BeanConfig;
 import com.example.demo.DTO.Funding;
 import com.example.demo.DTO.FundingCategory;
 import com.example.demo.DTO.Request.createProject_2Level;
+import com.example.demo.DTO.Response.CreateContentImage;
 import com.example.demo.DTO.Response.GetProject_0Level;
 import com.example.demo.DTO.Response.GetProject_1Level;
 import com.example.demo.DTO.Response.ProjectCategory;
@@ -35,7 +37,8 @@ public class ProjectController {
     private ProjectService projectService;
 
     @Autowired
-    private FileService fileService;
+    private BeanConfig beanConfig;
+
 
 
     /**
@@ -201,6 +204,30 @@ public class ProjectController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } else {
             return new ResponseEntity<>(getProject_1Level.getContent(), HttpStatus.OK);
+        }
+    }
+
+
+    @RequestMapping(value = "/content/image", method = RequestMethod.PUT, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Object> createContentImage(@RequestParam(value = "image") MultipartFile imageFile, HttpServletRequest request){
+        // ------------------------------ 인증 --------------------------------------------------------------------------
+        User user = userService.setUserToHttpServletRequestAttribute(request);
+        if (user == null){
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        // -------------------------------------------------------------------------------------------------------------
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String imageFileName = dateFormat.format(
+                new Timestamp(System.currentTimeMillis()))
+                + "_"
+                + imageFile.getOriginalFilename().replaceAll(" ", "");
+
+        if (projectService.createContentImage(imageFile, imageFileName)){
+            return new ResponseEntity<>(
+                    CreateContentImage.builder().preview(beanConfig.SERVER_URL + ":" + beanConfig.SERVER_PORT + beanConfig.CONTENT_IMAGE_URL + imageFileName).build(),
+                    HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
