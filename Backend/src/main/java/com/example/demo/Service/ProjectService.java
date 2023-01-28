@@ -56,8 +56,6 @@ public class ProjectService {
         }
     }
 
-
-
     /**
      * 펀딩 카테고리 호출
      * @return 모든 카테고리 정보
@@ -66,6 +64,35 @@ public class ProjectService {
         return (List<FundingCategory>) em.createQuery("SELECT fc FROM FundingCategory fc")
                 .getResultList();
     }
+
+
+    /**
+     * 프로젝트 작성 0단계 호출시 깡통 Funding 테이블을 만들어서 해당 프로젝트의 Id를 반환
+     * @param user 세팅할 User 객체
+     * @return 깡통으로 생성한 프로젝트 Id
+     */
+    public Long createProject_0Level(User user) {
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String now = dateFormat.format(new Timestamp(System.currentTimeMillis()));
+            Funding funding = new Funding();
+            funding.setUserId(user);
+            funding.setCreatedAt(now);
+            funding.setStartEnd(now);
+            funding.setDeadLine(now);
+            //funding.setFundingCategory();
+            tr.begin();
+            em.persist(funding);
+            em.clear();                                                                                                 // 영속성 초기화. 이거 없으면 깡통 펀딩 호출시 대부분이 null 담겨서 날라옴
+            tr.commit();
+            return funding.getId();
+        } catch (Exception e){
+            tr.rollback();
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
 
     /**
@@ -150,33 +177,6 @@ public class ProjectService {
 
 
     /**
-     * 프로젝트 작성 0단계 호출시 깡통 Funding 테이블을 만들어서 해당 프로젝트의 Id를 반환
-     * @param user 세팅할 User 객체
-     * @return 깡통으로 생성한 프로젝트 Id
-     */
-    public Long createProject_0Level(User user) {
-        try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String now = dateFormat.format(new Timestamp(System.currentTimeMillis()));
-            Funding funding = new Funding();
-            funding.setUserId(user);
-            funding.setCreatedAt(now);
-            funding.setStartEnd(now);
-            funding.setDeadLine(now);
-            //funding.setFundingCategory();
-            tr.begin();
-            em.persist(funding);
-            em.clear();                                                                                                 // 영속성 초기화. 이거 없으면 깡통 펀딩 호출시 대부분이 null 담겨서 날라옴
-            tr.commit();
-            return funding.getId();
-        } catch (Exception e){
-            tr.rollback();
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    /**
      * 프로젝트 2단계 컨텐트 부분을 DB에 저장하는 함수
      * @param projectId 저장할 프로젝트 Id
      * @param content 저장할 프로젝트 내용
@@ -192,6 +192,23 @@ public class ProjectService {
         }catch (Exception e){
             e.printStackTrace();
             tr.rollback();
+            return false;
+        }
+    }
+
+
+    /**
+     * 내용에 삽입되는 이미지를 contentImages 디렉터리에 저장하는 함수
+     * @param imageFile 내용에 삽입된 이미지 파일
+     * @param imageFileName contentImages 디렉터리에 저장될 파일 이름
+     * @return 정상 처리시 true, 비정상 처리시 false;
+     */
+    public boolean createContentImage(MultipartFile imageFile, String imageFileName) {
+        try {
+            fileService.createImage(imageFile, imageFileName, beanConfig.CONTENT_DIRECTORY_NAME);
+            return true;
+        } catch (Exception e){
+            e.printStackTrace();
             return false;
         }
     }
