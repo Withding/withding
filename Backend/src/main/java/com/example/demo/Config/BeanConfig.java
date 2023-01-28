@@ -17,14 +17,24 @@ import java.util.Properties;
 @NoArgsConstructor
 @Configuration
 public class BeanConfig {
+    public final String DEFAULT_USER_IMAGE = "default.png";                                                             // 유저 프로필 기본 이미지 이름
 
+    public final String USER_PROFILE_DIRECTORY_NAME = "profileImages";                                                  // 유저 프로필 이미지 파일 저장 디렉터리명
+    public final String THUMBNAIL_DIRECTORY_NAME = "thumbnailImages";                                                     // 썸네일 이미지 파일 저장 디렉터리명
+    public final String CONTENT_DIRECTORY_NAME = "contentImages";                                                         // 컨텐트에 담기는 이미지 파일 디렉터리명
+    public final String ARTICLE_DIRECTORY_NAME = "articleImages";                                                         // 물품 이미지 파일 저장 디렉터리명
 
     public final String PROFILE_IMAGE_URL = "/user/image/";                                                             // 유저 프로필 호출 URL
     public final String PROFILE_IMAGE_PATH = System.getProperty("user.dir") + File.separator + "profileImages/";        // 유저 이미지 파일 저장 경로
 
-    public final String THUMBNAIL_IMAGE_URL = "/thumbnail/image/";
+    public final String THUMBNAIL_IMAGE_URL = "/thumbnail/image/";                                                      // 썸네일 호출 URL
+    public final String THUMBNAIL_IMAGE_PATH = System.getProperty("user.dir") + File.separator + "thumbnailImages/";    // 썸네일 이미지 파일 저장 경로
 
-    public final String THUMBNAIL_IMAGE_PATH = System.getProperty("user.dir") + File.separator + "thumbnailImages/";
+    public final String CONTENT_IMAGE_URL = "/content/image/";                                                          // 컨텐츠 이미지 호출 URL
+    public final String CONTENT_IMAGE_PATH = System.getProperty("user.dir") + File.separator + "contentImages/";        // 컨텐츠 이미지 파일 저장 경로
+
+    public final String ARTICLE_IMAGE_URL = "/article/image/";                                                          // 물품 이미지 호출 URL
+    public final String ARTICLE_IMAGE_PATH = System.getProperty("user.dir") + File.separator + "articleImages/";        // 물품 이미지 파일 저장 경로
 
 
     @Value("${server.url}")
