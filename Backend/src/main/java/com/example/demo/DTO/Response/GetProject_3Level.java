@@ -26,6 +26,7 @@ public class GetProject_3Level {
             product.setDescription(articles.get(i).getDescription());
             product.setPrice(articles.get(i).getPrice());
             product.setShippingPrice(articles.get(i).getShippingPrice());
+            product.setShippingDay(articles.get(i).getShippingDay());
             product.setInventory(articles.get(i).getInventory());
             this.articles.add(product);
         }

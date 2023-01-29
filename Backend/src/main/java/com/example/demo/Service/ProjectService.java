@@ -253,6 +253,7 @@ public class ProjectService {
         try{
             tr.begin();
             Funding funding = em.find(Funding.class, projectId);
+            System.out.println(article);
             article.setFundingId(funding);
             em.persist(article);
             tr.commit();
