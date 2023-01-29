@@ -23,25 +23,25 @@ public class Article {
     private ArticleImage articleImage;          // 이미지
 
     @Column(name = "article_name")
-    private String articleName;                 // 상품 이름
+    private String name;                 // 상품 이름
 
     @Column(name = "comment")
-    private String comment;                     // 상품 설명
+    private String description;                     // 상품 설명
 
     @Column(name = "price")
     private Integer price;                      // 가격
 
     @Column(name = "shipping")
-    private Integer shipping;                   // 배송비
+    private Integer shippingPrice;                   // 배송비
 
     @Column(name = "start_send")
-    private String startSend;                  // 배송 시작일
+    private String shippingDay;                  // 배송 시작일
 
     @Column(name = "inventory")
     private Integer inventory;                  // 재고
 
-    //@ManyToOne
-    //@JoinColumn(name = "funding_id")
-    private Long fundingId;                  // 프로젝트 번호
+    @ManyToOne
+    @JoinColumn(name = "funding_id")
+    private Funding fundingId;                  // 프로젝트 번호
 
 }
