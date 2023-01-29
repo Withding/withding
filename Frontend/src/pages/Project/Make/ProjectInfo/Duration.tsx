@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import Input from "@/components/common/Input";
 import { css } from "@emotion/react";
 import ProjectMakeContext from "@/store/ProjectMakeContext";
+import dateByFormat from "@/utils/dateByFormat";
 
 /**
  * 프로젝트 생성시 기간을 입력하는 컴포넌트
@@ -16,7 +17,7 @@ function Duration() {
                 <div className="date-box">
                     <Input
                         type="date"
-                        min={new Date().toString()}
+                        min={dateByFormat(new Date(), "-")}
                         max={"9999-01-21"}
                         value={values.startDate}
                         onChange={onChangeValue}
@@ -25,7 +26,7 @@ function Duration() {
                     {` ~ `}
                     <Input
                         type="date"
-                        min={new Date().toString()}
+                        min={dateByFormat(new Date(), "-")}
                         max={"9999-01-01"}
                         value={values.endDate}
                         onChange={onChangeValue}
