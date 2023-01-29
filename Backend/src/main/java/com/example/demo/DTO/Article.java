@@ -15,6 +15,7 @@ public class Article {
 
     @Id
     @Column(name = "article_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long articleId;                    // 물품 번호
 
     @ManyToOne
