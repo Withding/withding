@@ -101,7 +101,7 @@ function Make() {
             }}>
                 <ProcedureNavigator
                     list={episode}
-                    path={"/project/make?step="}
+                    path={`/project/make?project=${project}&step=`}
                     currnet={step}
                 />
                 <main>

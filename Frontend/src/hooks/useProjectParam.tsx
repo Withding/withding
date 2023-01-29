@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 
 function useProjectParam() {
     const { search } = useLocation();
-    const step = parseInt(new URLSearchParams(search).get("project") ?? "1");
+    const step = parseInt(new URLSearchParams(search).get("project") ?? "0");
     return step;
 }
 
