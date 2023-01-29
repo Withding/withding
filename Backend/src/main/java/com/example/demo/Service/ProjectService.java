@@ -214,6 +214,21 @@ public class ProjectService {
     }
 
 
+    /**
+     * 프로젝트 2단계 호출
+     * @param projectId 저장할 프로젝트 Id
+     * @return 정상처리시 String 타입의 프로젝트 content, 비정상 처리시 null
+     */
+    public String getProject_2Level(Long projectId) {
+        try{
+            Funding funding = em.find(Funding.class, projectId);
+            return funding.getContent();
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
 
 
