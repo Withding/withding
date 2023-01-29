@@ -76,9 +76,6 @@ public class ProjectService {
             Funding funding = new Funding();
             funding.setUserId(user);
             funding.setCreatedAt(now);
-            funding.setStartEnd(now);
-            funding.setDeadLine(now);
-            //funding.setFundingCategory();
             tr.begin();
             em.persist(funding);
             em.clear();                                                                                                 // 영속성 초기화. 이거 없으면 깡통 펀딩 호출시 대부분이 null 담겨서 날라옴
