@@ -12,6 +12,7 @@ CREATE TABLE `funding_category` (
 	`funding_category_id` TINYINT NOT NULL PRIMARY KEY,
 	`category` VARCHAR(30) NOT NULL
 );
+Insert Into funding_category VALUES(-1, '카테고리');
 Insert Into funding_category VALUES(0, 'BEST 펀딩');
 Insert Into funding_category VALUES(1,'테크·가전');
 Insert Into funding_category VALUES(2, '패션·잡화');
@@ -99,7 +100,8 @@ CREATE TABLE `article` (
 	`price` INT(10) NOT NULL,
 	`shipping` INT(10) NOT NULL DEFAULT 0,
 	`start_send` TimeStamp NULL,
-	`inventory` INT(2) NOT NULL DEFAULT 0
+	`inventory` INT(2) NOT NULL DEFAULT 0,
+	`funding_id` INT(10) NOT NULL
 );
 
 
@@ -111,7 +113,7 @@ CREATE TABLE `thumbnail` (
 
 CREATE TABLE `funding` (
 	`funding_id` INT(10) auto_increment NOT NULL PRIMARY KEY,
-	`funding_category_id` TINYINT NULL DEFAULT 0,
+	`funding_category_id` TINYINT NULL DEFAULT -1,
 	`title` VARCHAR(100) NULL DEFAULT '',
 	`content` VARCHAR(1000) NULL DEFAULT '',
 	`image` VARCHAR(100) NULL DEFAULT NULL,
@@ -123,11 +125,6 @@ CREATE TABLE `funding` (
 	`created_at` TimeStamp NULL,
 	`open_at` TimeStamp NULL,
 	`deadline` TimeStamp NULL,
-	`article_id_1` INT(10) NULL DEFAULT null,
-	`article_id_2` INT(10) NULL DEFAULT null,
-	`article_id_3` INT(10) NULL DEFAULT null,
-	`article_id_4` INT(10) NULL DEFAULT null,
-	`article_id_5` INT(10) NULL DEFAULT null,
 	`state_code` TINYINT NULL DEFAULT 4
 );
 
@@ -168,40 +165,6 @@ REFERENCES `funding` (
 );
 
 
-ALTER TABLE `funding` ADD CONSTRAINT `FK_article_TO_funding_1` FOREIGN KEY (
-	`article_id_1`
-)
-REFERENCES `article` (
-	`article_id`
-);
-
-ALTER TABLE `funding` ADD CONSTRAINT `FK_article_TO_funding_2` FOREIGN KEY (
-	`article_id_2`
-)
-REFERENCES `article` (
-	`article_id`
-);
-
-ALTER TABLE `funding` ADD CONSTRAINT `FK_article_TO_funding_3` FOREIGN KEY (
-	`article_id_3`
-)
-REFERENCES `article` (
-	`article_id`
-);
-
-ALTER TABLE `funding` ADD CONSTRAINT `FK_article_TO_funding_4` FOREIGN KEY (
-	`article_id_4`
-)
-REFERENCES `article` (
-	`article_id`
-);
-
-ALTER TABLE `funding` ADD CONSTRAINT `FK_article_TO_funding_5` FOREIGN KEY (
-	`article_id_5`
-)
-REFERENCES `article` (
-	`article_id`
-);
 
 ALTER TABLE `funding` ADD CONSTRAINT `FK_funding_state_code_TO_funding_1` FOREIGN KEY (
 	`state_code`
@@ -215,6 +178,13 @@ ALTER TABLE `article` ADD CONSTRAINT `FK_article_image_TO_article_1` FOREIGN KEY
 )
 REFERENCES `article_image` (
 	`image`
+);
+
+ALTER TABLE `article` ADD CONSTRAINT `FK_funding_TO_article_1` FOREIGN KEY (
+	`funding_id`
+)
+REFERENCES `funding` (
+	`funding_id`
 );
 
 

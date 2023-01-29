@@ -6,7 +6,8 @@ CREATE TABLE `article` (
 	`price` INT(10) NOT NULL,
 	`shipping` INT(10) NOT NULL DEFAULT 0,
 	`start_send` TimeStamp NULL,
-	`inventory` INT(2) NOT NULL DEFAULT 0
+	`inventory` INT(2) NOT NULL DEFAULT 0,
+	`funding_id` INT(10) NOT NULL
 );
 
 ALTER TABLE `article` ADD CONSTRAINT `FK_article_image_TO_article_1` FOREIGN KEY (
@@ -14,4 +15,11 @@ ALTER TABLE `article` ADD CONSTRAINT `FK_article_image_TO_article_1` FOREIGN KEY
 )
 REFERENCES `article_image` (
 	`image`
+);
+
+ALTER TABLE `article` ADD CONSTRAINT `FK_funding_TO_article_1` FOREIGN KEY (
+	`funding_id`
+)
+REFERENCES `funding` (
+	`funding_id`
 );
