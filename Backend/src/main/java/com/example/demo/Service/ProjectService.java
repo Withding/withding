@@ -243,11 +243,17 @@ public class ProjectService {
     }
 
 
+    /**
+     * 프로젝트 3단계 저장
+     * @param projectId 저장할 프로젝트 Id
+     * @param article 물건정보가 담긴 article 객체
+     * @return
+     */
     public boolean createProject_3Level(Long projectId, Article article) {
         try{
             tr.begin();
             Funding funding = em.find(Funding.class, projectId);
-            article.setArticleId(projectId);
+            article.setFundingId(funding);
             em.persist(article);
             tr.commit();
             em.clear();
