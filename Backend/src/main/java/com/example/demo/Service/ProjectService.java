@@ -266,4 +266,16 @@ public class ProjectService {
 
 
     }
+
+
+    public List<Article> getProject_3Level(Long projectId) {
+        try{
+            return em.createQuery("SELECT a FROM Article a WHERE a.fundingId.id =: projectId")
+                    .setParameter("projectId", projectId)
+                    .getResultList();
+        } catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

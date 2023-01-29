@@ -65,7 +65,7 @@ public class Funding {
     //private Article article_1;
 
 
-    @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "state_code")
     private FundingStateCode fundingStateCode;  // 글 상태
 
