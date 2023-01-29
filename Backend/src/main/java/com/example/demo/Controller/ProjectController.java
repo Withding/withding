@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 @Controller
 @CrossOrigin("*")
@@ -226,6 +227,7 @@ public class ProjectController {
         }
     }
 
+
     /**
      * 프로젝트 3단계 저장하는 컨트롤러
      * @param projectId 저장할 프로젝트 Id
@@ -249,6 +251,34 @@ public class ProjectController {
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+    }
+
+
+    /**
+     * 프로젝트 3단계 호출
+     * @param projectId 저장할 프로젝트 Id
+     * @param request request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
+     * @return
+     */
+    @RequestMapping(value = "/projects/3/{projectNum}", method = RequestMethod.GET)
+    public ResponseEntity<Object> getProject_3Level(@PathVariable("projectNum") Long projectId,
+                                                       HttpServletRequest request)
+    {
+        // ------------------------------ 인증 --------------------------------------------------------------------------
+        User user = userService.setUserToHttpServletRequestAttribute(request);
+        if ((user == null) || (projectService.isUserToProject(user, projectId) == false) ){                             // 인증 || 기존에 글을 작성하던 작성자인지 확인 해당 함수
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        // -------------------------------------------------------------------------------------------------------------
+        GetProject_3Level getProject_3Level = new GetProject_3Level(projectService.getProject_3Level(projectId));
+
+        if (getProject_3Level.getArticles().size() != 0){
+            return new ResponseEntity<>(getProject_3Level, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+
     }
 
 
