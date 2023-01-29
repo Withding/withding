@@ -5,6 +5,7 @@ import com.example.demo.DTO.Funding;
 import com.example.demo.DTO.FundingCategory;
 import com.example.demo.DTO.Response.GetProject_0Level;
 import com.example.demo.DTO.Response.GetProject_1Level;
+import com.example.demo.DTO.Response.GetProject_2Level;
 import com.example.demo.DTO.Thumbnail;
 import com.example.demo.DTO.User;
 import lombok.Data;
@@ -156,7 +157,6 @@ public class ProjectService {
             GetProject_1Level getProject_1Level = new GetProject_1Level();
             getProject_1Level.setUserId(funding.getUserId().getUserId());
             getProject_1Level.setTitle(funding.getTitle());
-            getProject_1Level.setContent(funding.getContent());
             getProject_1Level.setTargetAmount(funding.getMaxAmount());
             getProject_1Level.setStartDate(funding.getStartEnd());
             getProject_1Level.setEndDate(funding.getDeadLine());
@@ -212,4 +212,11 @@ public class ProjectService {
             return false;
         }
     }
+
+
+
+
+
+
+
 }
