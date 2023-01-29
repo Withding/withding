@@ -1,12 +1,9 @@
 package com.example.demo.Controller;
 
 import com.example.demo.Config.BeanConfig;
-import com.example.demo.DTO.Funding;
-import com.example.demo.DTO.FundingCategory;
+import com.example.demo.DTO.*;
 import com.example.demo.DTO.Request.createProject_2Level;
 import com.example.demo.DTO.Response.*;
-import com.example.demo.DTO.Thumbnail;
-import com.example.demo.DTO.User;
 import com.example.demo.Service.FileService;
 import com.example.demo.Service.ProjectService;
 import com.example.demo.Service.UserService;
@@ -95,12 +92,12 @@ public class ProjectController {
     @RequestMapping(value = "/projects/1/{projectNum}", method = RequestMethod.PUT)
     public ResponseEntity<Object> createProject_1Level(
             @PathVariable("projectNum") Long id,                                                                        // 프로젝트 번호
-            @RequestParam("title") String title,                                                                        // 프로젝트 이름
-            @RequestParam("bestImage") MultipartFile thumbnailImage,                                                    // 프로젝트 썸네일
-            @RequestParam("category") Long fundingCategoryId,                                                           // 프로젝트 카테고리
-            @RequestParam("targetAmount") Long maxAmount,                                                               // 프로잭트 목표 금액
-            @RequestParam("startDate") String start,                                                                    // 프로젝트 시작 일자
-            @RequestParam("endDate") String dead,                                                                       // 프로젝트 종료 일자
+            @RequestParam(value = "title", required = false) String title,                                                                        // 프로젝트 이름
+            @RequestParam(value = "bestImage", required = false) MultipartFile thumbnailImage,                                                    // 프로젝트 썸네일
+            @RequestParam(value = "category", required = false) Long fundingCategoryId,                                                           // 프로젝트 카테고리
+            @RequestParam(value = "targetAmount", required = false) Long maxAmount,                                                               // 프로잭트 목표 금액
+            @RequestParam(value = "startDate", required = false) String start,                                                                    // 프로젝트 시작 일자
+            @RequestParam(value = "endDate", required = false) String dead,                                                                       // 프로젝트 종료 일자
             HttpServletRequest request)
     {
         System.out.println("start.getClass" + start.getClass() + ", start = " + start);
@@ -203,6 +200,31 @@ public class ProjectController {
         } else {
             getProject_2Level.setContent(content);
             return new ResponseEntity<>(getProject_2Level, HttpStatus.OK);
+        }
+    }
+
+    /**
+     * 프로젝트 3단계 저장하는 컨트롤러
+     * @param projectId 저장할 프로젝트 Id
+     * @param article 저장할 물품
+     * @param request request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
+     * @return
+     */
+    @RequestMapping(value = "/projects/3/{projectNum}", method = RequestMethod.PUT)
+    public ResponseEntity<Object> createProject_3Level(@PathVariable("projectNum") Long projectId,
+                                                    @RequestBody Article article,
+                                                    HttpServletRequest request)
+    {
+        // ------------------------------ 인증 --------------------------------------------------------------------------
+        User user = userService.setUserToHttpServletRequestAttribute(request);
+        if ((user == null) || (projectService.isUserToProject(user, projectId) == false) ){                             // 인증 || 기존에 글을 작성하던 작성자인지 확인 해당 함수
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        // -------------------------------------------------------------------------------------------------------------
+        if (projectService.createProject_3Level(projectId, article)){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
