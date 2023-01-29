@@ -29,8 +29,8 @@ function Make() {
         title: "",
         category: -1,
         targetAmount: 0,
-        startDate: new Date().toString(),
-        endDate: new Date().toString(),
+        startDate: "",
+        endDate: "",
         content: "",
     });
 

@@ -16,7 +16,7 @@ function Duration() {
                 <div className="date-box">
                     <Input
                         type="date"
-                        min={"2023-01-20"}
+                        min={new Date().toString()}
                         max={"9999-01-21"}
                         value={values.startDate}
                         onChange={onChangeValue}
@@ -25,7 +25,7 @@ function Duration() {
                     {` ~ `}
                     <Input
                         type="date"
-                        min={"2023-01-20"}
+                        min={new Date().toString()}
                         max={"9999-01-01"}
                         value={values.endDate}
                         onChange={onChangeValue}
