@@ -1,6 +1,6 @@
 interface ProjectMakeValues {
     title: string;
-    category: string;
+    category: number;
     targetAmount: number;
     bestImage?: File | null;
     preViewImage?: null;

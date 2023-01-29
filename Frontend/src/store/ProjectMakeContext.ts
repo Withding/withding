@@ -4,7 +4,7 @@ import ProjectMakeContextProps from "@/types/ProjectMakeContextProps";
 const ProjectMakeContext = React.createContext<ProjectMakeContextProps>({
     values: {
         title: "",
-        category: "",
+        category: -1,
         targetAmount: 0,
         startDate: "",
         endDate: "",

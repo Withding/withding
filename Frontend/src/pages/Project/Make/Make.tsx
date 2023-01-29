@@ -27,7 +27,7 @@ function Make() {
     const { mutate: projectContentMutate } = useMutation(generateProjectContent);
     const [values, setValues] = useState<ProjectMakeValues>(data ?? {
         title: "",
-        category: "",
+        category: -1,
         targetAmount: 0,
         startDate: new Date().toString(),
         endDate: new Date().toString(),
