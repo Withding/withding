@@ -22,7 +22,7 @@ import generateProjectInfo from "@/utils/RequestApis/projectmake/generateProject
 function Make() {
     const step = useStepParam();
     const project = useProjectParam();
-    const { data } = useQuery(["fetchStep1Values"], () => fetchProjectInfo(project));
+    const { data } = useQuery(["fetchStep1Values", project], () => fetchProjectInfo(project));
     const { mutate: projectInfoMutate } = useMutation(generateProjectInfo);
     const { mutate: projectContentMutate } = useMutation(generateProjectContent);
     const [values, setValues] = useState<ProjectMakeValues>(data ?? {
@@ -118,7 +118,7 @@ function Make() {
                         className="button"
                         step={step}
                         lastStep={episode.length}
-                        path={"/project/make?step="}
+                        path={`/project/make?project=${project}&step=`}
                         nextButtonValue={render?.nextButtonValue}
                         onClick={render?.clickEvent}
                     />
