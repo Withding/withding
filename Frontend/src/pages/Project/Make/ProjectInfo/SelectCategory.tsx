@@ -43,6 +43,8 @@ const style = css`
     border: 1px solid var(--grey-200);
     background-color: unset;
     min-height: 48px;
+    display: flex;
+    align-items: center;
 `;
 
 export default SelectCategory;
