@@ -17,11 +17,10 @@ function InputForm() {
         onChangeContent(content);
     }, [onChangeContent]);
     const MAX_LENGTH = useMemo(() => 1000, []);
-
     return (
         <form css={style}>
             <Editor
-                initialValue={values.content ?? ""}
+                initialValue={values.content}
                 height="600px"
                 initialEditType="wysiwyg"
                 previewStyle="vertical"

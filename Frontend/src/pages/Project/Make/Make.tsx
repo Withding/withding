@@ -22,10 +22,10 @@ import generateProjectInfo from "@/utils/RequestApis/projectmake/generateProject
 function Make() {
     const step = useStepParam();
     const project = useProjectParam();
-    const { data } = useQuery(["fetchStep1Values", project], () => fetchProjectInfo(project));
+    const { data: valuesData } = useQuery(["fetchStep1Values", project], () => fetchProjectInfo(project));
     const { mutate: projectInfoMutate } = useMutation(generateProjectInfo);
     const { mutate: projectContentMutate } = useMutation(generateProjectContent);
-    const [values, setValues] = useState<ProjectMakeValues>(data ?? {
+    const [values, setValues] = useState<ProjectMakeValues>(valuesData ?? {
         title: "",
         category: -1,
         targetAmount: 0,
@@ -70,7 +70,7 @@ function Make() {
     const onChangeContent = useCallback((content: string) => {
         setValues({
             ...values,
-            content
+            content: content
         });
     }, [values]);
 
@@ -95,6 +95,7 @@ function Make() {
     return (
         <Wrapper>
             <ProjectMakeContext.Provider value={{
+                project,
                 values,
                 onChangeValue,
                 onChangeContent
