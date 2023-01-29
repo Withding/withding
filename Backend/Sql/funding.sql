@@ -8,15 +8,10 @@ CREATE TABLE `funding` (
 	`now_amount` BIGINT(2) NOT NULL DEFAULT 0,
 	`view_count` INT NOT NULL DEFAULT 0,
 	`vote_count` INT NOT NULL DEFAULT 0,
-	`user_id` INT(10) NULL DEFAULT null,
+	`user_id` INT(10) NULL DEFAULT NULL,
 	`created_at` TimeStamp NULL,
-	`open_at` TimeStamp NULL,
-	`deadline` TimeStamp NULL,
-	`article_id_1` INT(10) NULL DEFAULT null,
-	`article_id_2` INT(10) NULL DEFAULT null,
-	`article_id_3` INT(10) NULL DEFAULT null,
-	`article_id_4` INT(10) NULL DEFAULT null,
-	`article_id_5` INT(10) NULL DEFAULT null,
+	`open_at` TimeStamp NULL DEFAULT NULL,
+	`deadline` TimeStamp NULL DEFAULT NULL,
 	`state_code` TINYINT NULL DEFAULT 4
 );
 

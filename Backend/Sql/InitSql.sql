@@ -121,10 +121,10 @@ CREATE TABLE `funding` (
 	`now_amount` BIGINT(2) NOT NULL DEFAULT 0,
 	`view_count` INT NOT NULL DEFAULT 0,
 	`vote_count` INT NOT NULL DEFAULT 0,
-	`user_id` INT(10) NULL DEFAULT null,
+	`user_id` INT(10) NULL DEFAULT NULL,
 	`created_at` TimeStamp NULL,
-	`open_at` TimeStamp NULL,
-	`deadline` TimeStamp NULL,
+	`open_at` TimeStamp NULL DEFAULT NULL,
+	`deadline` TimeStamp NULL DEFAULT NULL,
 	`state_code` TINYINT NULL DEFAULT 4
 );
 
