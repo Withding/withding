@@ -59,25 +59,11 @@ public class Funding {
     @JoinColumn(name = "funding_category_id")
     private FundingCategory fundingCategory;  // 펀딩 카테고리
 
+
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @PrimaryKeyJoinColumn(name = "article_id")
     private Article article_1;
 
-    //@OneToOne
-    //@JoinColumn(name = "article_id")
-    //private Article article_2;
-
-    //@OneToOne
-    //@JoinColumn(name = "article_id")
-    //private Article article_3;
-
-    //@OneToOne
-    //@JoinColumn(name = "article_id")
-    //private Article article_4;
-
-    //@OneToOne
-    //@JoinColumn(name = "article_id")
-    //private Article article_5;
 
     @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
     @JoinColumn(name = "state_code")
