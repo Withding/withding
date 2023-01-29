@@ -1,13 +1,10 @@
 package com.example.demo.Service;
 
 import com.example.demo.Config.BeanConfig;
-import com.example.demo.DTO.Funding;
-import com.example.demo.DTO.FundingCategory;
+import com.example.demo.DTO.*;
 import com.example.demo.DTO.Response.GetProject_0Level;
 import com.example.demo.DTO.Response.GetProject_1Level;
 import com.example.demo.DTO.Response.GetProject_2Level;
-import com.example.demo.DTO.Thumbnail;
-import com.example.demo.DTO.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -235,8 +232,21 @@ public class ProjectService {
     }
 
 
+    public boolean createProject_3Level(Long projectId, Article article) {
+        try{
+            tr.begin();
+            em.persist(article);
+            Funding funding = em.find(Funding.class, projectId);
+            funding.setArticle_1(article);
+            tr.commit();
+            em.clear();
+            return true;
+        } catch (Exception e){
+            e.printStackTrace();
+            tr.rollback();
+            return false;
+        }
 
 
-
-
+    }
 }
