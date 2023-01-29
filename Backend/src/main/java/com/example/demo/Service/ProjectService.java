@@ -251,14 +251,24 @@ public class ProjectService {
      */
     public boolean createProject_3Level(Long projectId, Article article) {
         try{
-            tr.begin();
-            Funding funding = em.find(Funding.class, projectId);
-            System.out.println(article);
-            article.setFundingId(funding);
-            em.persist(article);
-            tr.commit();
-            em.clear();
-            return true;
+            // ------------------------------------------- 물품 갯수 5개인지 확인하는 부분 -------------------------------------
+            Long projectCount = (Long) em.createQuery("SELECT count(a) FROM Article a WHERE a.fundingId.id =: projectId")
+                                .setParameter("projectId", projectId)
+                                .getSingleResult();
+            //----------------------------------------------------------------------------------------------------------
+
+            if (projectCount <= beanConfig.getMaxProjectArticleCount()){                                                // DB에 저장된 물품이 5개 미만일때
+                tr.begin();
+                Funding funding = em.find(Funding.class, projectId);
+                System.out.println(article);
+                article.setFundingId(funding);
+                em.persist(article);
+                tr.commit();
+                em.clear();
+                return true;
+            } else {
+                return false;
+            }
         } catch (Exception e){
             e.printStackTrace();
             tr.rollback();
