@@ -135,6 +135,7 @@ public class ProjectService {
             f.setCreatedAt(funding.getCreatedAt());
             // ---------------------------------------------------------------------------------------------------------
             tr.commit();                                                                                                // 트랜잭션 적용
+            em.clear();
             return true;
         } catch (Exception e){
             tr.rollback();
