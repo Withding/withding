@@ -11,8 +11,7 @@ import ProjectMakeValues from "@/types/ProjectMakeValues";
 import ProjectDetailContent from "./ProjectDetailContent/ProjectDetailContent";
 import AddProducts from "./AddProduts/AddProducts";
 import useProjectParam from "@/hooks/useProjectParam";
-import { useMutation, useQuery } from "react-query";
-import fetchProjectInfo from "@/utils/RequestApis/projectmake/fetchProjectInfo";
+import { useMutation } from "react-query";
 import generateProjectContent from "@/utils/RequestApis/projectmake/generateProjectContent";
 import generateProjectInfo from "@/utils/RequestApis/projectmake/generateProjectInfo";
 /**
@@ -22,10 +21,9 @@ import generateProjectInfo from "@/utils/RequestApis/projectmake/generateProject
 function Make() {
     const step = useStepParam();
     const project = useProjectParam();
-    const { data: valuesData } = useQuery(["fetchStep1Values", project], () => fetchProjectInfo(project));
     const { mutate: projectInfoMutate } = useMutation(generateProjectInfo);
     const { mutate: projectContentMutate } = useMutation(generateProjectContent);
-    const [values, setValues] = useState<ProjectMakeValues>(valuesData ?? {
+    const [values, setValues] = useState<ProjectMakeValues>({
         title: "",
         category: -1,
         targetAmount: 0,
@@ -67,6 +65,11 @@ function Make() {
     ];
     const render = episode.find((item) => item.step === step);// step에 해당하는 컴포넌트를 렌더링  
 
+
+    const onChangeStep1ValuesHandler = useCallback((value: ProjectMakeValues) => {
+        setValues(value);
+    }, []);
+
     const onChangeContent = useCallback((content: string) => {
         setValues({
             ...values,
@@ -98,7 +101,8 @@ function Make() {
                 project,
                 values,
                 onChangeValue,
-                onChangeContent
+                onChangeContent,
+                onChangeStep1Values: onChangeStep1ValuesHandler
             }}>
                 <ProcedureNavigator
                     list={episode}

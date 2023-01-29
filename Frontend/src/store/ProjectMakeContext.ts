@@ -1,5 +1,6 @@
 import React from "react";
 import ProjectMakeContextProps from "@/types/ProjectMakeContextProps";
+import ProjectMakeValues from "@/types/ProjectMakeValues";
 
 const ProjectMakeContext = React.createContext<ProjectMakeContextProps>({
     project: -1,
@@ -12,7 +13,8 @@ const ProjectMakeContext = React.createContext<ProjectMakeContextProps>({
         content: "",
     },
     onChangeValue: () => {},
-    onChangeContent: () => {}
+    onChangeContent: () => {},
+    onChangeStep1Values: (values: ProjectMakeValues) => {},
 });
 
 export default ProjectMakeContext;
