@@ -1,6 +1,6 @@
 CREATE TABLE `funding` (
 	`funding_id` INT(10) auto_increment NOT NULL PRIMARY KEY,
-	`funding_category_id` TINYINT(1) NULL DEFAULT 0,
+	`funding_category_id` TINYINT(1) NULL DEFAULT -1,
 	`title` VARCHAR(100) NULL DEFAULT '',
 	`content` VARCHAR(1000) NULL DEFAULT '',
 	`image` VARCHAR(100) NULL DEFAULT NULL,

@@ -40,4 +40,8 @@ public class Article {
     @Column(name = "inventory")
     private Integer inventory;                  // 재고
 
+    //@ManyToOne
+    //@JoinColumn(name = "funding_id")
+    private Long fundingId;                  // 프로젝트 번호
+
 }

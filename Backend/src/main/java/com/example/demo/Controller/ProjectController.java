@@ -100,12 +100,11 @@ public class ProjectController {
             @RequestParam(value = "endDate", required = false) String dead,                                                                       // 프로젝트 종료 일자
             HttpServletRequest request)
     {
-        System.out.println("start.getClass" + start.getClass() + ", start = " + start);
-        System.out.println("dead.getClass" + dead.getClass() + ", dead = " + dead);
         Timestamp nowTime = new Timestamp(System.currentTimeMillis());                                                  // 현재 시간
+        System.out.println("startDate = " + start);
+        System.out.println("endDate = " + dead);
 
-
-
+        System.out.println(fundingCategoryId);
         // ------------------------------ 인증 --------------------------------------------------------------------------
         User user = userService.setUserToHttpServletRequestAttribute(request);
         if ((user == null) || (projectService.isUserToProject(user, id) == false) ){                                    // 인증 || 기존에 글을 작성하던 작성자인지 확인 해당 함수
@@ -118,15 +117,17 @@ public class ProjectController {
         else {
             // 형식상 else 둠
         }
+        String thumbnailImageName;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");                               // 썸네일 파일 저장에 사용할 양식 획득
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");                              // 썸네일 파일 저장에 사용할 양식 획득
-        String thumbnailImageName =                                                                                     // 썸네일 저장할 때 사용할 이름
-                dateFormat.format(nowTime)
-                + "_"
-                + thumbnailImage.getOriginalFilename().replaceAll(" ","");
-
-
-
+        if (thumbnailImage == null){
+            thumbnailImageName = null;
+        }else {
+            thumbnailImageName =                                                                                        // 썸네일 저장할 때 사용할 이름
+                    dateFormat.format(nowTime)
+                            + "_"
+                            + thumbnailImage.getOriginalFilename().replaceAll(" ","");
+        }
 
         dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");                                                // 기존의 파일 양식을 DB에 저장할 양식으로 교체
         //System.out.println(startEnd.getTime());
@@ -135,17 +136,39 @@ public class ProjectController {
         funding.setId(id);
         funding.setUserId(user);
         funding.setTitle(title);
-        funding.setFundingCategory(new FundingCategory(fundingCategoryId));
-        funding.setThumbnail(new Thumbnail(thumbnailImageName, thumbnailImage.getOriginalFilename()));
+        if (fundingCategoryId == null){
+            funding.setFundingCategory(new FundingCategory(-1L));
+        } else {
+            funding.setFundingCategory(new FundingCategory(fundingCategoryId));
+        }
+
+        if (thumbnailImage == null){
+            funding.setThumbnail(null);
+        }else {
+            funding.setThumbnail(new Thumbnail(thumbnailImageName, thumbnailImage.getOriginalFilename()));
+        }
+
         funding.setMaxAmount(maxAmount);
-        funding.setStartEnd(start + " 00:00:00");
-        funding.setDeadLine(dead + " 00:00:00");
+
+        if (start.equals("")){
+            funding.setStartEnd(null);
+        }else {
+            funding.setStartEnd(start + " 00:00:00");
+        }
+
+        if (dead.equals("")){
+            funding.setDeadLine(null);
+        }else {
+            funding.setDeadLine(dead + " 00:00:00");
+        }
+
+
         funding.setCreatedAt(dateFormat.format(nowTime));
         // -------------------------------------------------------------------------------------------------------------
         if (projectService.createProject_1Level(funding, thumbnailImage, thumbnailImageName)) {                         // 프로젝트 덮어쓰기, 기존 썸네일 이미지 삭제, 새로운 썸네일 이미지 저장
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
-            return new ResponseEntity<>(funding,HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 

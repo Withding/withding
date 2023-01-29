@@ -122,18 +122,21 @@ public class ProjectService {
                 }
                 em.remove(t);                                                                                           // 테이블에서 기존 썸네일 삭제
             }
-
-            em.persist(funding.getThumbnail());                                                                         // 테이블에서 새로받은 썸네일 저장
+            if (funding.getThumbnail() == null){
+                f.setThumbnail(null);
+            } else {
+                em.persist(funding.getThumbnail());                                                                     // 테이블에서 새로받은 썸네일 저장
+                f.setThumbnail(funding.getThumbnail());
+            }
 
             f.setTitle(funding.getTitle());                                                                             // 영속 관리중인 기존 funding 수정 시작
-            f.setThumbnail(funding.getThumbnail());
+
             f.setMaxAmount(funding.getMaxAmount());
             f.setFundingCategory(funding.getFundingCategory());
             f.setStartEnd(funding.getStartEnd());
             f.setDeadLine(funding.getDeadLine());
             f.setCreatedAt(funding.getCreatedAt());
             // ---------------------------------------------------------------------------------------------------------
-
 
             tr.commit();                                                                                                // 트랜잭션 적용
             em.clear();
@@ -161,8 +164,19 @@ public class ProjectService {
             getProject_1Level.setTitle(funding.getTitle());
             getProject_1Level.setTargetAmount(funding.getMaxAmount());
             getProject_1Level.setStartDate(funding.getStartEnd());
-            getProject_1Level.setEndDate(funding.getDeadLine());
-            getProject_1Level.setCategory(funding.getFundingCategory().getCategory());
+
+            if (funding.getDeadLine() == null){
+                getProject_1Level.setEndDate("");
+            }else {
+                getProject_1Level.setEndDate(funding.getDeadLine());
+            }
+            if (funding.getStartEnd() == null){
+                getProject_1Level.setStartDate("");
+            }else {
+                getProject_1Level.setStartDate(funding.getStartEnd());
+            }
+
+            getProject_1Level.setCategory(funding.getFundingCategory().getId());
 
             if (funding.getThumbnail() != null) {
                 getProject_1Level.setPreViewImage(beanConfig.SERVER_URL + ":" + beanConfig.SERVER_PORT + beanConfig.THUMBNAIL_IMAGE_URL + funding.getThumbnail().getImage());
@@ -235,9 +249,9 @@ public class ProjectService {
     public boolean createProject_3Level(Long projectId, Article article) {
         try{
             tr.begin();
-            em.persist(article);
             Funding funding = em.find(Funding.class, projectId);
-            funding.setArticle_1(article);
+            article.setArticleId(projectId);
+            em.persist(article);
             tr.commit();
             em.clear();
             return true;

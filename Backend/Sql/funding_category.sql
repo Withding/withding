@@ -2,7 +2,7 @@ CREATE TABLE `funding_category` (
 	`funding_category_id` TINYINT NOT NULL PRIMARY KEY,
 	`category`	VARCHAR(30)	NOT NULL
 );
-
+Insert Into funding_category VALUES(-1, '카테고리');
 Insert Into funding_category VALUES(0, 'BEST 펀딩');
 Insert Into funding_category VALUES(1,'테크·가전');
 Insert Into funding_category VALUES(2, '패션·잡화');

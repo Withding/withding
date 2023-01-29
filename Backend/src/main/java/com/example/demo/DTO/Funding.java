@@ -23,7 +23,7 @@ public class Funding {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;                        // 펀딩 번호
 
-    @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User userId;                    // 작성자
 
@@ -60,9 +60,9 @@ public class Funding {
     private FundingCategory fundingCategory;  // 펀딩 카테고리
 
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @PrimaryKeyJoinColumn(name = "article_id")
-    private Article article_1;
+    //@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    //@PrimaryKeyJoinColumn(name = "article_id")
+    //private Article article_1;
 
 
     @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
