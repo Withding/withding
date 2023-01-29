@@ -4,10 +4,7 @@ import com.example.demo.Config.BeanConfig;
 import com.example.demo.DTO.Funding;
 import com.example.demo.DTO.FundingCategory;
 import com.example.demo.DTO.Request.createProject_2Level;
-import com.example.demo.DTO.Response.CreateContentImage;
-import com.example.demo.DTO.Response.GetProject_0Level;
-import com.example.demo.DTO.Response.GetProject_1Level;
-import com.example.demo.DTO.Response.ProjectCategory;
+import com.example.demo.DTO.Response.*;
 import com.example.demo.DTO.Thumbnail;
 import com.example.demo.DTO.User;
 import com.example.demo.Service.FileService;
@@ -95,9 +92,9 @@ public class ProjectController {
      * @param request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
      * @return 인증실패 401, 정상 처리 204, 비정상 처리 400
      */
-    @RequestMapping(value = "/projects/1", method = RequestMethod.PUT)
+    @RequestMapping(value = "/projects/1/{projectNum}", method = RequestMethod.PUT)
     public ResponseEntity<Object> createProject_1Level(
-            @RequestParam("id") Long id,                                                                                // 프로젝트 번호
+            @PathVariable("projectNum") Long id,                                                                        // 프로젝트 번호
             @RequestParam("title") String title,                                                                        // 프로젝트 이름
             @RequestParam("bestImage") MultipartFile thumbnailImage,                                                    // 프로젝트 썸네일
             @RequestParam("category") Long fundingCategoryId,                                                           // 프로젝트 카테고리
@@ -195,21 +192,30 @@ public class ProjectController {
     {
         // ------------------------------ 인증 --------------------------------------------------------------------------
         User user = userService.setUserToHttpServletRequestAttribute(request);
-        if ((user == null) || (projectService.isUserToProject(user, projectId) == false) ){                                    // 인증 || 기존에 글을 작성하던 작성자인지 확인 해당 함수
+        if ((user == null) || (projectService.isUserToProject(user, projectId) == false) ){                             // 인증 || 기존에 글을 작성하던 작성자인지 확인 해당 함수
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         // -------------------------------------------------------------------------------------------------------------
-        GetProject_1Level getProject_1Level = projectService.getProject_1Level(projectId);
-        if (getProject_1Level == null){
+        GetProject_2Level getProject_2Level = new GetProject_2Level();
+        String content = projectService.getProject_2Level(projectId);
+        if (content == null){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } else {
-            return new ResponseEntity<>(getProject_1Level.getContent(), HttpStatus.OK);
+            getProject_2Level.setContent(content);
+            return new ResponseEntity<>(getProject_2Level, HttpStatus.OK);
         }
     }
 
 
+    /**
+     * 프로젝트 내용에 삽입되는 이미지 파일을 저장하는 컨트롤러
+     * @param imageFile 삽입된 이미지 파일
+     * @param request request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
+     * @return
+     */
     @RequestMapping(value = "/content/image", method = RequestMethod.PUT, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Object> createContentImage(@RequestParam(value = "image") MultipartFile imageFile, HttpServletRequest request){
+        System.out.println(request.getAttribute("userNum"));
         // ------------------------------ 인증 --------------------------------------------------------------------------
         User user = userService.setUserToHttpServletRequestAttribute(request);
         if (user == null){
@@ -230,7 +236,6 @@ public class ProjectController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
-
 
 
 

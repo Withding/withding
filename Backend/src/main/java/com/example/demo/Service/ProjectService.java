@@ -5,6 +5,7 @@ import com.example.demo.DTO.Funding;
 import com.example.demo.DTO.FundingCategory;
 import com.example.demo.DTO.Response.GetProject_0Level;
 import com.example.demo.DTO.Response.GetProject_1Level;
+import com.example.demo.DTO.Response.GetProject_2Level;
 import com.example.demo.DTO.Thumbnail;
 import com.example.demo.DTO.User;
 import lombok.Data;
@@ -115,14 +116,16 @@ public class ProjectService {
 
             // ------------------------------------------ 디비에 임시저장된 글이 있다 ------------------------------------------
             Funding f = em.find(Funding.class, funding.getId());                                                        // 영속 관리 시작
-            Thumbnail t = em.find(Thumbnail.class, f.getThumbnail().getImage());                                        // 영속 관리 시작
 
-            if (!fileService.deleteImage(t.getImage(), beanConfig.THUMBNAIL_DIRECTORY_NAME)                               // 해당 썸네일 이미지 파일 삭제 실패 && 새로운 썸네일 저장 실패
-                    && !fileService.createImage(thumbnailImage, thumbnailImageName, beanConfig.THUMBNAIL_DIRECTORY_NAME)){
-                throw new Exception(); // 예외처리 발생
+            if (f.getThumbnail() != null){                                                                              // 기존 썸네일이 존재
+                Thumbnail t = em.find(Thumbnail.class, f.getThumbnail().getImage());                                    // 영속 관리 시작
+                if ((!fileService.deleteImage(t.getImage(), beanConfig.THUMBNAIL_DIRECTORY_NAME)                        // (해당 썸네일 이미지 파일 삭제 실패 || 새로운 썸네일 저장 실패)
+                        || !fileService.createImage(thumbnailImage, thumbnailImageName, beanConfig.THUMBNAIL_DIRECTORY_NAME))){
+                    throw new Exception(); // 예외처리 발생
+                }
+                em.remove(t);                                                                                           // 테이블에서 기존 썸네일 삭제
             }
 
-            em.remove(t);                                                                                               // 테이블에서 기존 썸네일 삭제
             em.persist(funding.getThumbnail());                                                                         // 테이블에서 새로받은 썸네일 저장
 
             f.setTitle(funding.getTitle());                                                                             // 영속 관리중인 기존 funding 수정 시작
@@ -133,7 +136,10 @@ public class ProjectService {
             f.setDeadLine(funding.getDeadLine());
             f.setCreatedAt(funding.getCreatedAt());
             // ---------------------------------------------------------------------------------------------------------
+
+
             tr.commit();                                                                                                // 트랜잭션 적용
+            em.clear();
             return true;
         } catch (Exception e){
             tr.rollback();
@@ -156,7 +162,6 @@ public class ProjectService {
             GetProject_1Level getProject_1Level = new GetProject_1Level();
             getProject_1Level.setUserId(funding.getUserId().getUserId());
             getProject_1Level.setTitle(funding.getTitle());
-            getProject_1Level.setContent(funding.getContent());
             getProject_1Level.setTargetAmount(funding.getMaxAmount());
             getProject_1Level.setStartDate(funding.getStartEnd());
             getProject_1Level.setEndDate(funding.getDeadLine());
@@ -212,4 +217,26 @@ public class ProjectService {
             return false;
         }
     }
+
+
+    /**
+     * 프로젝트 2단계 호출
+     * @param projectId 저장할 프로젝트 Id
+     * @return 정상처리시 String 타입의 프로젝트 content, 비정상 처리시 null
+     */
+    public String getProject_2Level(Long projectId) {
+        try{
+            Funding funding = em.find(Funding.class, projectId);
+            return funding.getContent();
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+
+
+
+
 }
