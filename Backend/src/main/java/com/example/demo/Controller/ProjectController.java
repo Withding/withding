@@ -92,9 +92,9 @@ public class ProjectController {
      * @param request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
      * @return 인증실패 401, 정상 처리 204, 비정상 처리 400
      */
-    @RequestMapping(value = "/projects/1", method = RequestMethod.PUT)
+    @RequestMapping(value = "/projects/1/{projectNum}", method = RequestMethod.PUT)
     public ResponseEntity<Object> createProject_1Level(
-            @RequestParam("id") Long id,                                                                                // 프로젝트 번호
+            @PathVariable("projectNum") Long id,                                                                        // 프로젝트 번호
             @RequestParam("title") String title,                                                                        // 프로젝트 이름
             @RequestParam("bestImage") MultipartFile thumbnailImage,                                                    // 프로젝트 썸네일
             @RequestParam("category") Long fundingCategoryId,                                                           // 프로젝트 카테고리
@@ -215,6 +215,7 @@ public class ProjectController {
      */
     @RequestMapping(value = "/content/image", method = RequestMethod.PUT, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Object> createContentImage(@RequestParam(value = "image") MultipartFile imageFile, HttpServletRequest request){
+        System.out.println(request.getAttribute("userNum"));
         // ------------------------------ 인증 --------------------------------------------------------------------------
         User user = userService.setUserToHttpServletRequestAttribute(request);
         if (user == null){
