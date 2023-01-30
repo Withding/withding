@@ -15,7 +15,9 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -101,6 +103,7 @@ public class LoginService {
         return user;
     }
 
+
     /**
      * 로그인 함수
      * @param user email이 담겨있는 User 객체
@@ -114,5 +117,42 @@ public class LoginService {
             e.printStackTrace();
         }
         return user;
+    }
+
+
+    /**
+     * 로그아웃
+     * @param user userService.setUserToHttpServletRequestAttribute()에서 세팅되어 나온 User 객체
+     * @return
+     */
+    public boolean logout(User user) {
+        try{
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            String loginAt = user.getLoginTime();
+            Date loginDate = dateFormat.parse(loginAt);
+            System.out.println(loginDate);
+
+
+            Long logoutLong = System.currentTimeMillis();
+            String logoutString = dateFormat.format(new Timestamp(logoutLong));
+            Date logoutDate = new Date(logoutLong);
+            System.out.println(logoutDate);
+
+            // 로그아웃 시간(현재시간)이 로그인 시간보다 이후이다 = true = 정상 로그아웃 처리 = 204 반환,
+            // 로그아웃 시간이(현재시간) 로그인시간 이전이다 = 로그아웃한 적이 있다.(토큰이 탈취됐을 수도 있음) = false = 401 반환
+            if (logoutDate.before(loginDate) == false){
+                return false;
+            } else {
+                tr.begin();
+                em.persist(user);
+                user.setLogoutAt(logoutString);
+                tr.commit();
+                return true;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            tr.rollback();
+            return false;
+        }
     }
 }
