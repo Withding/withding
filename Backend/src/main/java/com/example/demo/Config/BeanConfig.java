@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,6 +19,7 @@ import java.util.Properties;
 @Configuration
 public class BeanConfig {
     public final String DEFAULT_USER_IMAGE = "default.png";                                                             // 유저 프로필 기본 이미지 이름
+    private final int maxProjectArticleCount = 5;                                                                       // 프로젝트에 등록 가능한 물품 갯수
 
     public final String USER_PROFILE_DIRECTORY_NAME = "profileImages";                                                  // 유저 프로필 이미지 파일 저장 디렉터리명
     public final String THUMBNAIL_DIRECTORY_NAME = "thumbnailImages";                                                     // 썸네일 이미지 파일 저장 디렉터리명

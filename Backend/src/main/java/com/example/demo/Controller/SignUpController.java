@@ -125,6 +125,8 @@ public class SignUpController {
             e.printStackTrace();
         }
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String now = dateFormat.format(new Timestamp(System.currentTimeMillis()));                                      // 계정 생성 시간, 로그아웃 시간 초기화에 사용
+
 
         EmailAuth emailAuth = new EmailAuth();
         emailAuth.setEmail(encryptEmail);
@@ -140,7 +142,8 @@ public class SignUpController {
         user.setState(new State(0));
         user.setPassword(bCryptPasswordEncoder.encode(request.getPassword()));                                          // User 객체의 pwd 단방향 암호화
         user.setEmail(encryptEmail);
-        user.setCreatedAt(dateFormat.format(new Timestamp(System.currentTimeMillis())));
+        user.setCreatedAt(now);
+        user.setLogoutAt(dateFormat.format(now));
         user.setNickName(request.getNickName());
 
         List<EmailAuth> emailAuths = emailAuthRepo.getEmailAuthCountToSecretKeyAndEmail(emailAuth);

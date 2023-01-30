@@ -30,7 +30,8 @@ public class SecurityConfig implements WebMvcConfigurer {
                         "/user/image",
                         "/projects/*/*",
                         "/projects",
-                        "/content/image"
+                        "/content/image",
+                        "/user/logout"
                         ) // 해당 경로에 접근하기 전에 인터셉터가 가로챈다.
               .excludePathPatterns("/*/image/*"); // 해당 경로는 인터셉터가 가로채지 않는다.
         WebMvcConfigurer.super.addInterceptors(registry);

@@ -251,14 +251,24 @@ public class ProjectService {
      */
     public boolean createProject_3Level(Long projectId, Article article) {
         try{
-            tr.begin();
-            Funding funding = em.find(Funding.class, projectId);
-            System.out.println(article);
-            article.setFundingId(funding);
-            em.persist(article);
-            tr.commit();
-            em.clear();
-            return true;
+            // ------------------------------------------- 물품 갯수 5개인지 확인하는 부분 -------------------------------------
+            Long projectCount = (Long) em.createQuery("SELECT count(a) FROM Article a WHERE a.fundingId.id =: projectId")
+                                .setParameter("projectId", projectId)
+                                .getSingleResult();
+            //----------------------------------------------------------------------------------------------------------
+
+            if (projectCount <= beanConfig.getMaxProjectArticleCount()){                                                // DB에 저장된 물품이 5개 미만일때
+                tr.begin();
+                Funding funding = em.find(Funding.class, projectId);
+                System.out.println(article);
+                article.setFundingId(funding);
+                em.persist(article);
+                tr.commit();
+                em.clear();
+                return true;
+            } else {
+                return false;
+            }
         } catch (Exception e){
             e.printStackTrace();
             tr.rollback();
@@ -269,6 +279,11 @@ public class ProjectService {
     }
 
 
+    /**
+     * 프로젝트 3단계 호출
+     * @param projectId 저장할 프로젝트 Id
+     * @return
+     */
     public List<Article> getProject_3Level(Long projectId) {
         try{
             return em.createQuery("SELECT a FROM Article a WHERE a.fundingId.id =: projectId")
@@ -279,4 +294,39 @@ public class ProjectService {
             return null;
         }
     }
+
+
+    /**
+     * 프로젝트 3단계 삭제
+     * @param articleId 삭제할 물품 ID
+     * @return
+     */
+    public boolean deleteProject_3Level(Long projectId,Long articleId) {
+        try{
+            tr.begin();
+            Article article = em.find(Article.class, articleId);
+            if (article.getFundingId().getId() == projectId){
+                em.remove(article);
+            } else{
+                return false;
+            }
+            tr.commit();
+            return true;
+        } catch (Exception e){
+            e.printStackTrace();
+            tr.rollback();
+            return false;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
 }

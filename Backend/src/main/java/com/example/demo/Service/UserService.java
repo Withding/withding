@@ -14,6 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Service
 @NoArgsConstructor
@@ -40,15 +42,27 @@ public class UserService {
      */
     public User setUserToHttpServletRequestAttribute(HttpServletRequest request){
         try{
-            User user = (User) em.createQuery("SELECT u FROM User u WHERE u.userId =: id AND u.state.stateCode =: code")
+            /*User user = (User) em.createQuery("SELECT u FROM User u WHERE u.userId =: id AND u.state.stateCode =: code")
                             .setParameter("id", request.getAttribute("userNum"))
                             .setParameter("code", 0)
                             .getResultList()
-                            .get(0);
-            if (user != null){
+                            .get(0);*/
+            User user = em.find(User.class, request.getAttribute("userNum"));
+            user.setLoginTime((String) request.getAttribute("loginTime"));
+
+            // ------------------------------ String 타입의 시간 -> Date 타입의 시간으로 변경 -----------------------------------
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date loginDate = dateFormat.parse(user.getLoginTime());
+            Date logoutDate = dateFormat.parse(user.getLogoutAt());
+            // ---------------------------------------------------------------------------------------------------------
+
+            if (       user != null                                                                                     // 해당 userId에 대한 유저가 존재
+                    && user.getState().getStateCode() == 0                                                              // 해당 유저의 stateCode가 0(활동중)인 상태임
+                    && logoutDate.before(loginDate) == true) {                                                          // 로그아웃(logoutDate) 시간은 로그인(loginDate) 시간보다 이전(before)이다 == true == 탈취당한게 아님
                 return user;
+            } else {
+                return null;
             }
-            return null;
         } catch (Exception e){
             System.out.println("UserService.setUserToHttpServletRequestAttribute()에서 인증 실패 !!!");
             return null;
