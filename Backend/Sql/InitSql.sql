@@ -71,7 +71,7 @@ CREATE TABLE `user` (
 	`point`	BIGINT(1) NULL DEFAULT 0,
 	`state_code`	TINYINT(1) NOT NULL
 );
-INSERT INTO `user` VALUES(1, '0mFYBZug7mDw6/ST5H+o8msxk3VjU+lQu+xSwq8+1lw=', 0, '$2a$10$yoCwaLuNSKUHFoE9AR6mg.v2D4JnxJ8MPIAaNDO2LpDeal94aTCW.', '전국노예자랑', 'default.png', '2023-01-24 20:47:19', null, 0, 0);
+INSERT INTO `user` VALUES(1, '0mFYBZug7mDw6/ST5H+o8msxk3VjU+lQu+xSwq8+1lw=', 0, '$2a$10$yoCwaLuNSKUHFoE9AR6mg.v2D4JnxJ8MPIAaNDO2LpDeal94aTCW.', '전국노예자랑', 'default.png', '2023-01-24 20:47:19', '2023-01-24 20:47:19', 0, 0);
 
 
 
