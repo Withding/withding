@@ -40,12 +40,14 @@ public class UserService {
      */
     public User setUserToHttpServletRequestAttribute(HttpServletRequest request){
         try{
-            User user = (User) em.createQuery("SELECT u FROM User u WHERE u.userId =: id AND u.state.stateCode =: code")
+            /*User user = (User) em.createQuery("SELECT u FROM User u WHERE u.userId =: id AND u.state.stateCode =: code")
                             .setParameter("id", request.getAttribute("userNum"))
                             .setParameter("code", 0)
                             .getResultList()
-                            .get(0);
-            if (user != null){
+                            .get(0);*/
+            User user = em.find(User.class, request.getAttribute("userNum"));
+            user.setLoginTime((String) request.getAttribute("loginTime"));
+            if (user != null && user.getState().getStateCode() == 0){
                 return user;
             }
             return null;
