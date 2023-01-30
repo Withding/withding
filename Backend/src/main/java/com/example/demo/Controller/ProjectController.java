@@ -308,7 +308,7 @@ public class ProjectController {
     /**
      * 프로젝트 내용에 삽입되는 이미지 파일을 저장하는 컨트롤러
      * @param imageFile 삽입된 이미지 파일
-     * @param request request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
+     * @param request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
      * @return
      */
     @RequestMapping(value = "/content/image", method = RequestMethod.PUT, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
