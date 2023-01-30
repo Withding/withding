@@ -4,12 +4,14 @@ import com.example.demo.Config.AES256;
 import com.example.demo.Config.BeanConfig;
 import com.example.demo.DTO.*;
 
+import com.example.demo.DTO.Response.Login;
 import com.example.demo.Gson.Gson;
 import com.example.demo.Repository.UserRepo;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -24,12 +26,14 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 public class LoginService {
-
     @Autowired
     private BeanConfig beanConfig;
 
     @Autowired
     private JwtService jwtService;
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
     private UserRepo userRepo;
@@ -109,14 +113,37 @@ public class LoginService {
      * @param user email이 담겨있는 User 객체
      * @return
      */
-    public User login(User user){
+    public Login login(User user){
         try {
+            String requestPwd = user.getPassword();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
             user.setEmail(aes256.encrypt(user.getEmail()));
             user = userRepo.getUserToEmail(user);                                                                       // User 테이블에서 email, pwd 가 매칭되는 User 객체 반환
+            user.setLoginTime(dateFormat.format(new Timestamp(System.currentTimeMillis())));                            // user.LoginTime을 String 타입의 현재 시간으로 세팅
+            System.out.println(user);
+
+            // ------------------------------ String 타입의 시간 -> Date 타입의 시간으로 변경 -----------------------------------
+            Date loginDate = dateFormat.parse(user.getLoginTime());
+            Date logoutDate = dateFormat.parse(user.getLogoutAt());
+            // ---------------------------------------------------------------------------------------------------------
+
+            if (       user != null                                                                                     // 이메일에 해당하는 유저가 존재
+                    && bCryptPasswordEncoder.matches(requestPwd, user.getPassword()) == true                    // && 비밀번호 확인
+                    //&& loginDate.after(logoutDate) == true                                                            // && 현재시간(로그인하는 현재 시간)이 이전에 로그아웃한 시간보다 이후인지 확인
+            ) {
+                return new Login(
+                        jwtService.generateJwtToken(user.getUserId(), user.getNickName(), user.getLoginTime())
+                        , user.getNickName()
+                        ,beanConfig.SERVER_URL + ":" + beanConfig.SERVER_PORT + beanConfig.PROFILE_IMAGE_URL + user.getProfileImage().getProfileImage()
+                );
+            }else {
+                return null;
+            }
         } catch (Exception e){
             e.printStackTrace();
+            return null;
         }
-        return user;
     }
 
 

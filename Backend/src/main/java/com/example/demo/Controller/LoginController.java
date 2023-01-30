@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Controller
 @CrossOrigin("*")
@@ -33,8 +34,7 @@ public class LoginController {
     @Autowired
     private JwtService jwtService;
 
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
 
 
     /**
@@ -70,17 +70,13 @@ public class LoginController {
      * @return 정상 처리시 accessToken에 jwt와 HttpStatus.OK 리턴
      */
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseEntity<Object> login(@RequestBody final User request){
+    public ResponseEntity<Object> login(@RequestBody User request){
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        User user = loginService.login(request);
-        if (user.getUserId() != null && bCryptPasswordEncoder.matches(request.getPassword(), user.getPassword()) == true) {
-            Login responseLogin = new Login(
-                    jwtService.generateJwtToken(user.getUserId(), user.getNickName(), dateFormat.format(new Timestamp(System.currentTimeMillis())))
-                    , user.getNickName()
-                    ,beanConfig.SERVER_URL + ":" + beanConfig.SERVER_PORT + beanConfig.PROFILE_IMAGE_URL + user.getProfileImage().getProfileImage()
-            );
-            return new ResponseEntity<>(responseLogin, HttpStatus.OK);
+
+
+        Login login = loginService.login(request);                                                                      // 로그인 가능여부 검증
+        if (login != null) {
+            return new ResponseEntity<>(login, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
