@@ -4,7 +4,6 @@ import com.example.demo.Config.BeanConfig;
 import com.example.demo.DTO.*;
 import com.example.demo.DTO.Request.createProject_2Level;
 import com.example.demo.DTO.Response.*;
-import com.example.demo.Service.FileService;
 import com.example.demo.Service.ProjectService;
 import com.example.demo.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.List;
 
 @Controller
 @CrossOrigin("*")
@@ -281,6 +278,31 @@ public class ProjectController {
 
     }
 
+
+    /**
+     * 프로젝트 3단계 삭제
+     * @param projectId 프로젝트 Id
+     * @param article 삭제할 물품 Id가 담긴 Article 객체
+     * @param request request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
+     * @return
+     */
+    @RequestMapping(value = "/projects/3/{projectNum}", method = RequestMethod.DELETE)
+    public ResponseEntity<Object> deleteArticle(@PathVariable("projectNum") Long projectId,
+                                                @RequestBody Article article,
+                                                HttpServletRequest request){
+        // ------------------------------ 인증 --------------------------------------------------------------------------
+        User user = userService.setUserToHttpServletRequestAttribute(request);
+        if ((user == null) || (projectService.isUserToProject(user, projectId) == false) ){                             // 인증 || 기존에 글을 작성하던 작성자인지 확인 해당 함수
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        // -------------------------------------------------------------------------------------------------------------
+
+        if (projectService.deleteProject_3Level(projectId, article.getArticleId()) == true){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 
 
     /**

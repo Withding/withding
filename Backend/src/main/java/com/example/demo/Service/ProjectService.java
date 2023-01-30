@@ -279,6 +279,11 @@ public class ProjectService {
     }
 
 
+    /**
+     * 프로젝트 3단계 호출
+     * @param projectId 저장할 프로젝트 Id
+     * @return
+     */
     public List<Article> getProject_3Level(Long projectId) {
         try{
             return em.createQuery("SELECT a FROM Article a WHERE a.fundingId.id =: projectId")
@@ -289,4 +294,39 @@ public class ProjectService {
             return null;
         }
     }
+
+
+    /**
+     * 프로젝트 3단계 삭제
+     * @param articleId 삭제할 물품 ID
+     * @return
+     */
+    public boolean deleteProject_3Level(Long projectId,Long articleId) {
+        try{
+            tr.begin();
+            Article article = em.find(Article.class, articleId);
+            if (article.getFundingId().getId() == projectId){
+                em.remove(article);
+            } else{
+                return false;
+            }
+            tr.commit();
+            return true;
+        } catch (Exception e){
+            e.printStackTrace();
+            tr.rollback();
+            return false;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
 }

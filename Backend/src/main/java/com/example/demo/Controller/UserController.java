@@ -30,6 +30,11 @@ public class UserController {
     private UserService userService;
 
 
+    @RequestMapping(value = "/user/logout/{userNum}", method = RequestMethod.PUT)
+
+
+
+
     /**
      * 사용자의 프로필 이미지를 바꾸는 컨트롤러
      * @param image 변경할 이미지 파일
