@@ -36,7 +36,6 @@ public class LoginController {
 
 
 
-
     /**
      * 카카오 로그인
      * @param request 카카오 API에서 받은 엑세스 토큰 (json)
@@ -44,23 +43,22 @@ public class LoginController {
      */
     @RequestMapping(value = "/auth/kakao", method = RequestMethod.POST)
     public ResponseEntity<Object> kakaoauth(@RequestBody final User request){
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        User user = loginService.kakaoLogin(request.getAccessToken());
 
-        if (user.getNickName() == null){
+        User user = loginService.kakaoLogin(request.getAccessToken());
+        System.out.println(user);
+        if (user == null){
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         else {
             return new ResponseEntity (
                     new Login(
-                            jwtService.generateJwtToken(user.getUserId(), user.getNickName(), dateFormat.format(new Timestamp(System.currentTimeMillis())))
+                            jwtService.generateJwtToken(user.getUserId(), user.getNickName(), user.getLoginTime())
                             , user.getNickName()
                             ,beanConfig.SERVER_URL + ":" + beanConfig.SERVER_PORT + beanConfig.PROFILE_IMAGE_URL + user.getProfileImage().getProfileImage()
                     )
                     , HttpStatus.OK
             );
         }
-
     }
 
 
@@ -71,8 +69,6 @@ public class LoginController {
      */
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<Object> login(@RequestBody User request){
-
-
 
         Login login = loginService.login(request);                                                                      // 로그인 가능여부 검증
         if (login != null) {
@@ -99,7 +95,7 @@ public class LoginController {
         if (loginService.logout(user) == true){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
