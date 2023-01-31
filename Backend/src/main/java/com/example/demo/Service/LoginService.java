@@ -77,7 +77,7 @@ public class LoginService {
             List<User> users = em.createQuery("select u from User u where u.email = :email", User.class)
                     .setParameter("email", String.valueOf(json.id))
                     .getResultList();
-            String now = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(json.connected_at);
+            String now = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(json.connected_at);
             if (users.size() < 1) {
                 User user = new User();
                 tr.begin();
@@ -124,6 +124,10 @@ public class LoginService {
             String requestPwd = user.getPassword();
             user.setEmail(aes256.encrypt(user.getEmail()));
             user = userRepo.getUserToEmail(user);                                                                       // User 테이블에서 email, pwd 가 매칭되는 User 객체 반환
+            System.out.println(user);
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            user.setLoginTime(dateFormat.format(new Timestamp(System.currentTimeMillis())));
 
             if (       user != null                                                                                     // 이메일에 해당하는 유저가 존재
                     && bCryptPasswordEncoder.matches(requestPwd, user.getPassword()) == true                            // && 비밀번호 확인
@@ -150,7 +154,7 @@ public class LoginService {
      */
     public boolean logout(User user) {
         try{
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String logoutString = dateFormat.format(new Timestamp(System.currentTimeMillis()));
             tr.begin();
             em.persist(user);
