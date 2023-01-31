@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Controller
 @CrossOrigin("*")
@@ -90,28 +91,41 @@ public class ProjectController {
     @RequestMapping(value = "/projects/1/{projectNum}", method = RequestMethod.PUT)
     public ResponseEntity<Object> createProject_1Level(
             @PathVariable("projectNum") Long id,                                                                        // 프로젝트 번호
-            @RequestParam(value = "title", required = false) String title,                                                                        // 프로젝트 이름
-            @RequestParam(value = "bestImage", required = false) MultipartFile thumbnailImage,                                                    // 프로젝트 썸네일
-            @RequestParam(value = "category", required = false) Long fundingCategoryId,                                                           // 프로젝트 카테고리
-            @RequestParam(value = "targetAmount", required = false) Long maxAmount,                                                               // 프로잭트 목표 금액
-            @RequestParam(value = "startDate", required = false) String start,                                                                    // 프로젝트 시작 일자
-            @RequestParam(value = "endDate", required = false) String dead,                                                                       // 프로젝트 종료 일자
+            @RequestParam(value = "title", required = false) String title,                                              // 프로젝트 이름
+            @RequestParam(value = "bestImage", required = false) MultipartFile thumbnailImage,                          // 프로젝트 썸네일
+            @RequestParam(value = "category", required = false) Long fundingCategoryId,                                 // 프로젝트 카테고리
+            @RequestParam(value = "targetAmount", required = false) Long maxAmount,                                     // 프로잭트 목표 금액
+            @RequestParam(value = "startDate", required = false) String start,                                          // 프로젝트 시작 일자
+            @RequestParam(value = "endDate", required = false) String dead,                                             // 프로젝트 종료 일자
             HttpServletRequest request)
     {
-        Timestamp nowTime = new Timestamp(System.currentTimeMillis());                                                  // 현재 시간
-        System.out.println("startDate = " + start);
-        System.out.println("endDate = " + dead);
+        start = start + " 00:00:00";
+        dead = dead + " 23:59:59";
 
-        System.out.println(fundingCategoryId);
+        Timestamp now = new Timestamp(System.currentTimeMillis());                                                      // 현재 시간
+        String nowTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(now);
+
+        Date nowDate = null;
+        Date startDate = null;
+        Date endDate = null;
+        try {
+            nowDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(nowTime);
+            startDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(start);
+            endDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dead);
+        } catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+
         // ------------------------------ 인증 --------------------------------------------------------------------------
         User user = userService.setUserToHttpServletRequestAttribute(request);
-        if ((user == null) || (projectService.isUserToProject(user, id) == false) ){                                    // 인증 || 기존에 글을 작성하던 작성자인지 확인 해당 함수
+        if ((user == null) || (projectService.isUserToProject(user, id) == false)){                                    // 인증 || 기존에 글을 작성하던 작성자인지 확인 해당 함수
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         // -------------------------------------------------------------------------------------------------------------
-        //else if (nowTime.before(startEnd) || nowTime.before(deadLine)){                                               // 프론트에서 한번 걸러주겠지만 혹시나 과거의 시간을 설정할 경우를 대비
-        //  return new ResponseEntity<>(HttpStatus.CONFLICT);
-        //}
+        else if ((startDate.after(nowDate) == false) || (endDate.after(startDate) == false)){                           // 프론트에서 한번 걸러주겠지만 혹시나 과거의 시간을 설정할 경우를 대비
+          return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
         else {
             // 형식상 else 둠
         }
@@ -122,13 +136,12 @@ public class ProjectController {
             thumbnailImageName = null;
         }else {
             thumbnailImageName =                                                                                        // 썸네일 저장할 때 사용할 이름
-                    dateFormat.format(nowTime)
+                    dateFormat.format(now)
                             + "_"
                             + thumbnailImage.getOriginalFilename().replaceAll(" ","");
         }
 
         dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");                                                // 기존의 파일 양식을 DB에 저장할 양식으로 교체
-        //System.out.println(startEnd.getTime());
         // ---------------------------------- 펀딩 세팅 -------------------------------------------------------------------
         Funding funding = new Funding();
         funding.setId(id);
@@ -151,17 +164,16 @@ public class ProjectController {
         if (start.equals("")){
             funding.setStartEnd(null);
         }else {
-            funding.setStartEnd(start + " 00:00:00");
+            funding.setStartEnd(start);
         }
 
         if (dead.equals("")){
             funding.setDeadLine(null);
         }else {
-            funding.setDeadLine(dead + " 00:00:00");
+            funding.setDeadLine(dead);
         }
 
-
-        funding.setCreatedAt(dateFormat.format(nowTime));
+        funding.setCreatedAt(dateFormat.format(now));
         // -------------------------------------------------------------------------------------------------------------
         if (projectService.createProject_1Level(funding, thumbnailImage, thumbnailImageName)) {                         // 프로젝트 덮어쓰기, 기존 썸네일 이미지 삭제, 새로운 썸네일 이미지 저장
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
