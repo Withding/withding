@@ -10,6 +10,7 @@ interface InputProps {
     maxLength?: number;
     min?: string | number;
     max?: string | number;
+    defaultValue?: string;
 }
 
 export default InputProps;
