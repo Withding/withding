@@ -1,6 +1,6 @@
 import AlertBox from "@/components/common/AlertBox";
 import React from "react";
-import Products from './Products';
+import ProductInputForm from "./ProductInputForm";
 
 /**
  * 프로젝트 생성시 물건 등록하는 컴포넌트
@@ -14,7 +14,7 @@ function AddProducts() {
             <AlertBox
                 value="상품은 최대 5개까지만 등록할 수 있습니다."
             />
-            <Products />
+            <ProductInputForm />
         </article>
     );
 }

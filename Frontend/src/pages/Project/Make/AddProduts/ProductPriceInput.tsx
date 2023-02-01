@@ -1,11 +1,12 @@
 import NumberInput from "@/components/common/NumberInput";
 import React, { useMemo } from "react";
+import ProductComponentProps from "./ProductComponentProps";
 
 /**
  * 상품 가격을 입력하는 컴포넌트
  * @returns 
  */
-function ProductPriceInput() {
+function ProductPriceInput(props: ProductComponentProps) {
     const MAX_AMOUNT = useMemo(() => 5000000, []);
     const MIN_AMOUNT = useMemo(() => 1000, []);
     return (
@@ -13,11 +14,11 @@ function ProductPriceInput() {
             label="상품 가격"
             MAX={MAX_AMOUNT}
             MIN={MIN_AMOUNT}
-            onChangeValue={() => { }}
+            onChangeValue={props.onChangeValue}
             input={{
                 name: "price",
                 placeholder: "상품 가격을 입력해주세요",
-                value: "",
+                value: props.value,
             }}
             subDescription={
                 `상품 가격은 ${MIN_AMOUNT.toLocaleString("ko-KR")}원 이상

@@ -1,4 +1,6 @@
-import React from "react";
+import Button from "@/components/common/Button";
+import ProjectMakeContext from "@/store/ProjectMakeContext";
+import React, { useContext } from "react";
 import SectionStyle from "../SectionStyle";
 import ProductDescriptionInput from "./ProductDescriptionInput";
 import ProductinventoryInput from "./ProductinventoryInput";
@@ -12,15 +14,41 @@ import ProductShppingPriceInput from "./ProductShppingPriceInput";
  * @returns 
  */
 function ProductInputForm() {
-
+    const { product } = useContext(ProjectMakeContext);
+    const { values, onChangeValue: onChangeProductValue, addProduct } = product;
     return (
-        <form css={SectionStyle}>
-            <ProductNameInput />
-            <ProductDescriptionInput />
-            <ProductPriceInput />
-            <ProductShppingPriceInput />
-            <ProductShippingDay />
-            <ProductinventoryInput />
+        <form
+            onSubmit={addProduct}
+            css={SectionStyle}
+        >
+            <ProductNameInput
+                value={values.name}
+                onChangeValue={onChangeProductValue}
+            />
+            <ProductDescriptionInput
+                value={values.description}
+                onChangeValue={onChangeProductValue}
+            />
+            <ProductPriceInput
+                value={values.price.toString()}
+                onChangeValue={onChangeProductValue}
+            />
+            <ProductShppingPriceInput
+                value={values.shippingPrice.toString()}
+                onChangeValue={onChangeProductValue}
+            />
+            <ProductShippingDay
+                value={values.shippingDay}
+                onChangeValue={onChangeProductValue}
+            />
+            <ProductinventoryInput
+                value={values.inventory.toString()}
+                onChangeValue={onChangeProductValue}
+            />
+            <Button
+                value="추가"
+                type="submit"
+            />
         </form>
     );
 }

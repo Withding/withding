@@ -14,15 +14,36 @@ import useProjectParam from "@/hooks/useProjectParam";
 import { useMutation } from "react-query";
 import generateProjectContent from "@/utils/RequestApis/projectmake/generateProjectContent";
 import generateProjectInfo from "@/utils/RequestApis/projectmake/generateProjectInfo";
+import Product from "@/types/Product";
+import addProduct from "@/utils/RequestApis/projectmake/addProduct";
 /**
  * /project/make 페이지 컴포넌트
  * @returns 
  */
+
+const PRODUCT_INIT = {
+    description: "",
+    price: 0,
+    shippingPrice: -1,
+    shippingDay: "",
+    inventory: 0,
+    name: "",
+    image: null
+};
 function Make() {
     const step = useStepParam();
     const project = useProjectParam();
+    // 프로젝트 정보 임시 저장 요청
     const { mutate: projectInfoMutate } = useMutation(generateProjectInfo);
+    // 프로젝트 상세 내용 임시 저장 요청
     const { mutate: projectContentMutate } = useMutation(generateProjectContent);
+    // 프로젝트 아이템 추가 요청
+    const { mutate: addProductMutate } = useMutation(addProduct, {
+        onSuccess: () => {
+            setProduct(PRODUCT_INIT);
+        }
+    });
+
     const [values, setValues] = useState<ProjectMakeValues>({
         title: "",
         category: -1,
@@ -31,6 +52,8 @@ function Make() {
         endDate: "",
         content: "",
     });
+
+    const [product, setProduct] = useState<Product>(PRODUCT_INIT);
 
 
     const generateInfo = useCallback(() => {
@@ -77,6 +100,11 @@ function Make() {
         });
     }, [values]);
 
+    const addProductHandler = useCallback((e: React.FormEvent<HTMLElement>) => {
+        e.preventDefault();
+        addProductMutate({ project, values: product });
+    }, [addProductMutate, product, project]);
+
     const onChangeValue = useCallback(
         (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
             const { name, value } = e.target;
@@ -95,6 +123,16 @@ function Make() {
             });
         }, [values]);
 
+    const onChangeProductValue =
+        useCallback((e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
+            const { name, value } = e.target;
+            console.log(name, value);
+            setProduct({
+                ...product,
+                [name]: value
+            });
+        }, [product]);
+
     return (
         <Wrapper>
             <ProjectMakeContext.Provider value={{
@@ -102,7 +140,12 @@ function Make() {
                 values,
                 onChangeValue,
                 onChangeContent,
-                onChangeStep1Values: onChangeStep1ValuesHandler
+                onChangeStep1Values: onChangeStep1ValuesHandler,
+                product: {
+                    values: product,
+                    onChangeValue: onChangeProductValue,
+                    addProduct: addProductHandler
+                }
             }}>
                 <ProcedureNavigator
                     list={episode}

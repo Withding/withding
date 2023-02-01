@@ -5,12 +5,13 @@ import BaseProps from "../../types/BaseProps";
 interface ButtonProps {
     value: string;
     disabled?: boolean;
+    type?: "button" | "submit" | "reset";
 }
 
 function Button(props: BaseProps & ButtonProps) {
     return (
         <button
-            type="button"
+            type={props.type ?? "button"}
             className={props.className}
             onClick={props.onClick}
             css={[style, props.css]}

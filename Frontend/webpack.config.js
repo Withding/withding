@@ -11,7 +11,7 @@ module.exports = (env, argv) => {
     
     return {
         mode: prod ? "production" : "development",
-        devtool: prod ? "hidden-source-map" : "eval",
+        devtool: prod ? "hidden-source-map" : "inline-source-map",
         entry: "./src/Index.tsx",
         output: {
             path: path.join(__dirname, "/dist"),
