@@ -9,13 +9,13 @@ import MainHeader from "../MainHeader";
 import ProjectMakeContext from "@/store/ProjectMakeContext";
 import ProjectMakeValues from "@/types/ProjectMakeValues";
 import ProjectDetailContent from "./ProjectDetailContent/ProjectDetailContent";
-import AddProducts from "./AddProduts/AddProducts";
 import useProjectParam from "@/hooks/useProjectParam";
 import { useMutation } from "react-query";
 import generateProjectContent from "@/utils/RequestApis/projectmake/generateProjectContent";
 import generateProjectInfo from "@/utils/RequestApis/projectmake/generateProjectInfo";
 import Product from "@/types/Product";
 import addProduct from "@/utils/RequestApis/projectmake/addProduct";
+import Products from "./Product/Products";
 /**
  * /project/make 페이지 컴포넌트
  * @returns 
@@ -81,7 +81,7 @@ function Make() {
         },
         {
             step: 3,
-            component: <AddProducts />,
+            component: <Products />,
             nextButtonValue: "다음",
             name: "상품 등록"
         },

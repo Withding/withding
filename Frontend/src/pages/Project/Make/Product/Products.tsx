@@ -6,7 +6,7 @@ import ProductInputForm from "./ProductInputForm";
  * 프로젝트 생성시 물건 등록하는 컴포넌트
  * @returns 
  */
-function AddProducts() {
+function Products() {
     return (
         <article>
             <h1>상품 등록</h1>
@@ -19,4 +19,4 @@ function AddProducts() {
     );
 }
 
-export default AddProducts;
+export default Products;
