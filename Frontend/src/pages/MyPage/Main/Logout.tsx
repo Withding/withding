@@ -4,6 +4,9 @@ import React, { useContext } from "react";
 import BaseProps from "@/types/BaseProps";
 import UserContext from "@/store/UserContext";
 import { RiKakaoTalkFill } from "react-icons/ri";
+import { useMutation } from "react-query";
+import logoutRequest from "@/utils/RequestApis/mypage/logoutRequest";
+import { useNavigate } from "react-router-dom";
 
 /**
  * 마이페이지 로그아웃 버튼
@@ -16,6 +19,13 @@ function Logout(props: BaseProps) {
         { text: "이메일", icon: null },
         { text: "카카오", icon: <RiKakaoTalkFill /> }
     ];
+    const navigate = useNavigate();
+    const { mutate: logoutMutate } = useMutation(logoutRequest, {
+        onSuccess: () => {
+            localStorage.removeItem("user");
+            navigate("/main");
+        }
+    });
     return (
         <section css={style} className={props?.className}>
             <div className="type-box">
@@ -23,6 +33,7 @@ function Logout(props: BaseProps) {
                 <span>{`${type[loginType].text}로 로그인중`}</span>
             </div>
             <Button
+                onClick={logoutMutate}
                 value="로그아웃"
             />
         </section>
