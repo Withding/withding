@@ -6,6 +6,7 @@ import com.example.demo.DTO.Request.createProject_2Level;
 import com.example.demo.DTO.Response.*;
 import com.example.demo.Service.ProjectService;
 import com.example.demo.Service.UserService;
+import lombok.Synchronized;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -66,6 +68,7 @@ public class ProjectController {
                                                     HttpServletRequest request){
         // ------------------------------ 인증 --------------------------------------------------------------------------
         User user = userService.setUserToHttpServletRequestAttribute(request);
+        System.out.println(user);
         if (user == null){
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
@@ -99,36 +102,44 @@ public class ProjectController {
             @RequestParam(value = "endDate", required = false) String dead,                                             // 프로젝트 종료 일자
             HttpServletRequest request)
     {
-        start = start + " 00:00:00";
-        dead = dead + " 23:59:59";
-
-        Timestamp now = new Timestamp(System.currentTimeMillis());                                                      // 현재 시간
-        String nowTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(now);
-
+        // ------------------------------ 인증 --------------------------------------------------------------------------
+        User user = userService.setUserToHttpServletRequestAttribute(request);
+        System.out.println(user);
+        if ((user == null) || (projectService.isUserToProject(user, id) == false)){                                     // 인증 || 기존에 글을 작성하던 작성자인지 확인 해당 함수
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        // -------------------------------------------------------------------------------------------------------------
         Date nowDate = null;
         Date startDate = null;
         Date endDate = null;
+        Timestamp now = new Timestamp(System.currentTimeMillis());                                                      // 현재 시간
+        String nowTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(now);
+
         try {
+            if (!start.equals("")) {
+                start = start + " 00:00:00";
+                startDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(start);
+            }
+            else if (!dead.equals("")){
+                dead = dead + " 23:59:59";
+                endDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dead);
+            }
             nowDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(nowTime);
-            startDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(start);
-            endDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dead);
-        } catch (Exception e){
+        } catch (ParseException e) {
             e.printStackTrace();
             return null;
         }
 
-        // ------------------------------ 인증 --------------------------------------------------------------------------
-        User user = userService.setUserToHttpServletRequestAttribute(request);
-        if ((user == null) || (projectService.isUserToProject(user, id) == false)){                                    // 인증 || 기존에 글을 작성하던 작성자인지 확인 해당 함수
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
-        // -------------------------------------------------------------------------------------------------------------
-        else if ((startDate.after(nowDate) == false) || (endDate.after(startDate) == false)){                           // 프론트에서 한번 걸러주겠지만 혹시나 과거의 시간을 설정할 경우를 대비
-          return new ResponseEntity<>(HttpStatus.CONFLICT);
+
+        if (startDate != null || endDate != null) {
+            if ((startDate.after(nowDate) == false) || (endDate.after(startDate) == false)) {                                                                      // 프론트에서 한번 걸러주겠지만 혹시나 과거의 시간을 설정할 경우를 대비
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
+            }
         }
         else {
             // 형식상 else 둠
         }
+
         String thumbnailImageName;
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");                               // 썸네일 파일 저장에 사용할 양식 획득
 
@@ -181,7 +192,6 @@ public class ProjectController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
-
 
     /**
      * 프로젝트 2단계 저장
@@ -281,7 +291,7 @@ public class ProjectController {
         // -------------------------------------------------------------------------------------------------------------
         GetProject_3Level getProject_3Level = new GetProject_3Level(projectService.getProject_3Level(projectId));
 
-        if (getProject_3Level.getArticles().size() != 0){
+        if (getProject_3Level.getArticles().size() == 0){
             return new ResponseEntity<>(getProject_3Level, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

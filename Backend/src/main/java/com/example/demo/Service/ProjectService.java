@@ -180,7 +180,6 @@ public class ProjectService {
             } else {
                 getProject_1Level.setPreViewImage(null);
             }
-
             return getProject_1Level;
         } catch (Exception e){
             e.printStackTrace();
@@ -201,6 +200,7 @@ public class ProjectService {
             tr.begin();
             funding.setContent(content);
             tr.commit();
+            em.clear();
             return true;
         }catch (Exception e){
             e.printStackTrace();

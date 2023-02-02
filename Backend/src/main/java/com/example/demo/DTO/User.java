@@ -39,7 +39,7 @@ public class User {
     private String nickName;                // 닉네임
 
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "profile_image")
     private ProfileImage profileImage;        // 프로필 이미지
 
@@ -51,7 +51,7 @@ public class User {
 
     private Long point;                 // 보유 포인트
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "state_code")
     private State state;                // 회원 상태
 
