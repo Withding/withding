@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
  * @returns 
  */
 function Logout(props: BaseProps) {
-    const { loginType } = useContext(UserContext);
+    const { loginType, onResetUser } = useContext(UserContext);
     const type: any[] = [
         { text: "이메일", icon: null },
         { text: "카카오", icon: <RiKakaoTalkFill /> }
@@ -22,7 +22,7 @@ function Logout(props: BaseProps) {
     const navigate = useNavigate();
     const { mutate: logoutMutate } = useMutation(logoutRequest, {
         onSuccess: () => {
-            localStorage.removeItem("user");
+            onResetUser();
             navigate("/main");
         }
     });

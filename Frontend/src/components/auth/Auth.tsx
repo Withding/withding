@@ -31,7 +31,8 @@ function Auth(props: { children: React.ReactNode }) {
     }, [user]);
 
     const onResetUser = useCallback(() => {
-
+        setUser(InitUser);
+        localStorage.removeItem("user");
     }, []);
 
     useEffect(() => {
