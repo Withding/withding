@@ -68,6 +68,7 @@ public class UserRepo {
     }
 
     public User getUserToUserId(User user){
+        System.out.println(user);
         return em.find(User.class, user.getUserId());
     }
 }

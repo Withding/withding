@@ -43,12 +43,13 @@ public class MyPageController {
     @RequestMapping(value = "/user/mypage/supporter", method = RequestMethod.GET)
     public ResponseEntity<Object> getSupporter(HttpServletRequest request){
 
-        User user;
-
-        //System.out.println("컨트롤러 안 : " + request.getAttribute("userNum"));
-        if (request.getAttribute("userNum") == null){
+        // ------------------------------ 인증 --------------------------------------------------------------------------
+        User user = userService.setUserToHttpServletRequestAttribute(request);
+        if (user == null){                                                                                              // 인증
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }else {
+        }
+        // -------------------------------------------------------------------------------------------------------------
+        else {
             user = userService.setUserToHttpServletRequestAttribute(request);                                         // HttpServletRequest의 Attribute에서 값을 얻어서 User에 넣은 후 반환
             user = userRepo.getUserToUserId(user);                                                                      // 나머지 정보들 조회 후 반환
         }
@@ -65,10 +66,13 @@ public class MyPageController {
     @RequestMapping(value = "/user/mypage/maker", method = RequestMethod.GET)
     public ResponseEntity<Object> getMaker(HttpServletRequest request){
 
-        User user;
-        if (request.getAttribute("userNum") == null){
+        // ------------------------------ 인증 --------------------------------------------------------------------------
+        User user = userService.setUserToHttpServletRequestAttribute(request);
+        if (user == null){                             // 인증 || 기존에 글을 작성하던 작성자인지 확인 해당 함수
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }else {
+        }
+        // -------------------------------------------------------------------------------------------------------------
+        else {
             user = userService.setUserToHttpServletRequestAttribute(request);                                         // HttpServletRequest의 Attribute에서 값을 얻어서 User에 넣은 후 반환
             user = userRepo.getUserToUserId(user);                                                                      // 나머지 정보들 조회 후 반환
         }

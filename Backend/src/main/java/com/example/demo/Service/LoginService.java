@@ -78,6 +78,7 @@ public class LoginService {
                     .setParameter("email", String.valueOf(json.id))
                     .getResultList();
             String now = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(json.connected_at);
+            String loginTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Timestamp(System.currentTimeMillis()));
             if (users.size() < 1) {
                 User user = new User();
                 tr.begin();
@@ -85,9 +86,11 @@ public class LoginService {
                 user.setEmail(String.valueOf(json.id));
                 user.setCreatedAt(now);
                 user.setLogoutAt(now);
+                user.setProfileImage(em.find(ProfileImage.class, "default.png"));
                 user.setIdType(em.find(IdType.class, 1));
                 user.setNickName(json.kakao_account.profile.nickname);
                 user.setState(em.find(State.class, 0));
+                user.setLoginTime(loginTime);
                 em.persist(user);
                 tr.commit();
                 em.clear();
@@ -98,7 +101,7 @@ public class LoginService {
                 user.setUserId(users.get(0).getUserId());
                 user.setNickName(users.get(0).getNickName());
                 user.setProfileImage(users.get(0).getProfileImage());
-                user.setLoginTime(now);
+                user.setLoginTime(loginTime);
                 return user;
             } else {
                 return null;
