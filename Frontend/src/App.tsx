@@ -15,6 +15,7 @@ import { Suspense } from "react";
 import Auth from "./components/auth/Auth";
 import { QueryClient, QueryClientProvider } from "react-query";
 import GuestRoute from "./components/common/permissionRoute/GuestRoute";
+import PrivateRoute from "./components/common/permissionRoute/PrivateRoute";
 
 
 const queryClient = new QueryClient({
@@ -55,7 +56,9 @@ function App() {
                                 />
                                 <Route path="/funding" element={<div>funding</div>} />
                                 <Route path="/commingsoon" element={<div>commingsoon</div>} />
-                                <Route path="/mypage/*" element={<MyPage />} />
+                                <Route path="/mypage/*" element={
+                                    <PrivateRoute RouteComponent={MyPage} path={"/mypage"} />
+                                } />
                                 <Route path="/project/*" element={<Project />} />
                             </Routes>
                         </Suspense>
