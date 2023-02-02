@@ -10,7 +10,7 @@ import ProjectMakeContext from "@/store/ProjectMakeContext";
  * @returns 
  */
 function SelectCategory() {
-    const { onChangeValue } = useContext(ProjectMakeContext);
+    const { values, onChangeValue } = useContext(ProjectMakeContext);
     const { data } = useQuery(["makeCategory"], () => fetchCategorys(), {
         suspense: false,
         useErrorBoundary: false
@@ -26,7 +26,9 @@ function SelectCategory() {
                     name="category"
                 >
                     {data?.categoryList.map((item: Category) => (
-                        <option key={item.id} value={item.id}>{item.category}</option>
+                        <option selected={values.category === item.id} key={item.id} value={item.id}>
+                            {item.category}
+                        </option>
                     ))}
                 </select>
             </label>
