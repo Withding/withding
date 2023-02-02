@@ -42,7 +42,9 @@ public class UserService {
      */
     public User setUserToHttpServletRequestAttribute(HttpServletRequest request){
         try{
+            System.out.println(request.getAttribute("userNum"));
             User user = em.find(User.class, request.getAttribute("userNum"));
+
             user.setLoginTime((String) request.getAttribute("loginTime"));
 
             // ------------------------------ String 타입의 시간 -> Date 타입의 시간으로 변경 -----------------------------------

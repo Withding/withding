@@ -29,7 +29,7 @@ public class Funding {
 
     private String title;                   // 제목
 
-    @ManyToOne(cascade = CascadeType.PERSIST , fetch = FetchType.LAZY)   // cascade = CascadeType.PERSIST = Funding 영속성 추가할때 이 어노테이션이 달린 객체도 같이 영속성에 추가하는 것
+    @ManyToOne(fetch = FetchType.LAZY)   // cascade = CascadeType.PERSIST = Funding 영속성 추가할때 이 어노테이션이 달린 객체도 같이 영속성에 추가하는 것
     @JoinColumn(name = "image")
     private Thumbnail thumbnail;
 
