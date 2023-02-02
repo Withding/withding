@@ -25,7 +25,6 @@ function SelectCategory() {
                     onChange={onChangeValue}
                     name="category"
                 >
-                    <option selected value="-1">카테고리</option>
                     {data?.categoryList.map((item: Category) => (
                         <option key={item.id} value={item.id}>{item.category}</option>
                     ))}
