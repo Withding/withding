@@ -59,20 +59,20 @@ CREATE TABLE `profileimage` (
 );
 Insert into profileimage VALUES('default.png', 'default.png');
 
+
 CREATE TABLE `user` (
-	`user_id`	INT(10) auto_increment NOT NULL PRIMARY KEY,
-	`email`	VARCHAR(100)    NOT NULL,
-	`id_type_code`	TINYINT(1)  NOT NULL,
-	`password`	VARCHAR(100) NULL,
-	`user`	VARCHAR(50) NOT NULL,
-	`profile_image`	VARCHAR(100) NULL DEFAULT 'default.png',
+	`user_id` INT(10) auto_increment NOT NULL PRIMARY KEY,
+	`email` VARCHAR(100) NOT NULL,
+	`id_type_code` TINYINT(1) NOT NULL,
+	`password` VARCHAR(100) NULL,
+	`user` VARCHAR(50) NOT NULL,
+	`profile_image` VARCHAR(100) NULL DEFAULT 'default.png',
 	`created_at` TIMESTAMP NOT NULL,
-	`logout_at` TIMESTAMP NULL,
-	`point`	BIGINT(1) NULL DEFAULT 0,
-	`state_code`	TINYINT(1) NOT NULL
+	`logout_at` TIMESTAMP NOT NULL,
+	`point` BIGINT(1) NOT NULL DEFAULT 0,
+	`state_code` TINYINT(1) NOT NULL
 );
 INSERT INTO `user` VALUES(1, '0mFYBZug7mDw6/ST5H+o8msxk3VjU+lQu+xSwq8+1lw=', 0, '$2a$10$yoCwaLuNSKUHFoE9AR6mg.v2D4JnxJ8MPIAaNDO2LpDeal94aTCW.', '전국노예자랑', 'default.png', '2023-01-24 20:47:19', '2023-01-24 20:47:19', 0, 0);
-
 
 
 
