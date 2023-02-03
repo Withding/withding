@@ -29,10 +29,25 @@ function InputForm() {
                     maxLength: 40,
                 }}
             />
-            <BestImage />
-            <SelectCategory />
-            <Amount />
-            <Duration />
+            <BestImage
+                value={values.preViewImage}
+                onChangeValue={onChangeValue}
+            />
+            <SelectCategory
+                value={values.category}
+                onChangeValue={onChangeValue}
+            />
+            <Amount
+                value={values.targetAmount}
+                onChangeValue={onChangeValue}
+            />
+            <Duration
+                values={{
+                    startDate: values.startDate,
+                    endDate: values.endDate,
+                }}
+                onChangeValue={onChangeValue}
+            />
         </form>
     );
 }

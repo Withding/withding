@@ -1,15 +1,19 @@
-import React, { useContext } from "react";
+import React from "react";
 import Input from "@/components/common/Input";
 import { css } from "@emotion/react";
-import ProjectMakeContext from "@/store/ProjectMakeContext";
 import dateByFormat from "@/utils/dateByFormat";
 
 /**
  * 프로젝트 생성시 기간을 입력하는 컴포넌트
  * @returns 
  */
-function Duration() {
-    const { values, onChangeValue } = useContext(ProjectMakeContext);
+function Duration(props: {
+    values: {
+        startDate: string;
+        endDate: string;
+    }
+    onChangeValue: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}) {
     return (
         <section css={style}>
             <label>
@@ -19,8 +23,8 @@ function Duration() {
                         type="date"
                         min={dateByFormat(new Date(), "-")}
                         max={"9999-01-21"}
-                        value={values.startDate}
-                        onChange={onChangeValue}
+                        value={props.values.startDate}
+                        onChange={props.onChangeValue}
                         name="startDate"
                     />
                     {` ~ `}
@@ -28,8 +32,8 @@ function Duration() {
                         type="date"
                         min={dateByFormat(new Date(), "-")}
                         max={"9999-01-01"}
-                        value={values.endDate}
-                        onChange={onChangeValue}
+                        value={props.values.endDate}
+                        onChange={props.onChangeValue}
                         name="endDate"
                     />
                 </div>

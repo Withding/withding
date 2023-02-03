@@ -1,16 +1,15 @@
 import Category from "@/types/Category";
 import fetchCategorys from "@/utils/RequestApis/category/fetchCategorys";
 import { css } from "@emotion/react";
-import React, { useContext } from "react";
+import React from "react";
 import { useQuery } from "react-query";
-import ProjectMakeContext from "@/store/ProjectMakeContext";
+import ProjectInfoComponentProps from "./ProjectInfComponentProps";
 
 /**
  * 프로젝트 카테고리 선택 컴포넌트
  * @returns 
  */
-function SelectCategory() {
-    const { values, onChangeValue } = useContext(ProjectMakeContext);
+function SelectCategory(props: ProjectInfoComponentProps) {
     const { data } = useQuery(["makeCategory"], () => fetchCategorys(), {
         suspense: false,
         useErrorBoundary: false
@@ -22,11 +21,11 @@ function SelectCategory() {
                 <span>카테고리</span>
                 <select
                     css={style}
-                    onChange={onChangeValue}
+                    onChange={props.onChangeValue}
                     name="category"
                 >
                     {data?.categoryList.map((item: Category) => (
-                        <option selected={values.category === item.id} key={item.id} value={item.id}>
+                        <option selected={props.value === item.id} key={item.id} value={item.id}>
                             {item.category}
                         </option>
                     ))}

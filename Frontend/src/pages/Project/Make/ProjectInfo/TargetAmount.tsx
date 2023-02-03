@@ -1,13 +1,12 @@
 import NumberInput from "@/components/common/NumberInput";
-import ProjectMakeContext from "@/store/ProjectMakeContext";
-import React, { useContext, useMemo, } from "react";
+import React, { useMemo, } from "react";
+import ProjectInfoComponentProps from "./ProjectInfComponentProps";
 
 /**
  * 프로젝트 목표 금액을 작성하는 컴포넌트
  * @returns 
  */
-function TargetAmount() {
-    const { values, onChangeValue } = useContext(ProjectMakeContext);
+function TargetAmount(props: ProjectInfoComponentProps) {
     const MAX_AMOUNT = useMemo(() => 1000000000, []);
     const MIN_AMOUNT = useMemo(() => 1000, []);
     return (
@@ -15,11 +14,11 @@ function TargetAmount() {
             label="목표 금액"
             MAX={MAX_AMOUNT}
             MIN={MIN_AMOUNT}
-            onChangeValue={onChangeValue}
+            onChangeValue={props.onChangeValue}
             input={{
                 name: "targetAmount",
                 placeholder: "목표 금액을 입력해주세요",
-                value: values.targetAmount,
+                value: props.value || 0
             }}
             subDescription={
                 `금액은 ${MIN_AMOUNT.toLocaleString("ko-KR")}원 이상

@@ -1,7 +1,7 @@
-import ProjectMakeContext from "@/store/ProjectMakeContext";
 import { css } from "@emotion/react";
-import React, { useCallback, useContext, useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { AiOutlineCamera, AiOutlineClose } from "react-icons/ai";
+import ProjectInfoComponentProps from "./ProjectInfComponentProps";
 
 function PrevViewImageWrapper({ image, onRemove }: { image?: string, onRemove: () => void }) {
     return (
@@ -15,10 +15,9 @@ function PrevViewImageWrapper({ image, onRemove }: { image?: string, onRemove: (
  * 프로젝트 대표 이미지 선택 컴포넌트
  * @returns 
  */
-function BestImage() {
-    const { values, onChangeValue } = useContext(ProjectMakeContext);
+function BestImage(props: ProjectInfoComponentProps) {
     const imageRef = useRef<HTMLInputElement>(null);
-    const [preViewImage, setPreViewImage] = useState<string | null>(values.preViewImage ?? null);
+    const [preViewImage, setPreViewImage] = useState(props.value ?? null);
     const registerImageButtonClickHandler = useCallback(() => {
         imageRef.current?.click();
     }, []);
@@ -30,8 +29,8 @@ function BestImage() {
         const file = files[0];
         const blob = new Blob([file], { type: file.type });
         setPreViewImage(() => window.URL.createObjectURL(blob));
-        onChangeValue(e);
-    }, [onChangeValue]);
+        props.onChangeValue(e);
+    }, [props]);
 
     const removePrevViewImageHandler = useCallback(() => {
         setPreViewImage(() => null);
@@ -48,7 +47,7 @@ function BestImage() {
             {
                 preViewImage ?
                     <PrevViewImageWrapper
-                        image={preViewImage}
+                        image={preViewImage.toString()}
                         onRemove={removePrevViewImageHandler}
                     />
                     :

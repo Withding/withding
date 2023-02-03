@@ -23,7 +23,7 @@ interface NumberInputProps {
  * @returns 
  */
 function NumberInput(props: NumberInputProps & BaseProps) {
-    const [newAmount, setNewAmount] = useState<string>("");
+    const [newAmount, setNewAmount] = useState<string>(props.input.value.toLocaleString("ko-KR"));
     const MAX = useMemo(() => props.MAX, [props.MAX]);
     const MIN = useMemo(() => props.MIN, [props.MIN]);
     const [error, setError] = useState(false);
