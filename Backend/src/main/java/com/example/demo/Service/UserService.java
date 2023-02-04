@@ -42,7 +42,7 @@ public class UserService {
      */
     public User setUserToHttpServletRequestAttribute(HttpServletRequest request){
         try{
-            System.out.println(request.getAttribute("userNum"));
+            System.out.println("setUserToHttpServletRequestAttribute = " + request.getAttribute("userNum"));
             User user = em.find(User.class, request.getAttribute("userNum"));
 
             user.setLoginTime((String) request.getAttribute("loginTime"));
