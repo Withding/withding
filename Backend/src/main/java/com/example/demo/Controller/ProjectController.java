@@ -43,6 +43,7 @@ public class ProjectController {
      */
     @RequestMapping(value = "/projects", method = RequestMethod.POST)
     public ResponseEntity<Object> createProject_0Level(HttpServletRequest request){
+        System.out.println("프로젝트 0단계 저장 진입");
         // ------------------------------ 인증 --------------------------------------------------------------------------
         User user = userService.setUserToHttpServletRequestAttribute(request);
         if (user == null){
@@ -66,10 +67,11 @@ public class ProjectController {
     @RequestMapping(value = "/projects/1/{projectNum}", method = RequestMethod.GET)
     public ResponseEntity<Object> getProject_1Level(@PathVariable("projectNum") final Long projectId,
                                                     HttpServletRequest request){
+        System.out.println("프로젝트 1단계 호출 진입");
         // ------------------------------ 인증 --------------------------------------------------------------------------
         User user = userService.setUserToHttpServletRequestAttribute(request);
-        System.out.println(user);
-        if (user == null){
+        System.out.println("프로젝트 1단계 호출 user = " + user);
+        if (user == null || (projectService.isUserToProject(user, projectId) == false)){
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         // -------------------------------------------------------------------------------------------------------------
@@ -102,6 +104,7 @@ public class ProjectController {
             @RequestParam(value = "endDate", required = false) String dead,                                             // 프로젝트 종료 일자
             HttpServletRequest request)
     {
+        System.out.println("프로젝트 1단계 저장 진입");
         // ------------------------------ 인증 --------------------------------------------------------------------------
         User user = userService.setUserToHttpServletRequestAttribute(request);
         System.out.println(user);
@@ -132,7 +135,7 @@ public class ProjectController {
 
 
         if (startDate != null || endDate != null) {
-            if ((startDate.after(nowDate) == false) || (endDate.after(startDate) == false)) {                                                                      // 프론트에서 한번 걸러주겠지만 혹시나 과거의 시간을 설정할 경우를 대비
+            if ((startDate.after(nowDate) == false) || (endDate.after(startDate) == false)) {                           // 프론트에서 한번 걸러주겠지만 혹시나 과거의 시간을 설정할 경우를 대비
                 return new ResponseEntity<>(HttpStatus.CONFLICT);
             }
         }
@@ -296,8 +299,6 @@ public class ProjectController {
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-
-
     }
 
 
@@ -311,7 +312,7 @@ public class ProjectController {
     @RequestMapping(value = "/projects/3/{projectNum}", method = RequestMethod.DELETE)
     public ResponseEntity<Object> deleteArticle(@PathVariable("projectNum") Long projectId,
                                                 @RequestBody Article article,
-                                                HttpServletRequest request){
+                                                HttpServletRequest request) {
         // ------------------------------ 인증 --------------------------------------------------------------------------
         User user = userService.setUserToHttpServletRequestAttribute(request);
         if ((user == null) || (projectService.isUserToProject(user, projectId) == false) ){                             // 인증 || 기존에 글을 작성하던 작성자인지 확인 해당 함수
@@ -364,7 +365,7 @@ public class ProjectController {
      * @return 정상 = 200 + 카테고리 목록, 비정상 = 400
      */
     @RequestMapping(value = "/categorys", method = RequestMethod.GET)
-    public ResponseEntity<Object> getCategory(){
+    public ResponseEntity<Object> getCategory() {
         ProjectCategory category = new ProjectCategory();
         category.setCategoryList(projectService.getCategoryList());
 

@@ -19,6 +19,7 @@ import java.util.Properties;
 @Configuration
 public class BeanConfig {
     public final String DEFAULT_USER_IMAGE = "default.png";                                                             // 유저 프로필 기본 이미지 이름
+    private final Long maxFundingCategoryCount = 17L;
     private final int maxProjectArticleCount = 5;                                                                       // 프로젝트에 등록 가능한 물품 갯수
 
     public final String USER_PROFILE_DIRECTORY_NAME = "profileImages";                                                  // 유저 프로필 이미지 파일 저장 디렉터리명

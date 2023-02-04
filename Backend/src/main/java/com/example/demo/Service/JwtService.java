@@ -67,19 +67,27 @@ public class JwtService implements InitializingBean {
 
 
     //
-    // 토큰 유효성 검사
+    // 토큰 유효성 검사, 정보로 변환
     //
-    public boolean validateToken(String jwt) {
+    public Map<String, Object> validateToken(String jwt) {
         try {
+            if (jwt == null) {
+                return null;
+            }
+            Map<String, Object> map = new HashMap<>();
+
             System.out.println("this.key : " + key.getEncoded());
+            System.out.println("validateToken jwt = " + jwt);
             Claims claims = (Claims) Jwts.parserBuilder()
                     .setSigningKey(key)
                     .build()
                     .parseClaimsJws(jwt)
                     .getBody();
 
-            //Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwt).getBody();
-            return true;
+            map.put("userNum", claims.get("userNum",Long.class));
+            map.put("nickName", claims.get("nickName",String.class));
+            map.put("loginTime", claims.get("loginTime",String.class));
+            return map;
         } catch ( io.jsonwebtoken.SignatureException | MalformedJwtException e) {
             e.printStackTrace();
             System.out.println("잘못된 JWT 서명입니다.");
@@ -93,7 +101,7 @@ public class JwtService implements InitializingBean {
             e.printStackTrace();
             System.out.println("JWT 토큰이 잘못되었습니다.");
         }
-        return false;
+        return null;
     }
 
 
@@ -115,9 +123,6 @@ public class JwtService implements InitializingBean {
                     .parseClaimsJws(jwt)
                     .getBody();
 
-            map.put("userNum", claims.get("userNum",Long.class));
-            map.put("nickName", claims.get("nickName",String.class));
-            map.put("loginTime", claims.get("loginTime",String.class));
             return map;
         } catch (Exception err) {
             return map;

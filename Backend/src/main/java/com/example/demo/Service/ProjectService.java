@@ -7,6 +7,7 @@ import com.example.demo.DTO.Response.GetProject_1Level;
 import com.example.demo.DTO.Response.GetProject_2Level;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Synchronized;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,6 +16,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -54,13 +56,26 @@ public class ProjectService {
         }
     }
 
+
     /**
      * 펀딩 카테고리 호출
      * @return 모든 카테고리 정보
      */
     public List<FundingCategory> getCategoryList(){
-        return (List<FundingCategory>) em.createQuery("SELECT fc FROM FundingCategory fc")
-                .getResultList();
+        List<FundingCategory> categories = new ArrayList<>();
+        try {
+            for (Long i = -1L; i <= beanConfig.getMaxFundingCategoryCount(); i++){
+                FundingCategory fundingCategory = em.find(FundingCategory.class, i);
+                categories.add(fundingCategory);
+            }
+            /*List<FundingCategory> categories = (List<FundingCategory>) em.createQuery("SELECT fc FROM FundingCategory fc")
+                    .getResultList();*/
+            return categories;
+        } catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+
     }
 
 
@@ -318,15 +333,5 @@ public class ProjectService {
             return false;
         }
     }
-
-
-
-
-
-
-
-
-
-
 
 }
