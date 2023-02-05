@@ -1,5 +1,5 @@
 import { Editor } from "@toast-ui/react-editor";
-import React, { useCallback, useContext, useMemo } from "react";
+import React, { useCallback, useContext, useEffect, useMemo } from "react";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import { css } from "@emotion/react";
 import ProjectMakeContext from "@/store/ProjectMakeContext";
@@ -14,13 +14,16 @@ function InputForm() {
     const editorRef = React.useRef<Editor>(null);
     const onChange = useCallback(() => {
         const content = editorRef.current?.getInstance().getHTML() ?? "";
+        editorRef.current?.setState({ content });
         onChangeContent(content);
     }, [onChangeContent]);
     const MAX_LENGTH = useMemo(() => 1000, []);
+    useEffect(() => {
+        editorRef.current?.getInstance().setHTML(values.content);
+    }, [values.content]);
     return (
         <form css={style}>
             <Editor
-                initialValue={values.content}
                 height="600px"
                 initialEditType="wysiwyg"
                 previewStyle="vertical"
