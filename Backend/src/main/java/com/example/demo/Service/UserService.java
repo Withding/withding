@@ -7,6 +7,7 @@ import com.example.demo.DTO.State;
 import com.example.demo.DTO.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Synchronized;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.servlet.http.HttpServletRequest;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -35,6 +37,7 @@ public class UserService {
     private FileService fileService;
 
 
+    @Synchronized
     /**
      * jwtService에서 HttpServletRequest에 설정한 속성들을 User 객체에 세팅해서 반환
      * @param request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
@@ -43,16 +46,17 @@ public class UserService {
     public User setUserToHttpServletRequestAttribute(HttpServletRequest request){
         try{
             System.out.println("setUserToHttpServletRequestAttribute = " + request.getAttribute("userNum"));
+
             User user = em.find(User.class, request.getAttribute("userNum"));
 
             user.setLoginTime((String) request.getAttribute("loginTime"));
+            System.out.println("인증 함수 user = " + user);
 
             // ------------------------------ String 타입의 시간 -> Date 타입의 시간으로 변경 -----------------------------------
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date loginDate = dateFormat.parse(user.getLoginTime());
             Date logoutDate = dateFormat.parse(user.getLogoutAt());
             // ---------------------------------------------------------------------------------------------------------
-
             if (       user != null                                                                                     // 해당 userId에 대한 유저가 존재
                     && user.getState().getStateCode() == 0                                                              // 해당 유저의 stateCode가 0(활동중)인 상태임
                     && loginDate.after(logoutDate) == true) {                                                           // 로그아웃(logoutDate) 시간은 로그인(loginDate) 시간보다 이전(before)이다 == true == 탈취당한게 아님
@@ -62,6 +66,7 @@ public class UserService {
             }
         } catch (Exception e){
             System.out.println("UserService.setUserToHttpServletRequestAttribute()에서 인증 실패 !!!");
+            e.printStackTrace();
             return null;
         }
     }

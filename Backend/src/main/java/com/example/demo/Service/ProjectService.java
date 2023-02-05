@@ -68,8 +68,6 @@ public class ProjectService {
                 FundingCategory fundingCategory = em.find(FundingCategory.class, i);
                 categories.add(fundingCategory);
             }
-            /*List<FundingCategory> categories = (List<FundingCategory>) em.createQuery("SELECT fc FROM FundingCategory fc")
-                    .getResultList();*/
             return categories;
         } catch (Exception e){
             e.printStackTrace();
@@ -93,8 +91,8 @@ public class ProjectService {
             funding.setCreatedAt(now);
             tr.begin();
             em.persist(funding);
-            em.clear();                                                                                                 // 영속성 초기화. 이거 없으면 깡통 펀딩 호출시 대부분이 null 담겨서 날라옴
             tr.commit();
+            em.detach(funding);                                                                                         // 영속성 초기화. 이거 없으면 깡통 펀딩 호출시 대부분이 null 담겨서 날라옴
             return funding.getId();
         } catch (Exception e){
             tr.rollback();
@@ -151,7 +149,8 @@ public class ProjectService {
             // ---------------------------------------------------------------------------------------------------------
 
             tr.commit();                                                                                                // 트랜잭션 적용
-            em.clear();
+            em.detach(f);
+            em.find(Funding.class, f.getId());
             return true;
         } catch (Exception e){
             tr.rollback();

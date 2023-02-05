@@ -77,8 +77,18 @@ public class LoginService {
             List<User> users = em.createQuery("select u from User u where u.email = :email", User.class)
                     .setParameter("email", String.valueOf(json.id))
                     .getResultList();
-            String now = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(json.connected_at);
-            String loginTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Timestamp(System.currentTimeMillis()));
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String now = dateFormat.format(json.connected_at);
+
+            // -------------------------- 로그인 시간 세팅 -----------------------------------------------------------------
+            Timestamp loginTimestamp = new Timestamp(System.currentTimeMillis());
+            String loginTime = dateFormat.format(loginTimestamp);
+            // ---------------------------------------------------------------------------------------------------------
+
+            // -------------------------- 로그아웃 시간 세팅 -----------------------------------------------------------------
+            Timestamp logoutTimestamp = new Timestamp(System.currentTimeMillis() - 1000L);
+            String logoutTime = dateFormat.format(logoutTimestamp);
+            // ---------------------------------------------------------------------------------------------------------
             if (users.size() < 1) {
                 User user = new User();
                 tr.begin();
@@ -90,7 +100,8 @@ public class LoginService {
                 user.setIdType(em.find(IdType.class, 1));
                 user.setNickName(json.kakao_account.profile.nickname);
                 user.setState(em.find(State.class, 0));
-                user.setLoginTime(loginTime);
+                user.setLoginTime(loginTime);                                                                           // 로그인 시간 세팅
+                user.setLogoutAt(logoutTime);                                                                           // 로그아웃 시간 세팅
                 em.persist(user);
                 tr.commit();
                 em.clear();
@@ -102,6 +113,7 @@ public class LoginService {
                 user.setNickName(users.get(0).getNickName());
                 user.setProfileImage(users.get(0).getProfileImage());
                 user.setLoginTime(loginTime);
+                user.setLogoutAt(logoutTime);                                                                           // 로그아웃 시간 세팅
                 return user;
             } else {
                 return null;

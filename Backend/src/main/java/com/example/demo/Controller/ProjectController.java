@@ -364,6 +364,7 @@ public class ProjectController {
      * 프로젝트 카테고리 호출
      * @return 정상 = 200 + 카테고리 목록, 비정상 = 400
      */
+    @Synchronized
     @RequestMapping(value = "/categorys", method = RequestMethod.GET)
     public ResponseEntity<Object> getCategory() {
         ProjectCategory category = new ProjectCategory();
