@@ -51,6 +51,7 @@ function Make() {
         startDate: "",
         endDate: "",
         content: "",
+        preViewImage: null
     });
 
     const [product, setProduct] = useState<Product>(PRODUCT_INIT);
@@ -90,7 +91,7 @@ function Make() {
 
 
     const onChangeStep1ValuesHandler = useCallback((value: ProjectMakeValues) => {
-        setValues(value);
+        setValues(() => value);
     }, []);
 
     const onChangeContent = useCallback((content: string) => {
@@ -126,7 +127,6 @@ function Make() {
     const onChangeProductValue =
         useCallback((e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
             const { name, value } = e.target;
-            console.log(name, value);
             setProduct({
                 ...product,
                 [name]: value

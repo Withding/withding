@@ -11,6 +11,7 @@ const ProjectMakeContext = React.createContext<ProjectMakeContextProps>({
         startDate: "",
         endDate: "",
         content: "",
+        preViewImage: null,
     },
     onChangeValue: () => {},
     onChangeContent: () => {},

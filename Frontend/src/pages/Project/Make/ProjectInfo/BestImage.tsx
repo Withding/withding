@@ -1,7 +1,6 @@
 import { css } from "@emotion/react";
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { AiOutlineCamera, AiOutlineClose } from "react-icons/ai";
-import ProjectInfoComponentProps from "./ProjectInfComponentProps";
 
 function PrevViewImageWrapper({ image, onRemove }: { image?: string, onRemove: () => void }) {
     return (
@@ -15,13 +14,19 @@ function PrevViewImageWrapper({ image, onRemove }: { image?: string, onRemove: (
  * 프로젝트 대표 이미지 선택 컴포넌트
  * @returns 
  */
-function BestImage(props: ProjectInfoComponentProps) {
+function BestImage(props: {
+    value: string | null | undefined;
+    onChangeValue: (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => void;
+}) {
     const imageRef = useRef<HTMLInputElement>(null);
-    const [preViewImage, setPreViewImage] = useState(props.value ?? null);
+    const [preViewImage, setPreViewImage] = useState<string | null>(null);
     const registerImageButtonClickHandler = useCallback(() => {
         imageRef.current?.click();
     }, []);
-    console.log(preViewImage);
+
+    useEffect(() => {
+        setPreViewImage(props.value || null);
+    }, [props.value]);
 
     const onChangeImage = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         const { files } = e.target;
