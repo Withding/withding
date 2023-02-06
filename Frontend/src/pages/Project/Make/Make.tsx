@@ -16,6 +16,7 @@ import generateProjectInfo from "@/utils/RequestApis/projectmake/generateProject
 import Product from "@/types/Product";
 import addProduct from "@/utils/RequestApis/projectmake/addProduct";
 import Products from "./Product/Products";
+import deleteThumbnail from "@/utils/RequestApis/projectmake/deleteThumbnail";
 /**
  * /project/make 페이지 컴포넌트
  * @returns 
@@ -33,6 +34,7 @@ const PRODUCT_INIT = {
 function Make() {
     const step = useStepParam();
     const project = useProjectParam();
+
     // 프로젝트 정보 임시 저장 요청
     const { mutate: projectInfoMutate } = useMutation(generateProjectInfo);
     // 프로젝트 상세 내용 임시 저장 요청
@@ -43,6 +45,8 @@ function Make() {
             setProduct(PRODUCT_INIT);
         }
     });
+    // 프로젝트 썸네일 이미지 삭제 요청
+    const { mutate: deleteThumbnailMutate } = useMutation(deleteThumbnail);
 
     const [values, setValues] = useState<ProjectMakeValues>({
         title: "",
@@ -64,6 +68,10 @@ function Make() {
     const generateProjectContext = useCallback(() => {
         projectContentMutate({ content: values.content, project });
     }, [project, projectContentMutate, values.content]);
+
+    const thumbnailImageDeleteHandler = useCallback(() => {
+        deleteThumbnailMutate(project);
+    }, [deleteThumbnailMutate, project]);
 
     const episode: EpisodeType[] = [
         {
@@ -141,6 +149,7 @@ function Make() {
                 onChangeValue,
                 onChangeContent,
                 onChangeStep1Values: onChangeStep1ValuesHandler,
+                onDeleteThumbnail: thumbnailImageDeleteHandler,
                 product: {
                     values: product,
                     onChangeValue: onChangeProductValue,

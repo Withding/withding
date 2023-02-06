@@ -14,7 +14,7 @@ import SectionStyle from "../SectionStyle";
  * @returns 
  */
 function InputForm() {
-    const { values, onChangeValue } = useContext(ProjectMakeContext);
+    const { values, onChangeValue, onDeleteThumbnail } = useContext(ProjectMakeContext);
     return (
         <form css={SectionStyle}>
             <TitleInput
@@ -32,6 +32,7 @@ function InputForm() {
             <BestImage
                 value={values.preViewImage}
                 onChangeValue={onChangeValue}
+                onDeleteThumbnail={onDeleteThumbnail}
             />
             <SelectCategory
                 value={values.category}

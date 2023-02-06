@@ -1,8 +1,11 @@
 import { css } from "@emotion/react";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { AiOutlineCamera, AiOutlineClose } from "react-icons/ai";
+import useProjectParam from "@/hooks/useProjectParam";
 
-function PrevViewImageWrapper({ image, onRemove }: { image?: string, onRemove: () => void }) {
+function PrevViewImageWrapper({ image, onRemove }:
+    { image?: string, onRemove: () => void }
+) {
     return (
         <div css={prevViewImageStyle}>
             <img src={image} alt={"대표 이미지"} />
@@ -17,7 +20,9 @@ function PrevViewImageWrapper({ image, onRemove }: { image?: string, onRemove: (
 function BestImage(props: {
     value: string | null | undefined;
     onChangeValue: (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => void;
+    onDeleteThumbnail: (id: number) => void;
 }) {
+    const project = useProjectParam();
     const imageRef = useRef<HTMLInputElement>(null);
     const [preViewImage, setPreViewImage] = useState<string | null>(null);
     const registerImageButtonClickHandler = useCallback(() => {
@@ -40,7 +45,9 @@ function BestImage(props: {
     const removePrevViewImageHandler = useCallback(() => {
         setPreViewImage(() => null);
         imageRef.current!.value = "";
-    }, []);
+        props.onDeleteThumbnail(project);
+    }, [project, props]);
+
     return (
         <section css={style}>
             <label>
