@@ -365,8 +365,7 @@ public class ProjectController {
         }
     }
 
-
-
+    
     /**
      * 프로젝트 카테고리 호출
      * @return 정상 = 200 + 카테고리 목록, 비정상 = 400
@@ -384,5 +383,27 @@ public class ProjectController {
         }
     }
 
+
+    /**
+     * 프로젝트 1단계에서 썸네일을 삭제하는 API
+     * @return 인증실패 401, 정상 204, 실패 400
+     */
+    @RequestMapping(value = "/projects/thumbnail/{projectNum}", method = RequestMethod.DELETE)
+    public ResponseEntity<Object> deleteThumbnail(@PathVariable(value = "projectNum") Long id,
+                                                  HttpServletRequest request){
+        // ------------------------------ 인증 --------------------------------------------------------------------------
+        User user = userService.setUserToHttpServletRequestAttribute(request);
+        System.out.println(user);
+        if ((user == null) || (projectService.isUserToProject(user, id) == false)){                                     // 인증 || 기존에 글을 작성하던 작성자인지 확인 해당 함수
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        // -------------------------------------------------------------------------------------------------------------
+
+        if (projectService.deleteThumbnail(id)){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 
 }
