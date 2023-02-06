@@ -9,7 +9,7 @@ interface ProjectMakeContextProps {
     onChangeValue: (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => void;
     onChangeContent: (content: string) => void;
     onChangeStep1Values: (values: ProjectMakeValues) => void;
-    onDeleteThumbnail: (id: number) => void;
+    onDeleteThumbnail: () => void;
     product: {
         values: Product;
         onChangeValue: (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => void;

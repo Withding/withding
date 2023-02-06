@@ -10,7 +10,7 @@ function deleteThumbnail(id: number): Promise<AxiosResponse> {
     const accessToken = user?.accessToken;
     return axios({
         url: `/projects/thumbnail/${id}`,
-        method: "POST",
+        method: "DELETE",
         headers: {
             "authorization": accessToken,
         },

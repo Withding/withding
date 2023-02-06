@@ -46,7 +46,11 @@ function Make() {
         }
     });
     // 프로젝트 썸네일 이미지 삭제 요청
-    const { mutate: deleteThumbnailMutate } = useMutation(deleteThumbnail);
+    const { mutate: deleteThumbnailMutate } = useMutation(deleteThumbnail, {
+        onSuccess: () => {
+            setValues({ ...values, preViewImage: null });
+        }
+    });
 
     const [values, setValues] = useState<ProjectMakeValues>({
         title: "",

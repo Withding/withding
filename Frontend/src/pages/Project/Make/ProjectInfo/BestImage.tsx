@@ -20,7 +20,7 @@ function PrevViewImageWrapper({ image, onRemove }:
 function BestImage(props: {
     value: string | null | undefined;
     onChangeValue: (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => void;
-    onDeleteThumbnail: (id: number) => void;
+    onDeleteThumbnail: () => void;
 }) {
     const project = useProjectParam();
     const imageRef = useRef<HTMLInputElement>(null);
@@ -43,10 +43,8 @@ function BestImage(props: {
     }, [props]);
 
     const removePrevViewImageHandler = useCallback(() => {
-        setPreViewImage(() => null);
-        imageRef.current!.value = "";
-        props.onDeleteThumbnail(project);
-    }, [project, props]);
+        props.onDeleteThumbnail();
+    }, [props]);
 
     return (
         <section css={style}>
