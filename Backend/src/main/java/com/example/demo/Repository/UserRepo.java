@@ -1,5 +1,6 @@
 package com.example.demo.Repository;
 
+import com.example.demo.Config.JpaConfig;
 import com.example.demo.DTO.State;
 import com.example.demo.DTO.User;
 import lombok.Data;
@@ -16,11 +17,11 @@ import java.util.List;
 @Data
 public class UserRepo {
 
-    @Autowired
-    private EntityManager em;
+    //@Autowired
+    //private EntityManager em;
 
-    @Autowired
-    private EntityTransaction tr;
+    //@Autowired
+    //private EntityTransaction tr;
 
 
     /**
@@ -29,15 +30,18 @@ public class UserRepo {
      * @return 정상 저장시 true 반환
      */
     public boolean save(final User request) {
-
+        EntityManager em = JpaConfig.emf.createEntityManager();
+        EntityTransaction tr = em.getTransaction();
         try{
             tr.begin();
             em.persist(request);
             tr.commit();
+            em.close();
             return true;
         }catch (Exception e){
             e.printStackTrace();
             tr.rollback();
+            em.close();
             return false;
         }
     }
@@ -49,9 +53,12 @@ public class UserRepo {
      * @return List<User> 객체 반환
      */
     public List<User> findUserToEmail(final User user){
+        EntityManager em = JpaConfig.emf.createEntityManager();
+
         List<User> users = (List<User>) em.createQuery("SELECT u.userId FROM User u WHERE u.email =: email")
                 .setParameter("email", user.getEmail())
                 .getResultList();
+        em.close();
         return users;
     }
 
@@ -62,13 +69,20 @@ public class UserRepo {
      * @return 찾은 User 객체
      */
     public User getUserToEmail(User user) {
-        return (User) em.createQuery("SELECT u FROM User u WHERE u.email =: email AND u.state.stateCode = 0")
+        EntityManager em = JpaConfig.emf.createEntityManager();
+
+        User u = (User) em.createQuery("SELECT u FROM User u WHERE u.email =: email AND u.state.stateCode = 0")
                 .setParameter("email", user.getEmail())
                 .getSingleResult();
+        em.close();
+        return u;
     }
 
     public User getUserToUserId(User user){
-        System.out.println(user);
-        return em.find(User.class, user.getUserId());
+        EntityManager em = JpaConfig.emf.createEntityManager();
+
+        User u = em.find(User.class, user.getUserId());
+        em.close();
+        return u;
     }
 }

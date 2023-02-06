@@ -1,6 +1,7 @@
 package com.example.demo.Service;
 
 import com.example.demo.Config.BeanConfig;
+import com.example.demo.Config.JpaConfig;
 import com.example.demo.DTO.*;
 import com.example.demo.DTO.Response.GetProject_0Level;
 import com.example.demo.DTO.Response.GetProject_1Level;
@@ -30,11 +31,11 @@ public class ProjectService {
     @Autowired
     private FileService fileService;
 
-    @Autowired
-    private EntityManager em;
+    //@Autowired
+    //private EntityManager em;
 
-    @Autowired
-    private EntityTransaction tr;
+    //@Autowired
+    //private EntityTransaction tr;
 
 
     /**
@@ -44,14 +45,19 @@ public class ProjectService {
      * @return 작성자가 맞으면 true, 아니면 false
      */
     public boolean isUserToProject(User requestUser, Long id) {
+        EntityManager em = JpaConfig.emf.createEntityManager();
+
         try{
             User findUser = em.find(Funding.class, id).getUserId();
             if (requestUser.getUserId() == findUser.getUserId()){
+                em.close();
                 return true;
             } else {
+                em.close();
                 return false;
             }
         } catch (Exception e){
+            em.close();
             return false;
         }
     }
@@ -62,15 +68,20 @@ public class ProjectService {
      * @return 모든 카테고리 정보
      */
     public List<FundingCategory> getCategoryList(){
+        EntityManager em = JpaConfig.emf.createEntityManager();
+        EntityTransaction tr = em.getTransaction();
         List<FundingCategory> categories = new ArrayList<>();
         try {
             for (Long i = -1L; i <= beanConfig.getMaxFundingCategoryCount(); i++){
                 FundingCategory fundingCategory = em.find(FundingCategory.class, i);
                 categories.add(fundingCategory);
             }
+
+            em.close();
             return categories;
         } catch (Exception e){
             e.printStackTrace();
+            em.close();
             return null;
         }
 
@@ -83,6 +94,9 @@ public class ProjectService {
      * @return 깡통으로 생성한 프로젝트 Id
      */
     public Long createProject_0Level(User user) {
+        EntityManager em = JpaConfig.emf.createEntityManager();
+        EntityTransaction tr = em.getTransaction();
+
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String now = dateFormat.format(new Timestamp(System.currentTimeMillis()));
@@ -92,11 +106,12 @@ public class ProjectService {
             tr.begin();
             em.persist(funding);
             tr.commit();
-            em.detach(funding);                                                                                         // 영속성 초기화. 이거 없으면 깡통 펀딩 호출시 대부분이 null 담겨서 날라옴
+            em.close();                                                                                                 // 영속성 초기화. 이거 없으면 깡통 펀딩 호출시 대부분이 null 담겨서 날라옴
             return funding.getId();
         } catch (Exception e){
             tr.rollback();
             e.printStackTrace();
+            em.close();
             return null;
         }
     }
@@ -109,52 +124,50 @@ public class ProjectService {
      * @return Long 타입의 Funding Id
      */
     public boolean createProject_1Level(Funding funding, MultipartFile thumbnailImage, String thumbnailImageName){
-        // ----------------------------------------- 조회 (추후 갯수제한때 사용할 수 있음) ---------------------------------------
-        /*List<Funding> fundingList =
-                (List<Funding>) em.createQuery("SELECT f FROM Funding f WHERE f.userId.userId =: userId " +
-                        "AND f.fundingStateCode.stateCode =: stateCode")
-                .setParameter("userId", funding.getUserId().getUserId())
-                .setParameter("stateCode", 4)
-                .getResultList();*/
-        // -------------------------------------------------------------------------------------------------------------
+
+        EntityManager em = JpaConfig.emf.createEntityManager();
+        EntityTransaction tr = em.getTransaction();
 
         try{
-            tr.begin();                                                                                                 // 트랜잭션 시작
+            tr.begin();// 트랜잭션 시작
+            Funding f = em.find(Funding.class, funding.getId());
 
-            // ------------------------------------------ 디비에 임시저장된 글이 있다 ------------------------------------------
-            Funding f = em.find(Funding.class, funding.getId());                                                        // 영속 관리 시작
 
-            if (f.getThumbnail() != null){                                                                              // 기존 썸네일이 존재
-                Thumbnail t = em.find(Thumbnail.class, f.getThumbnail().getImage());                                    // 영속 관리 시작
-                if ((!fileService.deleteImage(t.getImage(), beanConfig.THUMBNAIL_DIRECTORY_NAME)                        // (해당 썸네일 이미지 파일 삭제 실패 || 새로운 썸네일 저장 실패)
-                        || !fileService.createImage(thumbnailImage, thumbnailImageName, beanConfig.THUMBNAIL_DIRECTORY_NAME))){
-                    throw new Exception(); // 예외처리 발생
+            // 기존 썸네일 유지
+            if (thumbnailImageName == null){
+
+            }
+            // 썸네일 변경
+            else{
+                if (fileService.createImage(thumbnailImage, thumbnailImageName, beanConfig.THUMBNAIL_DIRECTORY_NAME)){  // 등록
+                    Thumbnail newThumbnail = new Thumbnail(thumbnailImageName, thumbnailImage.getOriginalFilename());
+                    em.persist(newThumbnail);
+                    f.setThumbnail(newThumbnail);
+
+
+                }else {
+                    throw new Exception();
                 }
-                em.remove(t);                                                                                           // 테이블에서 기존 썸네일 삭제
             }
-            if (funding.getThumbnail() == null){
-                f.setThumbnail(null);
-            } else {
-                em.persist(funding.getThumbnail());                                                                     // 테이블에서 새로받은 썸네일 저장
-                f.setThumbnail(funding.getThumbnail());
-            }
+
 
             f.setTitle(funding.getTitle());                                                                             // 영속 관리중인 기존 funding 수정 시작
-
             f.setMaxAmount(funding.getMaxAmount());
             f.setFundingCategory(funding.getFundingCategory());
+            System.out.println("getStartEnd = " + funding.getStartEnd());
+            System.out.println("getDeadLine = " + funding.getDeadLine());
             f.setStartEnd(funding.getStartEnd());
             f.setDeadLine(funding.getDeadLine());
             f.setCreatedAt(funding.getCreatedAt());
             // ---------------------------------------------------------------------------------------------------------
 
             tr.commit();                                                                                                // 트랜잭션 적용
-            em.detach(f);
-            em.find(Funding.class, f.getId());
+            em.close();
             return true;
         } catch (Exception e){
             tr.rollback();
             e.printStackTrace();
+            em.close();
             return false;
         }
     }
@@ -166,6 +179,8 @@ public class ProjectService {
      * @return
      */
     public GetProject_1Level getProject_1Level(Long projectId) {
+        EntityManager em = JpaConfig.emf.createEntityManager();
+        EntityTransaction tr = em.getTransaction();
         try {
             Funding funding = em.find(Funding.class, projectId);                                                        // 영속성 등록 (persist 말고도 find로 조회해도 영속성으로 관리됨)
 
@@ -194,9 +209,11 @@ public class ProjectService {
             } else {
                 getProject_1Level.setPreViewImage(null);
             }
+            em.close();
             return getProject_1Level;
         } catch (Exception e){
             e.printStackTrace();
+            em.close();
             return null;
         }
     }
@@ -209,16 +226,19 @@ public class ProjectService {
      * @return 정상 저장시 true, 비정상 처리시 false
      */
     public boolean createProject_2Level(final Long projectId, final String content) {
+        EntityManager em = JpaConfig.emf.createEntityManager();
+        EntityTransaction tr = em.getTransaction();
         try {
             Funding funding = em.find(Funding.class, projectId);
             tr.begin();
             funding.setContent(content);
             tr.commit();
-            em.clear();
+            em.close();
             return true;
         }catch (Exception e){
             e.printStackTrace();
             tr.rollback();
+            em.close();
             return false;
         }
     }
@@ -247,11 +267,14 @@ public class ProjectService {
      * @return 정상처리시 String 타입의 프로젝트 content, 비정상 처리시 null
      */
     public String getProject_2Level(Long projectId) {
+        EntityManager em = JpaConfig.emf.createEntityManager();
         try{
             Funding funding = em.find(Funding.class, projectId);
+            em.close();
             return funding.getContent();
         }catch (Exception e){
             e.printStackTrace();
+            em.close();
             return null;
         }
     }
@@ -264,6 +287,9 @@ public class ProjectService {
      * @return
      */
     public boolean createProject_3Level(Long projectId, Article article) {
+        EntityManager em = JpaConfig.emf.createEntityManager();
+        EntityTransaction tr = em.getTransaction();
+
         try{
             // ------------------------------------------- 물품 갯수 5개인지 확인하는 부분 -------------------------------------
             Long projectCount = (Long) em.createQuery("SELECT count(a) FROM Article a WHERE a.fundingId.id =: projectId")
@@ -278,7 +304,7 @@ public class ProjectService {
                 article.setFundingId(funding);
                 em.persist(article);
                 tr.commit();
-                em.clear();
+                em.close();
                 return true;
             } else {
                 return false;
@@ -286,6 +312,7 @@ public class ProjectService {
         } catch (Exception e){
             e.printStackTrace();
             tr.rollback();
+            em.close();
             return false;
         }
 
@@ -299,12 +326,16 @@ public class ProjectService {
      * @return
      */
     public List<Article> getProject_3Level(Long projectId) {
+        EntityManager em = JpaConfig.emf.createEntityManager();
         try{
-            return em.createQuery("SELECT a FROM Article a WHERE a.fundingId.id =: projectId")
+            List<Article> articles = em.createQuery("SELECT a FROM Article a WHERE a.fundingId.id =: projectId")
                     .setParameter("projectId", projectId)
                     .getResultList();
+            em.close();
+            return articles;
         } catch (Exception e){
             e.printStackTrace();
+            em.close();
             return null;
         }
     }
@@ -316,19 +347,25 @@ public class ProjectService {
      * @return
      */
     public boolean deleteProject_3Level(Long projectId,Long articleId) {
+        EntityManager em = JpaConfig.emf.createEntityManager();
+        EntityTransaction tr = em.getTransaction();
+
         try{
             tr.begin();
             Article article = em.find(Article.class, articleId);
             if (article.getFundingId().getId() == projectId){
                 em.remove(article);
             } else{
+                em.close();
                 return false;
             }
             tr.commit();
+            em.close();
             return true;
         } catch (Exception e){
             e.printStackTrace();
             tr.rollback();
+            em.close();
             return false;
         }
     }

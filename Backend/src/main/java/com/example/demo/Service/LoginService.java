@@ -2,6 +2,7 @@ package com.example.demo.Service;
 
 import com.example.demo.Config.AES256;
 import com.example.demo.Config.BeanConfig;
+import com.example.demo.Config.JpaConfig;
 import com.example.demo.DTO.*;
 
 import com.example.demo.DTO.Response.Login;
@@ -38,11 +39,11 @@ public class LoginService {
     @Autowired
     private UserRepo userRepo;
 
-    @Autowired
-    private EntityManager em;
+    //@Autowired
+    //private EntityManager em;
 
-    @Autowired
-    private EntityTransaction tr;
+    //@Autowired
+    //private EntityTransaction tr;
 
     @Autowired
     private AES256 aes256;
@@ -54,6 +55,10 @@ public class LoginService {
      * @return User 객체
      */
     public User kakaoLogin(final String accessToken){
+
+        EntityManager em = JpaConfig.emf.createEntityManager();
+        EntityTransaction tr = em.getTransaction();
+
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(accessToken);
         HttpEntity<String> entity = new HttpEntity<String>(headers);
@@ -70,6 +75,7 @@ public class LoginService {
             com.google.gson.Gson gson = new com.google.gson.Gson();
             json = gson.fromJson(response.getBody(), Gson.class);
         }catch (Exception e){
+            em.close();
             return null;
         }
         
@@ -104,7 +110,7 @@ public class LoginService {
                 user.setLogoutAt(logoutTime);                                                                           // 로그아웃 시간 세팅
                 em.persist(user);
                 tr.commit();
-                em.clear();
+                em.close();
                 return user;
             } else if (users.size() <= 1 && users.get(0).getState().getStateCode() == 0) {
                 User user = new User();
@@ -114,14 +120,17 @@ public class LoginService {
                 user.setProfileImage(users.get(0).getProfileImage());
                 user.setLoginTime(loginTime);
                 user.setLogoutAt(logoutTime);                                                                           // 로그아웃 시간 세팅
+                em.close();
                 return user;
             } else {
+                em.close();
                 return null;
             }
         }
         catch (Exception e){
             e.printStackTrace();
             tr.rollback();
+            em.close();
             return null;
         }
 
@@ -168,6 +177,8 @@ public class LoginService {
      * @return
      */
     public boolean logout(User user) {
+        EntityManager em = JpaConfig.emf.createEntityManager();
+        EntityTransaction tr = em.getTransaction();
         try{
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String logoutString = dateFormat.format(new Timestamp(System.currentTimeMillis()));
@@ -175,10 +186,12 @@ public class LoginService {
             em.persist(user);
             user.setLogoutAt(logoutString);
             tr.commit();
+            em.close();
             return true;
         }catch (Exception e){
             e.printStackTrace();
             tr.rollback();
+            em.close();
             return false;
         }
     }

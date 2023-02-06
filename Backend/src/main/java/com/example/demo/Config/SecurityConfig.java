@@ -26,16 +26,17 @@ public class SecurityConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new IntercepterService())
                 .addPathPatterns(
-                        "/user/mypage/**",
-                        "/user/image",
-                        "/projects/*/*",
-                        "/projects",
-                        "/content/image",
-                        "/user/logout"
+                        "/**"
+                        //"/user/mypage/**",
+                        //"/user/image",
+                        //"/projects/*/*",
+                        //"/projects",
+                        //"/content/image",
+                        //"/user/logout"
                         ) // 해당 경로에 접근하기 전에 인터셉터가 가로챈다.
               .excludePathPatterns(
                       "/*/image/*",             // 이미지 파일 호출
-                      "/categorys",              // 카테고리 호출
+                      "/categorys",             // 카테고리 호출
                       "/auth/kakao",            // 카카오 로그인
                       "/login"                  // 로그인
               ); // 해당 경로는 인터셉터가 가로채지 않는다.

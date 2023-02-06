@@ -1,6 +1,7 @@
 package com.example.demo.Service;
 
 import com.example.demo.Config.BeanConfig;
+import com.example.demo.Config.JpaConfig;
 import com.example.demo.DTO.ProfileImage;
 import com.example.demo.DTO.User;
 import lombok.Data;
@@ -24,11 +25,11 @@ public class FileService {
     @Autowired
     private BeanConfig beanConfig;
 
-    @Autowired
-    private EntityManager em;
+    //@Autowired
+    //private EntityManager em;
 
-    @Autowired
-    private EntityTransaction tr;
+    //@Autowired
+    //private EntityTransaction tr;
 
 
     /**
@@ -64,6 +65,8 @@ public class FileService {
      * @return 정상 true, 실패 false
      */
     public String changeUserImage(User user, ProfileImage profileImage){
+        EntityManager em = JpaConfig.emf.createEntityManager();
+        EntityTransaction tr = em.getTransaction();
 
         try{
             user = em.find(User.class, user.getUserId());
@@ -72,9 +75,11 @@ public class FileService {
             em.persist(user);                                                                                           // JPA에서 관리 시작
             user.setProfileImage(profileImage);                                                                         // 변경
             tr.commit();
+            em.close();
             return user.getProfileImage().getProfileImage();
         } catch (Exception e){
             tr.rollback();
+            em.close();
             e.printStackTrace();
             return null;
         }
@@ -118,6 +123,7 @@ public class FileService {
             imageFile.transferTo(newFile);
             return true;
         } catch (Exception e){
+            System.out.println("썸네일 이미지 생성실패");
             e.printStackTrace();
             return false;
         }
@@ -156,6 +162,7 @@ public class FileService {
             return true;
         } catch (Exception e){
             e.printStackTrace();
+            System.out.println("썸네일 이미지 제거 실패");
             return false;
         }
     }

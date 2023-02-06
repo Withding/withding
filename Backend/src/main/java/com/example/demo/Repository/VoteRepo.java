@@ -1,6 +1,7 @@
 package com.example.demo.Repository;
 
 
+import com.example.demo.Config.JpaConfig;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +14,11 @@ import javax.persistence.EntityTransaction;
 @NoArgsConstructor
 @Data
 public class VoteRepo {
-    @Autowired
-    private EntityManager em;
+    //@Autowired
+    //private EntityManager em;
 
-    @Autowired
-    private EntityTransaction tr;
+    //@Autowired
+    //private EntityTransaction tr;
 
     /**
      *
@@ -25,8 +26,13 @@ public class VoteRepo {
      * @return
      */
     public Long getCountToUserId(Long user_id){
-        return (Long) em.createQuery("SELECT COUNT(v.user_id) FROM Vote v WHERE v.user_id =: user_id")
+        EntityManager em = JpaConfig.emf.createEntityManager();
+
+
+        Long count =  (Long) em.createQuery("SELECT COUNT(v.user_id) FROM Vote v WHERE v.user_id =: user_id")
                 .setParameter("user_id", user_id)
                 .getSingleResult();
+        em.close();
+        return count;
     }
 }

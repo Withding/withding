@@ -1,5 +1,6 @@
 package com.example.demo.Repository;
 
+import com.example.demo.Config.JpaConfig;
 import com.example.demo.DTO.EmailAuth;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -14,11 +15,11 @@ import java.util.List;
 @Repository
 public class EmailAuthRepo {
 
-    @Autowired
-    private EntityManager em;
+    //@Autowired
+    //private EntityManager em;
 
-    @Autowired
-    private EntityTransaction tr;
+    //@Autowired
+    //private EntityTransaction tr;
 
 
 
@@ -29,6 +30,8 @@ public class EmailAuthRepo {
      */
     public boolean save(final EmailAuth emailAuth){
         boolean result = false;
+        EntityManager em = JpaConfig.emf.createEntityManager();
+        EntityTransaction tr = em.getTransaction();
 
         Timestamp timestamp = new Timestamp(System.currentTimeMillis() + (1000 * 60 * 3));  // 현재시간 + 3분
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -37,11 +40,12 @@ public class EmailAuthRepo {
             tr.begin();
             em.persist(emailAuth);
             tr.commit();
-            em.clear();
+            em.close();
             result = true;
         }catch (Exception e){
             tr.rollback();
             e.printStackTrace();
+            em.close();
         }
 
         return result;
@@ -53,10 +57,14 @@ public class EmailAuthRepo {
      * @param emailAuth 조회할 이메일을 담고있는 EmailAuth 객체
      * @return 특정 이메일로 저장된 튜플의 갯수
      */
-    public Long getEmailAuthCountToEmail(EmailAuth emailAuth){                                                          // JPA에서 count()를 SELECT할땐 Long을 리턴해야됨
-        return (Long) em.createQuery("SELECT count(ea.emailAuth_id) FROM EmailAuth ea WHERE ea.email =: email")
+    public Long getEmailAuthCountToEmail(EmailAuth emailAuth){// JPA에서 count()를 SELECT할땐 Long을 리턴해야됨
+        EntityManager em = JpaConfig.emf.createEntityManager();
+
+        Long count = (Long) em.createQuery("SELECT count(ea.emailAuth_id) FROM EmailAuth ea WHERE ea.email =: email")
                 .setParameter("email", emailAuth.getEmail())
                 .getSingleResult();
+        em.close();
+        return count;
     }
 
 
@@ -66,10 +74,14 @@ public class EmailAuthRepo {
      * @return List<EmailAuth> 타입
      */
     public List<EmailAuth> findEmailAuthToCodeAndEmail(EmailAuth request) {
-        return em.createQuery("SELECT ea From EmailAuth ea WHERE ea.authCode =: code AND ea.email =: email")
+        EntityManager em = JpaConfig.emf.createEntityManager();
+
+        List<EmailAuth> emailAuths = em.createQuery("SELECT ea From EmailAuth ea WHERE ea.authCode =: code AND ea.email =: email")
                 .setParameter("code", request.getAuthCode())
                 .setParameter("email", request.getEmail())
                 .getResultList();
+        em.close();
+        return emailAuths;
     }
 
 
@@ -79,12 +91,15 @@ public class EmailAuthRepo {
      * @return 검색된 갯수를 반환
      */
     public List<EmailAuth> getEmailAuthCountToSecretKeyAndEmail(final EmailAuth emailAuth){
+        EntityManager em = JpaConfig.emf.createEntityManager();
+
         List<EmailAuth> emailAuths;
         emailAuths = (List<EmailAuth>) em.createQuery("SELECT ea FROM EmailAuth ea WHERE ea.email =: email ORDER BY ea.emailAuth_id DESC")
                         .setParameter("email", emailAuth.getEmail())
                         .setFirstResult(0)
                         .setMaxResults(1)
                         .getResultList();
+        em.close();
         return emailAuths;
     }
 
@@ -95,6 +110,9 @@ public class EmailAuthRepo {
      * @return 정상 처리시 true 반환
      */
     public boolean deleteEmailAuthToSecretKeyAndEmail(final EmailAuth emailAuth){
+        EntityManager em = JpaConfig.emf.createEntityManager();
+        EntityTransaction tr = em.getTransaction();
+
         boolean result = false;
         try{
             tr.begin();
@@ -102,10 +120,12 @@ public class EmailAuthRepo {
                     .setParameter("email", emailAuth.getEmail())
                     .executeUpdate();
             tr.commit();
+            em.close();
             result = true;
         }catch (Exception e){
             e.printStackTrace();
             tr.rollback();
+            em.close();
         }
         return result;
     }
@@ -116,14 +136,19 @@ public class EmailAuthRepo {
      * @param time 현새시간 - 25분
      */
     public void deleteEmailAuthToDeadLine(String time){
+        EntityManager em = JpaConfig.emf.createEntityManager();
+        EntityTransaction tr = em.getTransaction();
+
         try{
             tr.begin();
             em.createQuery("DELETE FROM EmailAuth ea WHERE ea.deadLine <: now")
                     .setParameter("now", time)
                     .executeUpdate();
             tr.commit();
+            em.close();
         } catch (Exception e){
             tr.rollback();
+            em.close();
         }
 
 

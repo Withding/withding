@@ -119,11 +119,11 @@ public class ProjectController {
         String nowTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(now);
 
         try {
-            if (!start.equals("")) {
+            if (!start.equals("") && start.length() <= 12) {
                 start = start + " 00:00:00";
                 startDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(start);
             }
-            else if (!dead.equals("")){
+            else if (!dead.equals("") && start.length() <= 12){
                 dead = dead + " 23:59:59";
                 endDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dead);
             }
@@ -134,7 +134,7 @@ public class ProjectController {
         }
 
 
-        if (startDate != null || endDate != null) {
+        if (startDate != null && endDate != null) {
             if ((startDate.after(nowDate) == false) || (endDate.after(startDate) == false)) {                           // 프론트에서 한번 걸러주겠지만 혹시나 과거의 시간을 설정할 경우를 대비
                 return new ResponseEntity<>(HttpStatus.CONFLICT);
             }
@@ -146,9 +146,12 @@ public class ProjectController {
         String thumbnailImageName;
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");                               // 썸네일 파일 저장에 사용할 양식 획득
 
+        // 기존 썸네일 유지
         if (thumbnailImage == null){
             thumbnailImageName = null;
-        }else {
+        }
+        // 썸네일 변경
+        else {
             thumbnailImageName =                                                                                        // 썸네일 저장할 때 사용할 이름
                     dateFormat.format(now)
                             + "_"
@@ -156,38 +159,41 @@ public class ProjectController {
         }
 
         dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");                                                // 기존의 파일 양식을 DB에 저장할 양식으로 교체
+
         // ---------------------------------- 펀딩 세팅 -------------------------------------------------------------------
         Funding funding = new Funding();
         funding.setId(id);
         funding.setUserId(user);
         funding.setTitle(title);
+        funding.setMaxAmount(maxAmount);
+        funding.setCreatedAt(dateFormat.format(now));
+
         if (fundingCategoryId == null){
             funding.setFundingCategory(new FundingCategory(-1L));
         } else {
             funding.setFundingCategory(new FundingCategory(fundingCategoryId));
         }
 
+
+        // ============== 의미 없어보임
         if (thumbnailImage == null){
             funding.setThumbnail(null);
         }else {
             funding.setThumbnail(new Thumbnail(thumbnailImageName, thumbnailImage.getOriginalFilename()));
         }
-
-        funding.setMaxAmount(maxAmount);
-
+        // ========================
         if (start.equals("")){
             funding.setStartEnd(null);
         }else {
             funding.setStartEnd(start);
         }
-
         if (dead.equals("")){
             funding.setDeadLine(null);
         }else {
             funding.setDeadLine(dead);
         }
 
-        funding.setCreatedAt(dateFormat.format(now));
+
         // -------------------------------------------------------------------------------------------------------------
         if (projectService.createProject_1Level(funding, thumbnailImage, thumbnailImageName)) {                         // 프로젝트 덮어쓰기, 기존 썸네일 이미지 삭제, 새로운 썸네일 이미지 저장
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -195,6 +201,7 @@ public class ProjectController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
 
     /**
      * 프로젝트 2단계 저장

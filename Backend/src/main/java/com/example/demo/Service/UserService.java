@@ -2,6 +2,7 @@ package com.example.demo.Service;
 
 
 import com.example.demo.Config.BeanConfig;
+import com.example.demo.Config.JpaConfig;
 import com.example.demo.DTO.ProfileImage;
 import com.example.demo.DTO.State;
 import com.example.demo.DTO.User;
@@ -24,11 +25,11 @@ import java.util.Date;
 @Data
 public class UserService {
 
-    @Autowired
-    private EntityManager em;
+    //@Autowired
+    //private EntityManager em;
 
-    @Autowired
-    private EntityTransaction tr;
+    //@Autowired
+    //private EntityTransaction tr;
 
     @Autowired
     private BeanConfig beanConfig;
@@ -44,6 +45,7 @@ public class UserService {
      * @return userNum, nickName, loginTime을 세팅한 User 객체
      */
     public User setUserToHttpServletRequestAttribute(HttpServletRequest request){
+        EntityManager em = JpaConfig.emf.createEntityManager();
         try{
             System.out.println("setUserToHttpServletRequestAttribute = " + request.getAttribute("userNum"));
 
@@ -60,13 +62,16 @@ public class UserService {
             if (       user != null                                                                                     // 해당 userId에 대한 유저가 존재
                     && user.getState().getStateCode() == 0                                                              // 해당 유저의 stateCode가 0(활동중)인 상태임
                     && loginDate.after(logoutDate) == true) {                                                           // 로그아웃(logoutDate) 시간은 로그인(loginDate) 시간보다 이전(before)이다 == true == 탈취당한게 아님
+                em.close();
                 return user;
             } else {
+                em.close();
                 return null;
             }
         } catch (Exception e){
             System.out.println("UserService.setUserToHttpServletRequestAttribute()에서 인증 실패 !!!");
             e.printStackTrace();
+            em.close();
             return null;
         }
     }
@@ -82,6 +87,9 @@ public class UserService {
      * @return
      */
     public boolean changeUserImage(User user, MultipartFile imageFile, String imageName){
+        EntityManager em = JpaConfig.emf.createEntityManager();
+        EntityTransaction tr = em.getTransaction();
+
         User findUser = em.find(User.class, user.getUserId());
 
         if (!findUser.getProfileImage().getProfileImage().equals(beanConfig.DEFAULT_USER_IMAGE)){                       // 프로필 이미지가 default.png가 아닌경우
@@ -102,10 +110,12 @@ public class UserService {
 
             findUser.setProfileImage(newProfileImage);                                                                  // user 테이블에 반영
             tr.commit();
+            em.close();
             return true;
         } catch (Exception e){
             e.printStackTrace();
             tr.rollback();
+            em.close();
             return false;
         }
     }
@@ -118,7 +128,8 @@ public class UserService {
      * @return
      */
     public boolean deleteUserImage(Long userId) {
-
+        EntityManager em = JpaConfig.emf.createEntityManager();
+        EntityTransaction tr = em.getTransaction();
         try{
             User user = em.find(User.class, userId);
             if (!user.getProfileImage().getProfileImage().equals(beanConfig.DEFAULT_USER_IMAGE)){                       // 프로필 이미지가 default.png가 아닌경우
@@ -128,10 +139,12 @@ public class UserService {
             tr.begin();
             user.setProfileImage(new ProfileImage("default.png", "default.png"));             // 변경
             tr.commit();
+            em.close();
             return true;
         } catch (Exception e){
             tr.rollback();
             e.printStackTrace();
+            em.close();
             return false;
         }
     }

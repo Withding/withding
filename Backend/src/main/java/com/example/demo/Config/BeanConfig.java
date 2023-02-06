@@ -23,15 +23,15 @@ public class BeanConfig {
     private final int maxProjectArticleCount = 5;                                                                       // 프로젝트에 등록 가능한 물품 갯수
 
     public final String USER_PROFILE_DIRECTORY_NAME = "profileImages";                                                  // 유저 프로필 이미지 파일 저장 디렉터리명
-    public final String THUMBNAIL_DIRECTORY_NAME = "thumbnailImages";                                                     // 썸네일 이미지 파일 저장 디렉터리명
-    public final String CONTENT_DIRECTORY_NAME = "contentImages";                                                         // 컨텐트에 담기는 이미지 파일 디렉터리명
-    public final String ARTICLE_DIRECTORY_NAME = "articleImages";                                                         // 물품 이미지 파일 저장 디렉터리명
+    public final String THUMBNAIL_DIRECTORY_NAME = "thumbnailImages";                                                   // 썸네일 이미지 파일 저장 디렉터리명
+    public final String CONTENT_DIRECTORY_NAME = "contentImages";                                                       // 컨텐트에 담기는 이미지 파일 디렉터리명
+    public final String ARTICLE_DIRECTORY_NAME = "articleImages";                                                       // 물품 이미지 파일 저장 디렉터리명
 
     public final String PROFILE_IMAGE_URL = "/user/image/";                                                             // 유저 프로필 호출 URL
     public final String PROFILE_IMAGE_PATH = System.getProperty("user.dir") + File.separator + "profileImages/";        // 유저 이미지 파일 저장 경로
 
     public final String THUMBNAIL_IMAGE_URL = "/thumbnail/image/";                                                      // 썸네일 호출 URL
-    public final String THUMBNAIL_IMAGE_PATH = System.getProperty("user.dir") + File.separator + "thumbnailImages" + File.separator;    // 썸네일 이미지 파일 저장 경로
+    public final String THUMBNAIL_IMAGE_PATH = System.getProperty("user.dir") + File.separator + "thumbnailImages/";    // 썸네일 이미지 파일 저장 경로
 
     public final String CONTENT_IMAGE_URL = "/content/image/";                                                          // 컨텐츠 이미지 호출 URL
     public final String CONTENT_IMAGE_PATH = System.getProperty("user.dir") + File.separator + "contentImages/";        // 컨텐츠 이미지 파일 저장 경로
@@ -63,23 +63,6 @@ public class BeanConfig {
 
     @Value("${spring.security.oauth2.resourceserver.jwt.public-key-location}")
     private String jwtKey;
-
-
-
-    @Bean
-    public EntityManagerFactory emf(){
-        return Persistence.createEntityManagerFactory("withding");
-    }
-
-    @Bean
-    public EntityManager em(){
-        return this.emf().createEntityManager();
-    }
-
-    @Bean
-    public EntityTransaction tr(){
-        return em().getTransaction();
-    }
 
     @Bean
     public JavaMailSender javaMailSender() {
