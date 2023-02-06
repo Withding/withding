@@ -370,4 +370,31 @@ public class ProjectService {
         }
     }
 
+
+    /**
+     * 썸네일 파일 지우고, 썸네일 테이블에서 지우고, 해당 펀딩 글의 썸네일을 null로 변경
+     * @param id 썸네일이 변경될 펀딩 글
+     * @return 정상처리 true, 비정상처리 false
+     */
+    public boolean deleteThumbnail(Long id) {
+        EntityManager em = JpaConfig.emf.createEntityManager();
+        EntityTransaction tr = em.getTransaction();
+
+        try{
+            Funding funding = em.find(Funding.class, id);
+            tr.begin();
+            Thumbnail thumbnail = em.find(Thumbnail.class, funding.getThumbnail().getImage());
+            fileService.deleteImage(thumbnail.getImage(),beanConfig.THUMBNAIL_DIRECTORY_NAME);
+            em.remove(thumbnail);
+            funding.setThumbnail(null);
+            tr.commit();
+            em.close();
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            tr.rollback();
+            em.close();
+            return false;
+        }
+    }
 }
