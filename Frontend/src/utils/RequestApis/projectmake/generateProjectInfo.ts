@@ -27,7 +27,7 @@ function generateProjectInfo({
             targetAmount: values.targetAmount,
             startDate: values.startDate,
             endDate: values.endDate,
-            bestImage: values.bestImage,
+            bestImage: values.bestImage ?? "",
         }
     });
 }
