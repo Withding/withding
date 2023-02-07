@@ -7,6 +7,7 @@ import com.example.demo.DTO.Response.*;
 import com.example.demo.Service.ProjectService;
 import com.example.demo.Service.UserService;
 import lombok.Synchronized;
+import org.apache.tomcat.util.net.NioEndpoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -112,6 +113,9 @@ public class ProjectController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         // -------------------------------------------------------------------------------------------------------------
+        System.out.println("start = " + start);
+        System.out.println("dead = " + dead);;
+
         Date nowDate = null;
         Date startDate = null;
         Date endDate = null;
@@ -119,13 +123,17 @@ public class ProjectController {
         String nowTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(now);
 
         try {
-            if (!start.equals("") && start.length() <= 12) {
+            if (!start.equals("") && start.length() <= 10) {
                 start = start + " 00:00:00";
+                System.out.println("start = " + start);
                 startDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(start);
+                System.out.println("startDate = " + startDate);
             }
-            else if (!dead.equals("") && start.length() <= 12){
+            if (!dead.equals("") && dead.length() <= 10){
+                System.out.println("dead = " + dead);
                 dead = dead + " 23:59:59";
                 endDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dead);
+                System.out.println("endDate = " + endDate);
             }
             nowDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(nowTime);
         } catch (ParseException e) {
@@ -167,6 +175,17 @@ public class ProjectController {
         funding.setTitle(title);
         funding.setMaxAmount(maxAmount);
         funding.setCreatedAt(dateFormat.format(now));
+        if (start.equals("")){
+            funding.setStartEnd(null);
+        }else {
+            funding.setStartEnd(dateFormat.format(startDate));
+        }
+        if (dead.equals("")){
+            funding.setDeadLine(null);
+        }else {
+            funding.setDeadLine(dateFormat.format(endDate));
+        }
+
 
         if (fundingCategoryId == null){
             funding.setFundingCategory(new FundingCategory(-1L));
@@ -182,16 +201,6 @@ public class ProjectController {
             funding.setThumbnail(new Thumbnail(thumbnailImageName, thumbnailImage.getOriginalFilename()));
         }
         // ========================
-        if (start.equals("")){
-            funding.setStartEnd(null);
-        }else {
-            funding.setStartEnd(start);
-        }
-        if (dead.equals("")){
-            funding.setDeadLine(null);
-        }else {
-            funding.setDeadLine(dead);
-        }
 
 
         // -------------------------------------------------------------------------------------------------------------
@@ -301,7 +310,7 @@ public class ProjectController {
         // -------------------------------------------------------------------------------------------------------------
         GetProject_3Level getProject_3Level = new GetProject_3Level(projectService.getProject_3Level(projectId));
 
-        if (getProject_3Level.getArticles().size() == 0){
+        if (getProject_3Level.getArticles().size() != 0){
             return new ResponseEntity<>(getProject_3Level, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
