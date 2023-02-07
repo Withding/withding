@@ -1,7 +1,6 @@
 import { css } from "@emotion/react";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { AiOutlineCamera, AiOutlineClose } from "react-icons/ai";
-import useProjectParam from "@/hooks/useProjectParam";
 
 function PrevViewImageWrapper({ image, onRemove }:
     { image?: string, onRemove: () => void }
@@ -22,7 +21,6 @@ function BestImage(props: {
     onChangeValue: (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => void;
     onDeleteThumbnail: () => void;
 }) {
-    const project = useProjectParam();
     const imageRef = useRef<HTMLInputElement>(null);
     const [preViewImage, setPreViewImage] = useState<string | null>(null);
     const registerImageButtonClickHandler = useCallback(() => {
@@ -44,6 +42,7 @@ function BestImage(props: {
 
     const removePrevViewImageHandler = useCallback(() => {
         props.onDeleteThumbnail();
+        setPreViewImage(null);
     }, [props]);
 
     return (
