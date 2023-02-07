@@ -18,6 +18,7 @@ import javax.persistence.EntityTransaction;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -143,8 +144,6 @@ public class ProjectService {
                     Thumbnail newThumbnail = new Thumbnail(thumbnailImageName, thumbnailImage.getOriginalFilename());
                     em.persist(newThumbnail);
                     f.setThumbnail(newThumbnail);
-
-
                 }else {
                     throw new Exception();
                 }
@@ -290,12 +289,33 @@ public class ProjectService {
         EntityManager em = JpaConfig.emf.createEntityManager();
         EntityTransaction tr = em.getTransaction();
 
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        String nowString = null;
+        Date nowDate = null;
+        Date sendDate = null;
         try{
             // ------------------------------------------- 물품 갯수 5개인지 확인하는 부분 -------------------------------------
             Long projectCount = (Long) em.createQuery("SELECT count(a) FROM Article a WHERE a.fundingId.id =: projectId")
                                 .setParameter("projectId", projectId)
                                 .getSingleResult();
             //----------------------------------------------------------------------------------------------------------
+            if (article.getShippingDay().equals("")){
+                article.setShippingDay(null);
+            }
+            else if (!article.getShippingDay().equals("") && article.getShippingDay().length() <= 19) {
+                nowString = dateFormat.format(timestamp);
+                nowDate = dateFormat.parse(nowString);
+                sendDate = dateFormat.parse(article.getShippingDay() + " 00:00:00");
+                System.out.println("nowDate" + nowDate);
+                System.out.println("sendDate" + sendDate);
+                System.out.println("sendDate.after(nowDate) = " + sendDate.after(nowDate));
+                if (!sendDate.after(nowDate)){
+                    em.close();
+                    return false;
+                }
+            }
+
 
             if (projectCount <= beanConfig.getMaxProjectArticleCount()){                                                // DB에 저장된 물품이 5개 미만일때
                 tr.begin();
@@ -307,6 +327,7 @@ public class ProjectService {
                 em.close();
                 return true;
             } else {
+                em.close();
                 return false;
             }
         } catch (Exception e){
