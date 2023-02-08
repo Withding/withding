@@ -25,7 +25,6 @@ const ProjectMakeContext = React.createContext<ProjectMakeContextProps>({
             shippingDay: "",
             inventory: 0,
             name: "",
-            image: null
         },
         onChangeValue: (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {},
         addProduct: () => {},
