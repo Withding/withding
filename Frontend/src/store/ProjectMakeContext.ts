@@ -17,18 +17,6 @@ const ProjectMakeContext = React.createContext<ProjectMakeContextProps>({
     onChangeContent: () => {},
     onChangeStep1Values: (values: ProjectMakeValues) => {},
     onDeleteThumbnail: () => {},
-    product: {
-        values: {
-            description: "",
-            price: 0,
-            shippingPrice: -1,
-            shippingDay: "",
-            inventory: 0,
-            name: "",
-        },
-        onChangeValue: (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {},
-        addProduct: () => {},
-    }
 });
 
 export default ProjectMakeContext;

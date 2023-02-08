@@ -1,5 +1,5 @@
 import Button from "@/components/common/Button";
-import ProjectMakeContext from "@/store/ProjectMakeContext";
+import ProjectMakeProductsContext from "@/store/ProjectMakeProductsContext";
 import React, { useContext } from "react";
 import SectionStyle from "../SectionStyle";
 import ProductDescriptionInput from "./ProductDescriptionInput";
@@ -14,36 +14,37 @@ import ProductShppingPriceInput from "./ProductShppingPriceInput";
  * @returns 
  */
 function ProductInputForm() {
-    const { product } = useContext(ProjectMakeContext);
-    const { values, onChangeValue: onChangeProductValue, addProduct } = product;
+    const { product, onAddProduct } = useContext(ProjectMakeProductsContext);
+    const { values, onChangeValues } = product;
+
     return (
         <form
-            onSubmit={addProduct}
+            onSubmit={onAddProduct}
             css={SectionStyle}
         >
             <ProductNameInput
                 value={values.name}
-                onChangeValue={onChangeProductValue}
+                onChangeValue={onChangeValues}
             />
             <ProductDescriptionInput
                 value={values.description}
-                onChangeValue={onChangeProductValue}
+                onChangeValue={onChangeValues}
             />
             <ProductPriceInput
                 value={values.price.toString()}
-                onChangeValue={onChangeProductValue}
+                onChangeValue={onChangeValues}
             />
             <ProductShppingPriceInput
                 value={values.shippingPrice.toString()}
-                onChangeValue={onChangeProductValue}
+                onChangeValue={onChangeValues}
             />
             <ProductShippingDay
                 value={values.shippingDay}
-                onChangeValue={onChangeProductValue}
+                onChangeValue={onChangeValues}
             />
             <ProductinventoryInput
                 value={values.inventory.toString()}
-                onChangeValue={onChangeProductValue}
+                onChangeValue={onChangeValues}
             />
             <Button
                 value="추가"

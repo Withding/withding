@@ -22,15 +22,7 @@ import deleteThumbnail from "@/utils/RequestApis/projectmake/deleteThumbnail";
  * @returns 
  */
 
-const PRODUCT_INIT = {
-    description: "",
-    price: 0,
-    shippingPrice: -1,
-    shippingDay: "",
-    inventory: 0,
-    name: "",
-    image: null
-};
+
 function Make() {
     const step = useStepParam();
     const project = useProjectParam();
@@ -39,12 +31,7 @@ function Make() {
     const { mutate: projectInfoMutate } = useMutation(generateProjectInfo);
     // 프로젝트 상세 내용 임시 저장 요청
     const { mutate: projectContentMutate } = useMutation(generateProjectContent);
-    // 프로젝트 아이템 추가 요청
-    const { mutate: addProductMutate } = useMutation(addProduct, {
-        onSuccess: () => {
-            setProduct(PRODUCT_INIT);
-        }
-    });
+
     // 프로젝트 썸네일 이미지 삭제 요청
     const { mutate: deleteThumbnailMutate } = useMutation(deleteThumbnail);
 
@@ -58,7 +45,7 @@ function Make() {
         preViewImage: null
     });
 
-    const [product, setProduct] = useState<Product>(PRODUCT_INIT);
+
 
 
     const generateInfo = useCallback(() => {
@@ -109,11 +96,6 @@ function Make() {
         });
     }, [values]);
 
-    const addProductHandler = useCallback((e: React.FormEvent<HTMLElement>) => {
-        e.preventDefault();
-        addProductMutate({ project, values: product });
-    }, [addProductMutate, product, project]);
-
     const onChangeValue = useCallback(
         (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
             const { name, value } = e.target;
@@ -132,14 +114,6 @@ function Make() {
             });
         }, [values]);
 
-    const onChangeProductValue =
-        useCallback((e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
-            const { name, value } = e.target;
-            setProduct({
-                ...product,
-                [name]: value
-            });
-        }, [product]);
 
     return (
         <Wrapper>
@@ -150,11 +124,6 @@ function Make() {
                 onChangeContent,
                 onChangeStep1Values: onChangeStep1ValuesHandler,
                 onDeleteThumbnail: thumbnailImageDeleteHandler,
-                product: {
-                    values: product,
-                    onChangeValue: onChangeProductValue,
-                    addProduct: addProductHandler
-                }
             }}>
                 <ProcedureNavigator
                     list={episode}

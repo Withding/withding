@@ -9,6 +9,9 @@ import ProductItem from "./ProductItem";
  */
 function ProductsList() {
     const { products } = useContext(ProjectMakeProductsContext);
+
+    if (products.length === 0) return null;
+
     return (
         <ul css={style}>
             {products.map((product, index) => (

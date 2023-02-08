@@ -1,12 +1,23 @@
 import AlertBox from "@/components/common/AlertBox";
-import React from "react";
+import React, { useCallback, useState } from "react";
 import ProductInputForm from "./ProductInputForm";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import useProjectParam from "@/hooks/useProjectParam";
 import fetchProductList from "@/utils/RequestApis/projectmake/fetchProductList";
 import ProjectMakeProductsContext from "@/store/ProjectMakeProductsContext";
 import Product from "@/types/Product";
 import ProductsList from "./ProductsList";
+import addProduct from "@/utils/RequestApis/projectmake/addProduct";
+
+const PRODUCT_INIT = {
+    description: "",
+    price: 0,
+    shippingPrice: -1,
+    shippingDay: "",
+    inventory: 0,
+    name: "",
+    image: null
+};
 
 /**
  * 프로젝트 생성시 물건 등록하는 컴포넌트
@@ -14,33 +25,8 @@ import ProductsList from "./ProductsList";
  */
 function Products() {
     const project = useProjectParam();
-    const [products, setProducts] = React.useState<Product[]>([
-        {
-            name: "test",
-            description: "test",
-            price: 1000,
-            shippingPrice: 1000,
-            shippingDay: "test",
-            inventory: 1000,
-        },
-        {
-            name: "test",
-            description: "test",
-            price: 1000,
-            shippingPrice: 1000,
-            shippingDay: "test",
-            inventory: 1000,
-        },
-        {
-            name: "test",
-            description: "test",
-            price: 1000,
-            shippingPrice: 1000,
-            shippingDay: "test",
-            inventory: 1000,
-        }
-
-    ]);
+    const [product, setProduct] = useState<Product>(PRODUCT_INIT);
+    const [products, setProducts] = React.useState<Product[]>([]);
     const { data } = useQuery(["makeProductList", project], () => fetchProductList(project), {
         useErrorBoundary: false,
         onSuccess: (data) => {
@@ -48,9 +34,35 @@ function Products() {
         }
     });
 
+    // 프로젝트 아이템 추가 요청
+    const { mutate: addProductMutate } = useMutation(addProduct, {
+        onSuccess: () => {
+            setProduct(PRODUCT_INIT);
+        }
+    });
+
+    const onChangeProductValue =
+        useCallback((e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
+            const { name, value } = e.target;
+            setProduct({
+                ...product,
+                [name]: value
+            });
+        }, [product]);
+
+    const addProductHandler = useCallback((e: React.FormEvent<HTMLElement>) => {
+        e.preventDefault();
+        addProductMutate({ project, values: product });
+    }, [addProductMutate, product, project]);
+
     return (
         <ProjectMakeProductsContext.Provider value={{
             products,
+            onAddProduct: addProductHandler,
+            product: {
+                values: product,
+                onChangeValues: onChangeProductValue
+            }
         }}>
             <article>
                 <h1>상품 등록</h1>
