@@ -352,6 +352,7 @@ public class ProjectService {
             List<Article> articles = em.createQuery("SELECT a FROM Article a WHERE a.fundingId.id =: projectId")
                     .setParameter("projectId", projectId)
                     .getResultList();
+            System.out.println(articles);
             em.close();
             return articles;
         } catch (Exception e){
