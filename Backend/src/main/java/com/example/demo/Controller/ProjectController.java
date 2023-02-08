@@ -308,13 +308,10 @@ public class ProjectController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         // -------------------------------------------------------------------------------------------------------------
-        GetProject_3Level getProject_3Level = new GetProject_3Level(projectService.getProject_3Level(projectId));
 
-        if (getProject_3Level.getArticles().size() != 0){
-            return new ResponseEntity<>(getProject_3Level, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+        GetProject_3Level getProject_3Level = new GetProject_3Level(projectService.getProject_3Level(projectId));
+        return new ResponseEntity<>(getProject_3Level, HttpStatus.OK);
+        
     }
 
 
