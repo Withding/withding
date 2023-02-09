@@ -11,7 +11,7 @@ function addProduct({
 }: {
     project: number,
     values: Product
-}): Promise<AxiosResponse> {
+}): Promise<Product> {
     const axios = customAxios();
     const user = JSON.parse(localStorage.getItem("user") || "{}");
     const accessToken = user?.accessToken;

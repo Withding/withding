@@ -10,6 +10,7 @@
  * @inventory 재고
  */
 interface Product {
+    id?: number;
     name: string;
     description: string;
     price: number;

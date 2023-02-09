@@ -18,7 +18,7 @@ function ProductsList() {
                 <ProductItem
                     key={index}
                     {...product}
-                    index={index = 1}
+                    index={index + 1}
                 />
             ))}
         </ul>
@@ -39,8 +39,6 @@ const style = css`
     li:not(:last-child) {
         margin-bottom: 1rem;
     }
-
-  
 `;
 
 export default ProductsList;
