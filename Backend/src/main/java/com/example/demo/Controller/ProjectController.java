@@ -113,29 +113,38 @@ public class ProjectController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         // -------------------------------------------------------------------------------------------------------------
-        System.out.println("start = " + start);
-        System.out.println("dead = " + dead);;
 
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date nowDate = null;
         Date startDate = null;
         Date endDate = null;
         Timestamp now = new Timestamp(System.currentTimeMillis());                                                      // 현재 시간
-        String nowTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(now);
+        String nowTime = dateFormat.format(now);
 
+        String strStart = "";
+        String strEnd = "";
         try {
             if (!start.equals("") && start.length() <= 10) {
                 start = start + " 00:00:00";
                 System.out.println("start = " + start);
-                startDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(start);
+                startDate = dateFormat.parse(start);
                 System.out.println("startDate = " + startDate);
+                strStart = dateFormat.format(startDate.getTime());
             }
+            else {
+                start = "";
+            }
+
             if (!dead.equals("") && dead.length() <= 10){
                 System.out.println("dead = " + dead);
                 dead = dead + " 23:59:59";
-                endDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dead);
+                endDate = dateFormat.parse(dead);
                 System.out.println("endDate = " + endDate);
+                strEnd = dateFormat.format(endDate.getTime());
+            } else {
+                dead = "";
             }
-            nowDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(nowTime);
+            nowDate = dateFormat.parse(nowTime);
         } catch (ParseException e) {
             e.printStackTrace();
             return null;
@@ -152,7 +161,7 @@ public class ProjectController {
         }
 
         String thumbnailImageName;
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");                               // 썸네일 파일 저장에 사용할 양식 획득
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");                               // 썸네일 파일 저장에 사용할 양식 획득
 
         // 기존 썸네일 유지
         if (thumbnailImage == null){
@@ -178,12 +187,12 @@ public class ProjectController {
         if (start.equals("")){
             funding.setStartEnd(null);
         }else {
-            funding.setStartEnd(dateFormat.format(startDate));
+            funding.setStartEnd(strStart);
         }
         if (dead.equals("")){
             funding.setDeadLine(null);
         }else {
-            funding.setDeadLine(dateFormat.format(endDate));
+            funding.setDeadLine(strEnd);
         }
 
 
@@ -342,6 +351,37 @@ public class ProjectController {
         }
     }
 
+    /**
+     * 프로젝트 최종 검사 후 등록하는 컨트롤러
+     * @param projectId 프로젝트 Id
+     * @param request request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
+     * @return
+     */
+    @RequestMapping(value = "/projects/{ProjectNum}", method = RequestMethod.PATCH)
+    public ResponseEntity<Object> createProject(@PathVariable("ProjectNum")Long projectId,
+                                                HttpServletRequest request){
+
+        // ------------------------------ 인증 --------------------------------------------------------------------------
+        User user = userService.setUserToHttpServletRequestAttribute(request);
+        if ((user == null) || (projectService.isUserToProject(user, projectId) == false) ){                             // 인증 || 기존에 글을 작성하던 작성자인지 확인 해당 함수
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        // -------------------------------------------------------------------------------------------------------------
+        String responseCode = projectService.createProject(projectId);
+
+        switch (responseCode){
+            case "0":
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            case "1":
+            case "2":
+                return new ResponseEntity<>(responseCode ,HttpStatus.BAD_REQUEST);
+            default:                                                                                                    // 트라이 캣치 같은 곳에서 에러난 경우
+                return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+    }
+
+
+
 
     /**
      * 프로젝트 내용에 삽입되는 이미지 파일을 저장하는 컨트롤러
@@ -373,7 +413,14 @@ public class ProjectController {
         }
     }
 
-    
+
+
+
+
+
+
+
+
     /**
      * 프로젝트 카테고리 호출
      * @return 정상 = 200 + 카테고리 목록, 비정상 = 400

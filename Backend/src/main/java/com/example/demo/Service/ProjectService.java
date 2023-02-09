@@ -32,11 +32,6 @@ public class ProjectService {
     @Autowired
     private FileService fileService;
 
-    //@Autowired
-    //private EntityManager em;
-
-    //@Autowired
-    //private EntityTransaction tr;
 
 
     /**
@@ -404,6 +399,8 @@ public class ProjectService {
             Funding funding = em.find(Funding.class, id);
             tr.begin();
             Thumbnail thumbnail = em.find(Thumbnail.class, funding.getThumbnail().getImage());
+
+
             fileService.deleteImage(thumbnail.getImage(),beanConfig.THUMBNAIL_DIRECTORY_NAME);
             em.remove(thumbnail);
             funding.setThumbnail(null);
@@ -416,5 +413,65 @@ public class ProjectService {
             em.close();
             return false;
         }
+    }
+
+
+    /**
+     * 프로젝트 최종 유효성 검사 후 stateCode를 수정하여 최종 등록하는 함수
+     * @param projectId 프로젝트 Id
+     * @return 1단계 유효성 검사 오류 = "1", 2단계 유효성 검사 오류 = "2", 비정상 처리 = "3", 통과 = "0"
+     */
+    public String createProject(Long projectId) {
+        EntityManager em = JpaConfig.emf.createEntityManager();
+        EntityTransaction tr = em.getTransaction();
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String startStr = dateFormat.format(new Timestamp(System.currentTimeMillis()));
+
+        try{
+            Funding funding = em.find(Funding.class, projectId);
+
+            String fundingValidateStateCode = funding.fundingValidate();
+            switch (fundingValidateStateCode){
+                case "0":               // 통과
+                    break;
+                case "1":               // 1단계 유효성 검사 실패
+                    System.out.println("------------------------------------------------------------------------------");
+                    System.out.println("funding.fundingValidate()에러 -> stateCode : " + fundingValidateStateCode);
+                    System.out.println("-------------------------------------------------------------------------------");
+                    em.close();
+                    return "1";
+                case "2":               // 2단계 유효성 검사 실패
+                    System.out.println("------------------------------------------------------------------------------");
+                    System.out.println("funding.fundingValidate()에러 -> stateCode : " + fundingValidateStateCode);
+                    System.out.println("------------------------------------------------------------------------------");
+                    em.close();
+                    return "2";
+            }
+
+            Date nowDate = dateFormat.parse(startStr);
+            Date startDate = dateFormat.parse(funding.getStartEnd());
+            tr.begin();
+
+            // ----------------------------- funding state code를 설정해주는 판별 -------------------------------------------
+            if (startDate.after(nowDate) == true) {
+                funding.setFundingStateCode(new FundingStateCode(0));
+            } else if (startDate.before(nowDate) == true || startDate.getTime() == nowDate.getTime()){
+                funding.setFundingStateCode(new FundingStateCode(1));
+            } else {
+                em.close();
+                return "3";
+            }
+            // ---------------------------------------------------------------------------------------------------------
+            tr.commit();
+            em.close();
+            return "0";
+        } catch (Exception e){
+            e.printStackTrace();
+            tr.rollback();
+            em.close();
+            return "3";
+        }
+
     }
 }
