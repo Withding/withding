@@ -27,7 +27,6 @@ function NumberInput(props: NumberInputProps & BaseProps) {
     const MAX = useMemo(() => props.MAX, [props.MAX]);
     const MIN = useMemo(() => props.MIN, [props.MIN]);
     const [error, setError] = useState(false);
-
     const onChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         const { value } = e.target;
         const newValue = value.replaceAll(",", "");
@@ -103,4 +102,4 @@ const style = css`
 `;
 
 
-export default NumberInput;
+export default React.memo(NumberInput);

@@ -25,14 +25,12 @@ const PRODUCT_INIT = {
  */
 function Products() {
     const project = useProjectParam();
-    const [product, setProduct] = useState<Product>(PRODUCT_INIT);
-    const [products, setProducts] = useState<Product[]>([]);
     const { data } = useQuery(["makeProductList", project], () => fetchProductList(project), {
-        useErrorBoundary: false,
-        onSuccess: (data) => {
-            setProducts(data.articles);
-        }
     });
+
+
+    const [product, setProduct] = useState<Product>(PRODUCT_INIT);
+    const [products, setProducts] = useState<Product[]>(data?.articles ?? []);
 
     // 프로젝트 아이템 추가 요청
     const { mutate: addProductMutate } = useMutation(addProduct, {
@@ -71,6 +69,8 @@ function Products() {
         if (!isProductValid()) return;
         addProductMutate({ project, values: product });
     }, [addProductMutate, product, project, isProductValid]);
+
+    console.log(products);
 
     return (
         <ProjectMakeProductsContext.Provider value={{

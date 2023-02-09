@@ -18,7 +18,7 @@ function ProductsList() {
                 <ProductItem
                     key={index}
                     {...product}
-                    index={index = 1}
+                    index={index + 1}
                 />
             ))}
         </ul>
