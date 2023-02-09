@@ -16,7 +16,7 @@ function ProductShppingPriceInput(props: ProductComponentProps) {
             MIN={MIN_AMOUNT}
             onChangeValue={props.onChangeValue}
             input={{
-                name: "shppingPrice",
+                name: "shippingPrice",
                 placeholder: "배송시 발생되는 비용을 입력해주세요.",
                 value: props.value,
             }}

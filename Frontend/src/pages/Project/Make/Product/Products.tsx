@@ -12,7 +12,7 @@ import addProduct from "@/utils/RequestApis/projectmake/addProduct";
 const PRODUCT_INIT = {
     description: "",
     price: 0,
-    shippingPrice: -1,
+    shippingPrice: 0,
     shippingDay: "",
     inventory: 0,
     name: "",
@@ -26,7 +26,7 @@ const PRODUCT_INIT = {
 function Products() {
     const project = useProjectParam();
     const [product, setProduct] = useState<Product>(PRODUCT_INIT);
-    const [products, setProducts] = React.useState<Product[]>([]);
+    const [products, setProducts] = useState<Product[]>([]);
     const { data } = useQuery(["makeProductList", project], () => fetchProductList(project), {
         useErrorBoundary: false,
         onSuccess: (data) => {
@@ -36,8 +36,9 @@ function Products() {
 
     // 프로젝트 아이템 추가 요청
     const { mutate: addProductMutate } = useMutation(addProduct, {
-        onSuccess: () => {
+        onSuccess: (data) => {
             setProduct(PRODUCT_INIT);
+            setProducts(() => products.concat(data));
         }
     });
 
@@ -50,10 +51,26 @@ function Products() {
             });
         }, [product]);
 
+    const isProductValid = useCallback(() => {
+        if (
+            product.description === "" ||
+            product.price < 1000 ||
+            product.name === "" ||
+            product.shippingPrice === 0 ||
+            product.shippingDay === "" ||
+            product.inventory === 0
+        ) {
+            return false;
+        }
+        else
+            return true;
+    }, [product]);
+
     const addProductHandler = useCallback((e: React.FormEvent<HTMLElement>) => {
         e.preventDefault();
+        if (!isProductValid()) return;
         addProductMutate({ project, values: product });
-    }, [addProductMutate, product, project]);
+    }, [addProductMutate, product, project, isProductValid]);
 
     return (
         <ProjectMakeProductsContext.Provider value={{
