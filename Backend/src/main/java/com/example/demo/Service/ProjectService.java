@@ -285,7 +285,7 @@ public class ProjectService {
      * @param article 물건정보가 담긴 article 객체
      * @return
      */
-    public boolean createProject_3Level(Long projectId, Article article) {
+    public Article createProject_3Level(Long projectId, Article article) {
         EntityManager em = JpaConfig.emf.createEntityManager();
         EntityTransaction tr = em.getTransaction();
 
@@ -312,7 +312,7 @@ public class ProjectService {
                 System.out.println("sendDate.after(nowDate) = " + sendDate.after(nowDate));
                 if (!sendDate.after(nowDate)){
                     em.close();
-                    return false;
+                    return null;
                 }
             }
 
@@ -324,17 +324,19 @@ public class ProjectService {
                 article.setFundingId(funding);
                 em.persist(article);
                 tr.commit();
+                em.clear();
+                em.find(Article.class, article.getId());
                 em.close();
-                return true;
+                return article;
             } else {
                 em.close();
-                return false;
+                return null;
             }
         } catch (Exception e){
             e.printStackTrace();
             tr.rollback();
             em.close();
-            return false;
+            return null;
         }
 
 
