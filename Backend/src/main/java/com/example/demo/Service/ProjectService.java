@@ -300,27 +300,25 @@ public class ProjectService {
                                 .setParameter("projectId", projectId)
                                 .getSingleResult();
             //----------------------------------------------------------------------------------------------------------
-            if (article.getShippingDay().equals("")){
-                article.setShippingDay(null);
+            if (article.articleValidate() == false)     // article.articleValidate() == false -> 물품 유효성 오류
+            {
+                return null;
             }
-            else if (!article.getShippingDay().equals("") && article.getShippingDay().length() <= 19) {
+            else if (article.getShippingDay().length() <= 19) {
                 nowString = dateFormat.format(timestamp);
                 nowDate = dateFormat.parse(nowString);
                 sendDate = dateFormat.parse(article.getShippingDay() + " 00:00:00");
-                System.out.println("nowDate" + nowDate);
-                System.out.println("sendDate" + sendDate);
-                System.out.println("sendDate.after(nowDate) = " + sendDate.after(nowDate));
+
+                // 배송일 검증 (오늘 기준으로 배송일이 과거이거나 오늘날짜라면 오류, 내일부터 가능)
                 if (!sendDate.after(nowDate)){
                     em.close();
                     return null;
                 }
             }
 
-
             if (projectCount <= beanConfig.getMaxProjectArticleCount()){                                                // DB에 저장된 물품이 5개 미만일때
-                tr.begin();
                 Funding funding = em.find(Funding.class, projectId);
-                System.out.println(article);
+                tr.begin();
                 article.setFundingId(funding);
                 em.persist(article);
                 tr.commit();
@@ -338,8 +336,6 @@ public class ProjectService {
             em.close();
             return null;
         }
-
-
     }
 
 
