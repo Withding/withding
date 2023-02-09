@@ -35,8 +35,8 @@ function Products() {
     // 프로젝트 아이템 추가 요청
     const { mutate: addProductMutate } = useMutation(addProduct, {
         onSuccess: (data) => {
-            setProduct(PRODUCT_INIT);
             setProducts(() => products.concat(data));
+            setProduct(PRODUCT_INIT);
         }
     });
 

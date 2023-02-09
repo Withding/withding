@@ -16,7 +16,7 @@ import ProductShppingPriceInput from "./ProductShppingPriceInput";
 function ProductInputForm() {
     const { product, onAddProduct } = useContext(ProjectMakeProductsContext);
     const { values, onChangeValues } = product;
-
+    console.log(values);
     return (
         <form
             onSubmit={onAddProduct}

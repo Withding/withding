@@ -14,11 +14,12 @@ function TargetAmount(props: ProjectInfoComponentProps) {
             label="목표 금액"
             MAX={MAX_AMOUNT}
             MIN={MIN_AMOUNT}
-            onChangeValue={props.onChangeValue}
+
             input={{
                 name: "targetAmount",
                 placeholder: "목표 금액을 입력해주세요",
-                value: props.value || 0
+                value: props.value || 0,
+                onChangeValue: props.onChangeValue
             }}
             subDescription={
                 `금액은 ${MIN_AMOUNT.toLocaleString("ko-KR")}원 이상

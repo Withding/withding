@@ -14,11 +14,12 @@ function ProductShppingPriceInput(props: ProductComponentProps) {
             label="배송비"
             MAX={MAX_AMOUNT}
             MIN={MIN_AMOUNT}
-            onChangeValue={props.onChangeValue}
+
             input={{
                 name: "shippingPrice",
                 placeholder: "배송시 발생되는 비용을 입력해주세요.",
                 value: props.value,
+                onChangeValue: props.onChangeValue
             }}
             subDescription={
                 `배송비는 ${MIN_AMOUNT.toLocaleString("ko-KR")}원 이상

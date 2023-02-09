@@ -12,11 +12,11 @@ function ProductinventoryInput(props: ProductComponentProps) {
             label="상품 재고 수량"
             MAX={10000}
             MIN={1}
-            onChangeValue={props.onChangeValue}
             input={{
                 name: "inventory",
                 placeholder: "상품 재고 수량을 입력해주세요.",
                 value: props.value,
+                onChangeValue: props.onChangeValue
             }}
             subDescription="상품 재고 수량을 입력해주세요."
             unit="개"

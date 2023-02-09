@@ -39,8 +39,6 @@ const style = css`
     li:not(:last-child) {
         margin-bottom: 1rem;
     }
-
-  
 `;
 
 export default ProductsList;
