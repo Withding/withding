@@ -45,6 +45,10 @@ public class Article {
     private Funding fundingId;                  // 프로젝트 번호
 
 
+    /**
+     * 물품 등록(프로젝트 3단계 저장) 유효성 검사에서 사용되는 함수
+     * @return 정상 true, 비정상 false
+     */
     public boolean articleValidate(){
         if (    (this.getName() == null || this.getName().equals("")) ||                                                // 물품 이름이 null 이거나 값이 없으면 안 됨
                 (this.getDescription() == null || this.getDescription().equals("")) ||                                  // 물품 설명이 null 이거나 값이 없으면 안 됨

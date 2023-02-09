@@ -19,4 +19,9 @@ public class FundingStateCode {
 
     @Column(name = "state")
     private String state;
+
+    public FundingStateCode(int stateCode){
+        this.stateCode = stateCode;
+    }
+
 }
