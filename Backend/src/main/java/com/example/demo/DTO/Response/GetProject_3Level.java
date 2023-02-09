@@ -20,7 +20,7 @@ public class GetProject_3Level {
 
         for (int i = 0; i < articles.size(); i++){
             Product product = new Product();
-            product.setId(articles.get(i).getArticleId());
+            product.setId(articles.get(i).getId());
             //product.setImage(articles.get(i).getArticleImage());
             product.setName(articles.get(i).getName());
             product.setDescription(articles.get(i).getDescription());

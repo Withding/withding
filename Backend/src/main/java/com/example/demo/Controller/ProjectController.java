@@ -284,8 +284,10 @@ public class ProjectController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         // -------------------------------------------------------------------------------------------------------------
-        if (projectService.createProject_3Level(projectId, article)){
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        article = projectService.createProject_3Level(projectId, article);
+        if (article != null){
+            article.setFundingId(null);
+            return new ResponseEntity<>(article, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -333,7 +335,7 @@ public class ProjectController {
         }
         // -------------------------------------------------------------------------------------------------------------
 
-        if (projectService.deleteProject_3Level(projectId, article.getArticleId()) == true){
+        if (projectService.deleteProject_3Level(projectId, article.getId()) == true){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
