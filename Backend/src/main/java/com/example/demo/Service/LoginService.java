@@ -183,7 +183,7 @@ public class LoginService {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String logoutString = dateFormat.format(new Timestamp(System.currentTimeMillis()));
             tr.begin();
-            em.persist(user);
+            em.detach(user);
             user.setLogoutAt(logoutString);
             tr.commit();
             em.close();

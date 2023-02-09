@@ -51,7 +51,7 @@ public class User {
 
     private Long point;                 // 보유 포인트
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne
     @JoinColumn(name = "state_code")
     private State state;                // 회원 상태
 

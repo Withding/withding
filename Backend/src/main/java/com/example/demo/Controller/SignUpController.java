@@ -143,7 +143,7 @@ public class SignUpController {
         user.setPassword(bCryptPasswordEncoder.encode(request.getPassword()));                                          // User 객체의 pwd 단방향 암호화
         user.setEmail(encryptEmail);
         user.setCreatedAt(now);
-        user.setLogoutAt(dateFormat.format(now));
+        user.setLogoutAt(now);
         user.setNickName(request.getNickName());
 
         List<EmailAuth> emailAuths = emailAuthRepo.getEmailAuthCountToSecretKeyAndEmail(emailAuth);
