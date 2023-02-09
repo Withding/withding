@@ -1,6 +1,7 @@
+import ProjectMakeProductsContext from "@/store/ProjectMakeProductsContext";
 import Product from "@/types/Product";
 import { css } from "@emotion/react";
-import React from "react";
+import React, { useContext } from "react";
 import { RiDeleteBinLine } from "react-icons/ri";
 
 /**
@@ -8,10 +9,13 @@ import { RiDeleteBinLine } from "react-icons/ri";
  * @returns 
  */
 function ProductItem(props: Product & { index: number }) {
+    const { onDeleteProduct } = useContext(ProjectMakeProductsContext);
     return (
         <li css={style}>
             <span>{`${props.index}. ${props.name}`}</span>
-            <RiDeleteBinLine />
+            <RiDeleteBinLine
+                onClick={() => onDeleteProduct(props.id ?? -1)}
+            />
         </li>
     );
 }
@@ -37,6 +41,6 @@ const style = css`
     &:hover {
         box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
     }
-`
+`;
 
 export default ProductItem;

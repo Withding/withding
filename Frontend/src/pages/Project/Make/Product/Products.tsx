@@ -8,6 +8,7 @@ import ProjectMakeProductsContext from "@/store/ProjectMakeProductsContext";
 import Product from "@/types/Product";
 import ProductsList from "./ProductsList";
 import addProduct from "@/utils/RequestApis/projectmake/addProduct";
+import deleteProduct from "@/utils/RequestApis/projectmake/deleteProduct";
 
 const PRODUCT_INIT = {
     description: "",
@@ -28,15 +29,22 @@ function Products() {
     const { data } = useQuery(["makeProductList", project], () => fetchProductList(project), {
     });
 
-
     const [product, setProduct] = useState<Product>(PRODUCT_INIT);
     const [products, setProducts] = useState<Product[]>(data?.articles ?? []);
 
-    // 프로젝트 아이템 추가 요청
+    // 프로젝트 상품 추가 요청
     const { mutate: addProductMutate } = useMutation(addProduct, {
         onSuccess: (data) => {
             setProducts(() => products.concat(data));
             setProduct(PRODUCT_INIT);
+        }
+    });
+
+    // 프로젝트 상품 삭제 요청
+    const { mutate: deleteProductMutate } = useMutation(deleteProduct, {
+        onSuccess: (response) => {
+            if (response.status === 204)
+                setProducts(products.filter((product) => product.id !== product.id));
         }
     });
 
@@ -70,12 +78,15 @@ function Products() {
         addProductMutate({ project, values: product });
     }, [addProductMutate, product, project, isProductValid]);
 
-    console.log(products);
+    const deleteProductHandler = useCallback((id: number) => {
+        deleteProductMutate({ project, productId: id });
+    }, [deleteProductMutate, project]);
 
     return (
         <ProjectMakeProductsContext.Provider value={{
             products,
             onAddProduct: addProductHandler,
+            onDeleteProduct: deleteProductHandler,
             product: {
                 values: product,
                 onChangeValues: onChangeProductValue
