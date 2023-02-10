@@ -35,17 +35,19 @@ public class ProjectService {
 
 
     /**
-     * 해당 유저가 글을 작성하던 유저인지 확인
+     * 해당 유저가 글을 작성하던 유저인지 확인하고 해당 프로젝트의 상태가 작성중인지 확인
      * @param requestUser 작성을 요청한 유저
      * @param id 작성 요청한 프로젝트 Id
-     * @return 작성자가 맞으면 true, 아니면 false
+     * @return 작성자가 맞고, 해당 프로젝트 글이 작성중인 상태라면 true, 아니면 false
      */
     public boolean isUserToProject(User requestUser, Long id) {
         EntityManager em = JpaConfig.emf.createEntityManager();
 
         try{
-            User findUser = em.find(Funding.class, id).getUserId();
-            if (requestUser.getUserId() == findUser.getUserId()){
+            Funding funding = em.find(Funding.class, id);
+            User findUser = funding.getUserId();
+            int fundingStateCode = funding.getFundingStateCode().getStateCode();
+            if (requestUser.getUserId() == findUser.getUserId() || fundingStateCode == 4){
                 em.close();
                 return true;
             } else {
