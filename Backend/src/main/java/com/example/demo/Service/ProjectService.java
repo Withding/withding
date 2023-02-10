@@ -188,12 +188,12 @@ public class ProjectService {
             if (funding.getDeadLine() == null){
                 getProject_1Level.setEndDate("");
             }else {
-                getProject_1Level.setEndDate(funding.getDeadLine());
+                getProject_1Level.setEndDate(funding.getDeadLine().substring(0,10));
             }
             if (funding.getStartEnd() == null){
                 getProject_1Level.setStartDate("");
             }else {
-                getProject_1Level.setStartDate(funding.getStartEnd());
+                getProject_1Level.setStartDate(funding.getStartEnd().substring(0,10));
             }
 
             getProject_1Level.setCategory(funding.getFundingCategory().getId());
@@ -431,7 +431,7 @@ public class ProjectService {
         try{
             Funding funding = em.find(Funding.class, projectId);
 
-            String fundingValidateStateCode = funding.fundingValidate();
+            String fundingValidateStateCode = fundingValidate(funding);
             switch (fundingValidateStateCode){
                 case "0":               // 통과
                     break;
@@ -447,6 +447,16 @@ public class ProjectService {
                     System.out.println("------------------------------------------------------------------------------");
                     em.close();
                     return "2";
+                case "3":               // 3단계 유효성 검사 실패
+                    System.out.println("------------------------------------------------------------------------------");
+                    System.out.println("funding.fundingValidate()에러 -> stateCode : " + fundingValidateStateCode);
+                    System.out.println("------------------------------------------------------------------------------");
+                    return "3";
+                default:                // 비정상 동작(캣치문으로 들어옴) 에러
+                    System.out.println("------------------------------------------------------------------------------");
+                    System.out.println("funding.fundingValidate()에러 -> stateCode : " + fundingValidateStateCode);
+                    System.out.println("------------------------------------------------------------------------------");
+                    return "4";
             }
 
             Date nowDate = dateFormat.parse(startStr);
@@ -460,7 +470,7 @@ public class ProjectService {
                 funding.setFundingStateCode(new FundingStateCode(1));
             } else {
                 em.close();
-                return "3";
+                return "4";
             }
             // ---------------------------------------------------------------------------------------------------------
             tr.commit();
@@ -470,8 +480,68 @@ public class ProjectService {
             e.printStackTrace();
             tr.rollback();
             em.close();
-            return "3";
+            return "4";
         }
 
     }
+
+
+    /**
+     * 펀딩 최종 유효성 검사 함수
+     * @param funding 검증할 funding 객체
+     * @return 통과 = "0", 1단계 유효성 검사 오류 = "1", 2단계 유효성 검사 오류 = "2", 3단계 유효성 검사 오류 = "3", 비정상 동작 = "4"
+     */
+    public String fundingValidate(Funding funding) {
+        EntityManager em = JpaConfig.emf.createEntityManager();
+        EntityTransaction tr = em.getTransaction();
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date startDate;
+        Date endDate;
+        try {
+            startDate = dateFormat.parse(funding.getStartEnd());
+            endDate = dateFormat.parse(funding.getDeadLine());
+        } catch (Exception e) {
+            e.printStackTrace();
+            em.close();
+            return "1";             // 원래라면 캣치문으로 빠진 비정상 동작 에러("4")가 맞지만 1단계 날짜의 변환중에 빠진 에러이므로 "1"로 설정
+        }
+
+        Long alticleCount = (Long) em.createQuery("SELECT count(a) FROM Article a WHERE a.fundingId.id =: Id")
+                            .setParameter("Id", funding.getId())
+                            .getSingleResult();
+
+        // 1단계 유효성 검사
+        if
+        (
+                (funding.getTitle() == null || 0 >= funding.getTitle().length() || funding.getTitle().length() >= 41) ||                        // 제목이 null 이거나 제목길이가 0 이거나 제목 길이가 40자를 초과
+                        (funding.getThumbnail() == null || funding.getThumbnail().getImage().length() < 20) ||                                 // 썸네일이 null 이거나 썸네일 호출 url이 이상한경우
+                        (funding.getMaxAmount() == null || 1000 > funding.getMaxAmount() || funding.getMaxAmount() >= 1000000000) ||     // 목표금액이 null 이거나 목표 금액이 1000원 미만 이거나 10억 초과인 경우
+                        (funding.getStartEnd() == null || funding.getDeadLine() == null || endDate.after(startDate) == false)                   // 시작 날짜가 null 이거나 종료 날짜가 null이거나 종료날짜가 시작날짜 보다 앞에 있는 경우
+        ) {
+            em.close();
+            return "1";
+        }
+
+        // 2단계 유효성 검사
+        else if (funding.getContent() == null || funding.getContent().length() > 1000) {                                // 설명이 null 이거나 1000자를 초과한 경우
+            em.close();
+            return "2";
+        }
+
+        // 3단계 물품 확인
+        else if (alticleCount == null || alticleCount == 0){
+            em.close();
+            return "3";
+        }
+
+        // 통과
+        else {
+            em.close();
+            return "0";
+        }
+    }
+
+
+
 }

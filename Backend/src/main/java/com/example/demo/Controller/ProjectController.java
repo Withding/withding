@@ -68,19 +68,16 @@ public class ProjectController {
     @RequestMapping(value = "/projects/1/{projectNum}", method = RequestMethod.GET)
     public ResponseEntity<Object> getProject_1Level(@PathVariable("projectNum") final Long projectId,
                                                     HttpServletRequest request){
-        System.out.println("프로젝트 1단계 호출 진입");
         // ------------------------------ 인증 --------------------------------------------------------------------------
         User user = userService.setUserToHttpServletRequestAttribute(request);
-        System.out.println("프로젝트 1단계 호출 user = " + user);
         if (user == null || (projectService.isUserToProject(user, projectId) == false)){
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         // -------------------------------------------------------------------------------------------------------------
 
         GetProject_1Level getProject_1Level = projectService.getProject_1Level(projectId);
-        if (getProject_1Level.getUserId() != user.getUserId()){                                                         // 작성자가 다름
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        } else if (getProject_1Level != null ) {                                                                        // 정상
+        if (getProject_1Level != null )
+        {                                                                                                               // 정상
             getProject_1Level.setUserId(null);
             return new ResponseEntity<>(getProject_1Level, HttpStatus.OK);
         } else {                                                                                                        // 그 외에 모든 경우
@@ -364,6 +361,7 @@ public class ProjectController {
         // ------------------------------ 인증 --------------------------------------------------------------------------
         User user = userService.setUserToHttpServletRequestAttribute(request);
         if ((user == null) || (projectService.isUserToProject(user, projectId) == false) ){                             // 인증 || 기존에 글을 작성하던 작성자인지 확인 해당 함수
+            System.out.println("ewqeqweqwew");
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         // -------------------------------------------------------------------------------------------------------------
@@ -374,6 +372,7 @@ public class ProjectController {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             case "1":
             case "2":
+            case "3":
                 return new ResponseEntity<>(responseCode ,HttpStatus.BAD_REQUEST);
             default:                                                                                                    // 트라이 캣치 같은 곳에서 에러난 경우
                 return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
