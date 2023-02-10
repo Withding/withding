@@ -1,5 +1,6 @@
 import Button from "@/components/common/Button";
 import ProjectMakeProductsContext from "@/store/ProjectMakeProductsContext";
+import { css } from "@emotion/react";
 import React, { useContext } from "react";
 import SectionStyle from "../SectionStyle";
 import ProductDescriptionInput from "./ProductDescriptionInput";
@@ -19,7 +20,7 @@ function ProductInputForm() {
     return (
         <form
             onSubmit={onAddProduct}
-            css={SectionStyle}
+            css={[SectionStyle, style]}
         >
             <ProductNameInput
                 value={values.name}
@@ -57,5 +58,27 @@ function ProductInputForm() {
         </form>
     );
 }
+
+const style = css`
+    button {
+        min-width: 8rem;
+        color: white;
+    }
+    button[type="submit"] {
+        background-color: var(--blue-200);
+    }
+
+    button[type="submit"]:hover  {
+        background-color: var(--blue-300);
+    }
+
+    button[type="reset"] {
+        background-color: var(--red-200);
+    }
+
+    button[type="reset"]:hover {
+        background-color: var(--red-300);
+    }
+`;
 
 export default ProductInputForm;

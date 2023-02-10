@@ -166,10 +166,18 @@ const style = css`
         --green-200: #A5D6A7;
         --green-100: #DCEDC8;
         --green-50: #E0F2F1;
+        --blue-300: #64B5F6;
+        --blue-200: #90CAF9;
+        --blue-100: #BBDEFB;
         --yellow: #fede03;
         --orange: #ffa100;
+        --orange-200: #FFCC80;
+        --orange-300: #FFB74D;
         --orange-600: #FB8C00;
         --coral: #ff5268;
+        --red-100: #FFCDD2;
+        --red-200: #EF9A9A;
+        --red-300: #E57373;
         --red-400: #fc2b38;
         --minus-margin-android: 0px -16px;
         --minus-margin-ios: 0px -24px;
