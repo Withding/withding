@@ -42,9 +42,9 @@ function Products() {
 
     // 프로젝트 상품 삭제 요청
     const { mutate: deleteProductMutate } = useMutation(deleteProduct, {
-        onSuccess: (response) => {
-            if (response.status === 204)
-                setProducts(products.filter((product) => product.id !== product.id));
+        onSuccess: (obj: { status: number, productId: number }) => {
+            if (obj.status === 204)
+                setProducts(products.filter((product) => product.id !== obj.productId));
         }
     });
 
