@@ -355,17 +355,17 @@ public class ProjectController {
      * @return
      */
     @RequestMapping(value = "/projects/{ProjectNum}", method = RequestMethod.PATCH)
-    public ResponseEntity<Object> createProject(@PathVariable("ProjectNum")Long projectId,
+    public ResponseEntity<Object> validateProject(@PathVariable("ProjectNum")Long projectId,
                                                 HttpServletRequest request){
 
         // ------------------------------ 인증 --------------------------------------------------------------------------
         User user = userService.setUserToHttpServletRequestAttribute(request);
         if ((user == null) || (projectService.isUserToProject(user, projectId) == false) ){                             // 인증 || 기존에 글을 작성하던 작성자인지 확인 해당 함수
-            System.out.println("ewqeqweqwew");
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         // -------------------------------------------------------------------------------------------------------------
-        String responseCode = projectService.createProject(projectId);
+        String responseCode = projectService.validateProject(projectId);
+
 
         switch (responseCode){
             case "0":
@@ -373,7 +373,9 @@ public class ProjectController {
             case "1":
             case "2":
             case "3":
-                return new ResponseEntity<>(responseCode ,HttpStatus.BAD_REQUEST);
+                ResponseValidateFunding responseValidateFunding = new ResponseValidateFunding();
+                responseValidateFunding.setErrorCode(responseCode);
+                return new ResponseEntity<>(responseValidateFunding ,HttpStatus.BAD_REQUEST);
             default:                                                                                                    // 트라이 캣치 같은 곳에서 에러난 경우
                 return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
         }

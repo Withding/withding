@@ -419,9 +419,9 @@ public class ProjectService {
     /**
      * 프로젝트 최종 유효성 검사 후 stateCode를 수정하여 최종 등록하는 함수
      * @param projectId 프로젝트 Id
-     * @return 1단계 유효성 검사 오류 = "1", 2단계 유효성 검사 오류 = "2", 비정상 처리 = "3", 통과 = "0"
+     * @return 통과 = "0", 1단계 유효성 검사 실패 = "1", 2단계 유효성 검사 실패 = "2", 3단계 유효성 검사 실패 = "3", 비정상 처리 = "4",
      */
-    public String createProject(Long projectId) {
+    public String validateProject(Long projectId) {
         EntityManager em = JpaConfig.emf.createEntityManager();
         EntityTransaction tr = em.getTransaction();
 
@@ -451,11 +451,13 @@ public class ProjectService {
                     System.out.println("------------------------------------------------------------------------------");
                     System.out.println("funding.fundingValidate()에러 -> stateCode : " + fundingValidateStateCode);
                     System.out.println("------------------------------------------------------------------------------");
+                    em.close();
                     return "3";
                 default:                // 비정상 동작(캣치문으로 들어옴) 에러
                     System.out.println("------------------------------------------------------------------------------");
                     System.out.println("funding.fundingValidate()에러 -> stateCode : " + fundingValidateStateCode);
                     System.out.println("------------------------------------------------------------------------------");
+                    em.close();
                     return "4";
             }
 
