@@ -17,6 +17,7 @@ import Product from "@/types/Product";
 import addProduct from "@/utils/RequestApis/projectmake/addProduct";
 import Products from "./Product/Products";
 import deleteThumbnail from "@/utils/RequestApis/projectmake/deleteThumbnail";
+import PreView from "./PreView/PreView";
 /**
  * /project/make 페이지 컴포넌트
  * @returns 
@@ -80,6 +81,12 @@ function Make() {
             component: <Products />,
             nextButtonValue: "다음",
             name: "상품 등록"
+        },
+        {
+            step: 4,
+            component: <PreView />,
+            nextButtonValue: "다음",
+            name: "미리 보기"
         },
     ];
     const render = episode.find((item) => item.step === step);// step에 해당하는 컴포넌트를 렌더링  
