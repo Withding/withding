@@ -320,6 +320,7 @@ public class ProjectService {
                 em.clear();
                 em.find(Article.class, article.getId());
                 em.close();
+                article.setShippingDay(article.getShippingDay().substring(0,10));
                 return article;
             } else {
                 em.close();
@@ -345,7 +346,7 @@ public class ProjectService {
             List<Article> articles = em.createQuery("SELECT a FROM Article a WHERE a.fundingId.id =: projectId")
                     .setParameter("projectId", projectId)
                     .getResultList();
-            System.out.println(articles);
+
             em.close();
             return articles;
         } catch (Exception e){
@@ -504,7 +505,6 @@ public class ProjectService {
             startDate = dateFormat.parse(funding.getStartEnd());
             endDate = dateFormat.parse(funding.getDeadLine());
         } catch (Exception e) {
-            e.printStackTrace();
             em.close();
             return "1";             // 원래라면 캣치문으로 빠진 비정상 동작 에러("4")가 맞지만 1단계 날짜의 변환중에 빠진 에러이므로 "1"로 설정
         }
@@ -545,5 +545,44 @@ public class ProjectService {
     }
 
 
+    /**
+     * 프로젝트 3단계 수정
+     * @param projectId 해당 물품이 등록된 펀딩의 Id
+     * @param newArticle 등록할 Article 객체
+     * @return 정상 처리 true, 비정상 처리 false
+     */
+    public boolean changeProject_3Level(Long projectId, Article newArticle) {
+        EntityManager em = JpaConfig.emf.createEntityManager();
+        EntityTransaction tr = em.getTransaction();
 
+        Article article = em.find(Article.class, newArticle.getId());
+        if (article == null || article.getFundingId().getId() != projectId){                                            // 해당 물품이 없거나 물품이 등록된 펀딩과 요청으로 날라온 펀딩 ID가 다른 경우
+            em.close();
+            return false;
+        }
+        try{
+            tr.begin();
+            article.setName(newArticle.getName());
+            article.setDescription(newArticle.getDescription());
+            article.setPrice(newArticle.getPrice());
+            article.setShippingPrice(newArticle.getShippingPrice());
+            article.setShippingDay(newArticle.getShippingDay() + " 00:00:00");
+            article.setInventory(newArticle.getInventory());
+            tr.commit();
+            em.close();
+            return true;
+        } catch (Exception e){
+            System.out.println("---------------------------------------------------------------------------------------");
+            System.out.println("ProjectService().changeProject_3Level() 에러 에러 발생");
+            System.out.println("---------------------------------------------------------------------------------------");
+            e.printStackTrace();
+            tr.rollback();
+            em.close();
+            return false;
+        }
+
+
+
+
+    }
 }
