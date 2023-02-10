@@ -279,7 +279,7 @@ public class ProjectController {
      * @param request request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
      * @return
      */
-    @RequestMapping(value = "/projects/3/{projectNum}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/projects/3/{projectNum}", method = RequestMethod.POST)
     public ResponseEntity<Object> createProject_3Level(@PathVariable("projectNum") Long projectId,
                                                     @RequestBody Article article,
                                                     HttpServletRequest request)
@@ -304,7 +304,7 @@ public class ProjectController {
      * 프로젝트 3단계 호출
      * @param projectId 저장할 프로젝트 Id
      * @param request request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
-     * @return
+     * @return 해당 프로젝트 Id에 등록된 물품들을 담은 List<Article> 타입을 반환
      */
     @RequestMapping(value = "/projects/3/{projectNum}", method = RequestMethod.GET)
     public ResponseEntity<Object> getProject_3Level(@PathVariable("projectNum") Long projectId,
@@ -320,6 +320,30 @@ public class ProjectController {
         GetProject_3Level getProject_3Level = new GetProject_3Level(projectService.getProject_3Level(projectId));
         return new ResponseEntity<>(getProject_3Level, HttpStatus.OK);
 
+    }
+
+
+    /**
+     * 프로젝트 3단계 수정
+     * @param projectId 저장할 프로젝트 Id
+     * @param request request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
+     * @return 인증실패 401, 정상 처리 204, 비정상 처리 400
+     */
+    @RequestMapping(value = "/projects/3/{projectNum}", method = RequestMethod.PUT)
+    public ResponseEntity<Object> changeProject_3Level(@PathVariable("projectNum") Long projectId,
+                                                       @RequestBody Article article,
+                                                       HttpServletRequest request){
+        // ------------------------------ 인증 --------------------------------------------------------------------------
+        User user = userService.setUserToHttpServletRequestAttribute(request);
+        if ((user == null) || (projectService.isUserToProject(user, projectId) == false) ){                             // 인증 || 기존에 글을 작성하던 작성자인지 확인 해당 함수
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        // -------------------------------------------------------------------------------------------------------------
+        if (projectService.changeProject_3Level(projectId, article) == true){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
 
