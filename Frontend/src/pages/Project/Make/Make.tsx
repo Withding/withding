@@ -13,11 +13,12 @@ import useProjectParam from "@/hooks/useProjectParam";
 import { useMutation } from "react-query";
 import generateProjectContent from "@/utils/RequestApis/projectmake/generateProjectContent";
 import generateProjectInfo from "@/utils/RequestApis/projectmake/generateProjectInfo";
-import Product from "@/types/Product";
-import addProduct from "@/utils/RequestApis/projectmake/addProduct";
 import Products from "./Product/Products";
 import deleteThumbnail from "@/utils/RequestApis/projectmake/deleteThumbnail";
 import PreView from "./PreView/PreView";
+import Final from "./Final/Final";
+import projectFianlCheck from "@/utils/RequestApis/projectmake/projectFinalCheck";
+import { useNavigate } from "react-router-dom";
 /**
  * /project/make 페이지 컴포넌트
  * @returns 
@@ -27,7 +28,7 @@ import PreView from "./PreView/PreView";
 function Make() {
     const step = useStepParam();
     const project = useProjectParam();
-
+    const navigator = useNavigate();
     // 프로젝트 정보 임시 저장 요청
     const { mutate: projectInfoMutate } = useMutation(generateProjectInfo);
     // 프로젝트 상세 내용 임시 저장 요청
@@ -35,6 +36,22 @@ function Make() {
 
     // 프로젝트 썸네일 이미지 삭제 요청
     const { mutate: deleteThumbnailMutate } = useMutation(deleteThumbnail);
+
+    const { mutate: projectFinalCheckMutate } = useMutation(projectFianlCheck, {
+        onSuccess: (data) => {
+            if (data.status === 204) {
+                navigator(`/main`);
+            }
+        },
+        onError: (error: any) => {
+            if (error.response.status === 400) {
+                const { errorCode } = error.response.data;
+                if (errorCode) {
+                    navigator(`/project/make?project=${project}&step=${errorCode}}`);
+                }
+            }
+        }
+    });
 
     const [values, setValues] = useState<ProjectMakeValues>({
         title: "",
@@ -60,6 +77,8 @@ function Make() {
     const thumbnailImageDeleteHandler = useCallback(() => {
         deleteThumbnailMutate(project);
     }, [deleteThumbnailMutate, project]);
+
+
 
     const episode: EpisodeType[] = [
         {
@@ -87,6 +106,13 @@ function Make() {
             component: <PreView />,
             nextButtonValue: "다음",
             name: "미리 보기"
+        },
+        {
+            step: 5,
+            component: <Final />,
+            nextButtonValue: "검증",
+            name: "최종 검증",
+            clickEvent: () => projectFinalCheckMutate(project)
         },
     ];
     const render = episode.find((item) => item.step === step);// step에 해당하는 컴포넌트를 렌더링  
