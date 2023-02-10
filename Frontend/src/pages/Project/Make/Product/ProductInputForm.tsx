@@ -14,7 +14,7 @@ import ProductShppingPriceInput from "./ProductShppingPriceInput";
  * @returns 
  */
 function ProductInputForm() {
-    const { product, onAddProduct } = useContext(ProjectMakeProductsContext);
+    const { product, onAddProduct, onResetProduct } = useContext(ProjectMakeProductsContext);
     const { values, onChangeValues } = product;
     return (
         <form
@@ -48,6 +48,11 @@ function ProductInputForm() {
             <Button
                 value="추가"
                 type="submit"
+            />
+            <Button
+                onClick={onResetProduct}
+                value="초기화"
+                type="reset"
             />
         </form>
     );

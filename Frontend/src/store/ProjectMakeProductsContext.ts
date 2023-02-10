@@ -8,6 +8,7 @@ const ProjectMakeProductsContext = createContext<ProjectMakeProductsContextProps
     products: [],
     onAddProduct: () => {},
     onDeleteProduct: () => {},
+    onResetProduct: () => {},
     product: {
         values: {
             description: "",

@@ -82,11 +82,15 @@ function Products() {
         deleteProductMutate({ project, productId: id });
     }, [deleteProductMutate, project]);
 
+    const resetProductHandler = useCallback(() => {
+        setProduct(PRODUCT_INIT);
+    }, []);
     return (
         <ProjectMakeProductsContext.Provider value={{
             products,
             onAddProduct: addProductHandler,
             onDeleteProduct: deleteProductHandler,
+            onResetProduct: resetProductHandler,
             product: {
                 values: product,
                 onChangeValues: onChangeProductValue
