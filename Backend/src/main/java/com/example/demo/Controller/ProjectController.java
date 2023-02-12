@@ -257,7 +257,7 @@ public class ProjectController {
     {
         // ------------------------------ 인증 --------------------------------------------------------------------------
         User user = userService.setUserToHttpServletRequestAttribute(request);
-        if ((user == null) || (projectService.isUserToProject(user, projectId) == false) ){                             // 인증 || 기존에 글을 작성하던 작성자인지 확인 해당 함수
+        if ((user == null) || (projectService.isUserToProject(user, projectId) == false) ){                             // 인증 || 기존에 글을 작성하던 작성자인지 확인하고 해당 프로젝트 글이 작성중인 상태인지 확인
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         // -------------------------------------------------------------------------------------------------------------
