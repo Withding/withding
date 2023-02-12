@@ -17,7 +17,7 @@ function addProduct({
     const accessToken = user?.accessToken;
     return axios({
         url: `/projects/3/${project}`,
-        method: "PUT",
+        method: "POST",
         headers: {
             "authorization": accessToken,
         },

@@ -16,7 +16,7 @@ function generateProjectContent({
     const accessToken = user?.accessToken;
     return axios({
         url: `/projects/2/${project}`,
-        method: "POST",
+        method: "PUT",
         headers: {
             "authorization": accessToken,
         },
