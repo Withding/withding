@@ -5,10 +5,13 @@ import React from "react";
  * 프로젝트 생성 상품 관리 Context API
  */
 const ProjectMakeProductsContext = createContext<ProjectMakeProductsContextProps>({
+    isEditMode: false,
     products: [],
     onAddProduct: () => {},
     onDeleteProduct: () => {},
     onResetProduct: () => {},
+    onLoadProduct: () => {},
+    onOffEditMode: () => {},
     product: {
         values: {
             description: "",

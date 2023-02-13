@@ -31,7 +31,7 @@ function Products() {
 
     const [product, setProduct] = useState<Product>(PRODUCT_INIT);
     const [products, setProducts] = useState<Product[]>(data?.articles ?? []);
-
+    const [isEditMode, setIsEditMode] = useState<boolean>(false);
     // 프로젝트 상품 추가 요청
     const { mutate: addProductMutate } = useMutation(addProduct, {
         onSuccess: (data) => {
@@ -85,12 +85,28 @@ function Products() {
     const resetProductHandler = useCallback(() => {
         setProduct(PRODUCT_INIT);
     }, []);
+
+    const loadProductHandler = useCallback((id: number) => {
+        const newProduct = products.find((product) => product.id === id);
+        if (newProduct) {
+            setProduct(newProduct);
+            setIsEditMode(true);
+        }
+    }, [products]);
+
+    const offEditModeHandelr = useCallback(() => {
+        setIsEditMode(() => false);
+        setProduct(PRODUCT_INIT);
+    }, []);
     return (
         <ProjectMakeProductsContext.Provider value={{
+            isEditMode,
             products,
             onAddProduct: addProductHandler,
             onDeleteProduct: deleteProductHandler,
             onResetProduct: resetProductHandler,
+            onLoadProduct: loadProductHandler,
+            onOffEditMode: offEditModeHandelr,
             product: {
                 values: product,
                 onChangeValues: onChangeProductValue

@@ -9,9 +9,12 @@ import { RiDeleteBinLine } from "react-icons/ri";
  * @returns 
  */
 function ProductItem(props: Product & { index: number }) {
-    const { onDeleteProduct } = useContext(ProjectMakeProductsContext);
+    const { onDeleteProduct, onLoadProduct } = useContext(ProjectMakeProductsContext);
     return (
-        <li css={style}>
+        <li
+            css={style}
+            onClick={() => onLoadProduct(props.id ?? -1)}
+        >
             <span>{`${props.index}. ${props.name}`}</span>
             <RiDeleteBinLine
                 onClick={() => onDeleteProduct(props.id ?? -1)}
