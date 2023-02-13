@@ -21,6 +21,7 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @Controller
 @CrossOrigin("*")
@@ -439,7 +440,29 @@ public class ProjectController {
     }
 
 
+    //=============================================완성된 프로젝트들 ========================================================
 
+    /**
+     * 마이페이지 메이커에서 내가 작성한 프로젝트 호출
+     * @param page 호출할 페이지
+     * @param cursor 시작점을 가리키는 커서
+     * @param request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
+     * @return 정상 처리 200 + List<GetMyProject> 객체, 비정상 200, 비어있는 List<GetMyProject> 객체
+     */
+    @RequestMapping(value = "/maker/projects", method = RequestMethod.GET)
+    public ResponseEntity<Object> getMyProjects(@RequestParam(value = "page",required = false)Long page,
+                                                @RequestParam(value = "cursor", required = false)Long cursor,
+                                                HttpServletRequest request) {
+        // ------------------------------ 인증 --------------------------------------------------------------------------
+        User user = userService.setUserToHttpServletRequestAttribute(request);
+        if (user == null){
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        // -------------------------------------------------------------------------------------------------------------
+
+        List<GetMyProjects> getMyProjectsList = projectService.getMyProjects(user, page, cursor);
+        return new ResponseEntity<>(getMyProjectsList, HttpStatus.OK);
+    }
 
 
 

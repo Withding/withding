@@ -3,6 +3,7 @@ package com.example.demo.Service;
 import com.example.demo.Config.BeanConfig;
 import com.example.demo.Config.JpaConfig;
 import com.example.demo.DTO.*;
+import com.example.demo.DTO.Response.GetMyProjects;
 import com.example.demo.DTO.Response.GetProject_0Level;
 import com.example.demo.DTO.Response.GetProject_1Level;
 import com.example.demo.DTO.Response.GetProject_2Level;
@@ -586,5 +587,58 @@ public class ProjectService {
 
 
 
+    }
+
+
+    /**
+     * 커서 기반으로 내가 작성한 프로젝트를 목록으로 반환해주는 함수
+     * @param user 프로젝트를 작성한 user
+     * @param page 호출할 페이지
+     * @param cursor 시작점을 가리키는 커서
+     * @return
+     */
+    public List<GetMyProjects> getMyProjects(User user, Long page, Long cursor) {
+        EntityManager em = JpaConfig.emf.createEntityManager();
+        final int getCount = 6;
+        List<Funding> fundingList = new ArrayList<>();
+        if (cursor == null) {
+            fundingList = em.createQuery("SELECT f FROM Funding f " +
+                            "WHERE f.userId =: user " +
+                            "AND f.fundingStateCode.stateCode NOT IN (2 , 3)" +
+                            "ORDER BY f.createdAt DESC, f.id DESC")
+                    .setParameter("user", user)
+                    .setFirstResult((page.intValue() - 1) * 6 )
+                    .setMaxResults(getCount)
+                    .getResultList();
+        } else {
+            fundingList = em.createQuery("SELECT f FROM Funding f " +
+                            "WHERE f.userId =: user " +
+                            "AND f.id < :cursor " +
+                            "AND f.fundingStateCode.stateCode NOT IN (2 , 3)" +
+                            "ORDER BY f.createdAt DESC, f.id DESC")
+                    .setParameter("user", user)
+                    .setParameter("cursor", cursor)
+                    .setMaxResults(getCount)
+                    .getResultList();
+        }
+        List<GetMyProjects> getMyProjectsList = new ArrayList<>();
+
+        if (fundingList.size() != 0) {
+            for (int i = 0; i < fundingList.size(); i++) {
+                GetMyProjects getMyProjects = new GetMyProjects();
+                getMyProjects.setId(fundingList.get(i).getId());
+                getMyProjects.setState(fundingList.get(i).getFundingStateCode().getState());
+                getMyProjects.setTitle(fundingList.get(i).getTitle());
+                if (fundingList.get(i).getThumbnail() == null) {
+                    getMyProjects.setImage(beanConfig.SERVER_URL + ":" + beanConfig.SERVER_PORT + beanConfig.THUMBNAIL_IMAGE_URL + "default.jpeg");
+                } else {
+                    getMyProjects.setImage(beanConfig.SERVER_URL + ":" + beanConfig.SERVER_PORT + beanConfig.THUMBNAIL_IMAGE_URL + fundingList.get(i).getThumbnail().getImage());
+                }
+
+                getMyProjectsList.add(getMyProjects);
+            }
+        }
+        em.close();
+        return getMyProjectsList;
     }
 }
