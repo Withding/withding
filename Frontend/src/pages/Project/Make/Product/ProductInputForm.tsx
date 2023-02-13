@@ -15,7 +15,8 @@ import ProductShppingPriceInput from "./ProductShppingPriceInput";
  * @returns 
  */
 function ProductInputForm() {
-    const { product, onAddProduct, onResetProduct, isEditMode, onOffEditMode } = useContext(ProjectMakeProductsContext);
+    const { product, onAddProduct, onResetProduct, isEditMode, onOffEditMode, onEditProduct }
+        = useContext(ProjectMakeProductsContext);
     const { values, onChangeValues } = product;
     return (
         <form
@@ -51,7 +52,9 @@ function ProductInputForm() {
                     <React.Fragment>
                         <Button
                             value="수정 완료"
-                            type="submit"
+                            type="button"
+                            onClick={onEditProduct}
+                            className="edit-btn"
                         />
                         <Button
                             value="수정 취소"
@@ -81,11 +84,11 @@ const style = css`
         min-width: 8rem;
         color: white;
     }
-    button[type="submit"] {
+    button[type="submit"], button.edit-btn {
         background-color: var(--blue-200);
     }
 
-    button[type="submit"]:hover  {
+    button[type="submit"]:hover, button.edit-btn:hover  {
         background-color: var(--blue-300);
     }
 

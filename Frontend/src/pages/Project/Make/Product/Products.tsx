@@ -9,6 +9,7 @@ import Product from "@/types/Product";
 import ProductsList from "./ProductsList";
 import addProduct from "@/utils/RequestApis/projectmake/addProduct";
 import deleteProduct from "@/utils/RequestApis/projectmake/deleteProduct";
+import editProduct from "@/utils/RequestApis/projectmake/editProduct";
 
 const PRODUCT_INIT = {
     description: "",
@@ -45,6 +46,22 @@ function Products() {
         onSuccess: (obj: { status: number, productId: number }) => {
             if (obj.status === 204)
                 setProducts(products.filter((product) => product.id !== obj.productId));
+        }
+    });
+
+    const { mutate: editProductMutate } = useMutation(editProduct, {
+        onSuccess: (response) => {
+            if (response.status === 204) {
+                const newProducts = products.map((_product) => {
+                    if (_product.id === product.id) {
+                        return product;
+                    }
+                    return _product;
+                });
+                setProducts(newProducts);
+                setIsEditMode(false);
+                setProduct(PRODUCT_INIT);
+            }
         }
     });
 
@@ -98,6 +115,14 @@ function Products() {
         setIsEditMode(() => false);
         setProduct(PRODUCT_INIT);
     }, []);
+
+    const onEditProduct = useCallback(() => {
+        editProductMutate({
+            _product: product,
+            project
+        });
+    }, [editProductMutate, product, project]);
+
     return (
         <ProjectMakeProductsContext.Provider value={{
             isEditMode,
@@ -107,6 +132,7 @@ function Products() {
             onResetProduct: resetProductHandler,
             onLoadProduct: loadProductHandler,
             onOffEditMode: offEditModeHandelr,
+            onEditProduct: onEditProduct,
             product: {
                 values: product,
                 onChangeValues: onChangeProductValue
@@ -121,7 +147,7 @@ function Products() {
                 <ProductsList />
                 <ProductInputForm />
             </article>
-        </ProjectMakeProductsContext.Provider>
+        </ProjectMakeProductsContext.Provider >
     );
 }
 

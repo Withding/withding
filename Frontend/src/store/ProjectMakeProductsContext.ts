@@ -12,6 +12,7 @@ const ProjectMakeProductsContext = createContext<ProjectMakeProductsContextProps
     onResetProduct: () => {},
     onLoadProduct: () => {},
     onOffEditMode: () => {},
+    onEditProduct: () => {},
     product: {
         values: {
             description: "",
