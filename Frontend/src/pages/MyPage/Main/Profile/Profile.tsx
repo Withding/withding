@@ -8,6 +8,7 @@ import UserContext from "@/store/UserContext";
 interface ProfileProps {
     isEditProfileImage?: boolean;
     type?: number;
+    followerCount?: number;
 }
 
 /** 
@@ -37,6 +38,10 @@ function Profile(props: ProfileProps) {
                         <b>{nickName}</b>
                         {nameDecorator[props.type ?? 0]}
                     </p>
+                    {props.followerCount
+                        &&
+                        <p className="follower">내 팔로워 {props.followerCount}명</p>
+                    }
                 </section>
             </section>
             {isDesktop && <Logout className="logout" />}
@@ -62,6 +67,10 @@ const style = css`
         b {
             font-weight: 500;
         }
+
+        .follower {
+            font-size: 0.8rem;
+        }
     }
     @media screen and (min-width: 1096px) {
         width: 233px;
@@ -69,7 +78,12 @@ const style = css`
         flex-direction: column;
         .text {
             margin-top: 1.5rem;
+            .follower {
+                margin-top: 1rem;
+                text-align: center;
+            }
         }
+        
     }
 
     @media screen and (max-width: 1095px) {
@@ -80,8 +94,11 @@ const style = css`
             width: 100%;
             font-size: 1.2rem;
             margin-left: 1.5rem;
+            .follower {
+                margin-top: 0.5rem;
+            }
         }
     }
 `;
 
-export default Profile;
+export default Profile; 
