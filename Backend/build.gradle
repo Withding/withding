@@ -76,6 +76,10 @@ dependencies {
 
 	implementation 'org.springframework.boot:spring-boot-starter-security'												// spring security (인터셉터 설정에 필요)
 
+	// https://mvnrepository.com/artifact/com.mysql/mysql-connector-j
+	implementation group: 'com.mysql', name: 'mysql-connector-j', version: '8.0.31'
+
+
 
 }
 

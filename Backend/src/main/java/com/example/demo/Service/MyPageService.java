@@ -5,14 +5,11 @@ import com.example.demo.DTO.Response.MyPageMaker;
 import com.example.demo.DTO.Response.MyPageSupporter;
 import com.example.demo.DTO.User;
 import com.example.demo.Repository.FollowerRepo;
-import com.example.demo.Repository.FundingDetailsRepo;
 import com.example.demo.Repository.VoteRepo;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.servlet.http.HttpServletRequest;
 
 @Service
 @Data
@@ -23,7 +20,7 @@ public class MyPageService {
     private VoteRepo voteRepo;
 
     @Autowired
-    private FundingDetailsRepo fundingDetailsRepo;
+    private ProjectService projectService;
 
     @Autowired
     private FollowerRepo followerRepo;
@@ -41,7 +38,7 @@ public class MyPageService {
         MyPageSupporter myPageSupporter = new MyPageSupporter();
         myPageSupporter.setNickName(user.getNickName());
         myPageSupporter.setPoint(user.getPoint());
-        myPageSupporter.setFundingCount(fundingDetailsRepo.getCountToUserId(user.getUserId()));
+        myPageSupporter.setFundingCount(projectService.getCountToUserId(user.getUserId()));
         myPageSupporter.setProfileImage(beanConfig.SERVER_URL + ":" + beanConfig.SERVER_PORT + beanConfig.PROFILE_IMAGE_URL + user.getProfileImage().getProfileImage());
         return myPageSupporter;
     }
@@ -54,8 +51,7 @@ public class MyPageService {
      */
     public MyPageMaker setMyPageMaker(User user){
         MyPageMaker myPageMaker = new MyPageMaker();
-        myPageMaker.setFundingCount(fundingDetailsRepo.getCountToUserId(user.getUserId()));
-        myPageMaker.setFollowCount(followerRepo.getCountToUserId(user.getUserId()));
+        myPageMaker.setFollowerCount(followerRepo.getCountToUserId(user.getUserId()));
         return myPageMaker;
     }
 

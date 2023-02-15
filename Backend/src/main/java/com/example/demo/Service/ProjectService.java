@@ -599,26 +599,26 @@ public class ProjectService {
      */
     public List<GetMyProjects> getMyProjects(User user, Long page, Long cursor) {
         EntityManager em = JpaConfig.emf.createEntityManager();
-        final int getCount = 6;
+
         List<Funding> fundingList = new ArrayList<>();
         if (cursor == null) {
             fundingList = em.createQuery("SELECT f FROM Funding f " +
                             "WHERE f.userId =: user " +
                             "AND f.fundingStateCode.stateCode NOT IN (2 , 3)" +
-                            "ORDER BY f.createdAt DESC, f.id DESC")
+                            "ORDER BY f.createdAt DESC")
                     .setParameter("user", user)
                     .setFirstResult((page.intValue() - 1) * 6 )
-                    .setMaxResults(getCount)
+                    .setMaxResults(beanConfig.getGET_MY_PROJECT_PAGE_PER_COUNT())
                     .getResultList();
         } else {
             fundingList = em.createQuery("SELECT f FROM Funding f " +
                             "WHERE f.userId =: user " +
                             "AND f.id < :cursor " +
                             "AND f.fundingStateCode.stateCode NOT IN (2 , 3)" +
-                            "ORDER BY f.createdAt DESC, f.id DESC")
+                            "ORDER BY f.createdAt DESC")
                     .setParameter("user", user)
                     .setParameter("cursor", cursor)
-                    .setMaxResults(getCount)
+                    .setMaxResults(beanConfig.getGET_MY_PROJECT_PAGE_PER_COUNT())
                     .getResultList();
         }
         List<GetMyProjects> getMyProjectsList = new ArrayList<>();
@@ -629,6 +629,24 @@ public class ProjectService {
                 getMyProjects.setId(fundingList.get(i).getId());
                 getMyProjects.setState(fundingList.get(i).getFundingStateCode().getState());
                 getMyProjects.setTitle(fundingList.get(i).getTitle());
+
+
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Long dateNow = System.currentTimeMillis();
+                Long dateOpen = 0L;
+
+                try {
+                    dateOpen = dateFormat.parse(fundingList.get(i).getStartEnd()).getTime() - 86400000L;
+                }catch (Exception e){
+
+                }
+
+                if (getMyProjects.equals("임시저장") || getMyProjects.equals("진행대기") || (dateNow > dateOpen)) {
+                    getMyProjects.setIsDeleteAble(true);
+                } else {
+                    getMyProjects.setIsDeleteAble(false);
+                }
+
                 if (fundingList.get(i).getThumbnail() == null) {
                     getMyProjects.setImage(beanConfig.SERVER_URL + ":" + beanConfig.SERVER_PORT + beanConfig.THUMBNAIL_IMAGE_URL + "default.jpeg");
                 } else {
@@ -640,5 +658,20 @@ public class ProjectService {
         }
         em.close();
         return getMyProjectsList;
+    }
+
+
+    /**
+     * 내가 작성한 프로젝트 글 갯수 호출
+     * @param user_id userId
+     * @return Long 타입의 내가 작성한 프로젝트 글 갯수
+     */
+    public Long getCountToUserId(Long user_id) {
+        EntityManager em = JpaConfig.emf.createEntityManager();
+        Long count = (Long) em.createQuery("SELECT COUNT(f.id) FROM Funding f WHERE f.userId.userId =: user_id")
+                .setParameter("user_id", user_id)
+                .getSingleResult();
+        em.close();
+        return count;
     }
 }

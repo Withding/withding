@@ -11,4 +11,14 @@ public class GetMyProjects {
     private String image;
     private String title;
     private String state;
+    private boolean isDeleteAble;
+
+
+    public void setIsDeleteAble(boolean b){
+        this.isDeleteAble = b;
+    }
+
+    public Boolean getIsDeleteAble(){
+        return this.isDeleteAble;
+    }
 }
