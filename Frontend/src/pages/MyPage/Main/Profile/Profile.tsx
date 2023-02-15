@@ -3,7 +3,7 @@ import React, { useContext } from "react";
 import Image from "./Image";
 import Logout from "../Logout";
 import { useMediaQuery } from "react-responsive";
-import SupportContext from "@/store/SupportContext";
+import UserContext from "@/store/UserContext";
 
 interface ProfileProps {
     isEditProfileImage?: boolean;
@@ -21,7 +21,7 @@ function Profile(props: ProfileProps) {
         "님",
         " 메이커님"
     ];
-    const { profileImage, nickName } = useContext(SupportContext);
+    const { image, nickName } = useContext(UserContext);
     const isDesktop = useMediaQuery({ query: "(min-width: 1096px)" });
     return (
         <article
@@ -29,7 +29,7 @@ function Profile(props: ProfileProps) {
         >
             <section css={style}>
                 <Image
-                    src={profileImage}
+                    src={image}
                     isEdit={props.isEditProfileImage}
                 />
                 <section className="text">
