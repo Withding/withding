@@ -460,8 +460,14 @@ public class ProjectController {
         }
         // -------------------------------------------------------------------------------------------------------------
 
-        List<GetMyProjects> getMyProjectsList = projectService.getMyProjects(user, page, cursor);
-        return new ResponseEntity<>(getMyProjectsList, HttpStatus.OK);
+        Long fundingCount = projectService.getCountToUserId(user.getUserId());
+        System.out.println(fundingCount);
+
+        GetMyProjectsFinal getMyProjectsFinal = new GetMyProjectsFinal();
+        getMyProjectsFinal.setFundingCount(fundingCount);
+        getMyProjectsFinal.setFundingList(projectService.getMyProjects(user, page, cursor));
+        getMyProjectsFinal.setLastPage((fundingCount / beanConfig.getGET_MY_PROJECT_PAGE_PER_COUNT()) + 1);
+        return new ResponseEntity<>(getMyProjectsFinal, HttpStatus.OK);
     }
 
 

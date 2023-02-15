@@ -7,6 +7,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class MyPageMaker {
-    private Long fundingCount;
-    private Long followCount;
+    private Long followerCount;
 }
