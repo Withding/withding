@@ -4,6 +4,8 @@ import Logout from "../Logout";
 import Profile from "../Profile/Profile";
 import { useQuery } from "react-query";
 import fetchMakerInfo from "@/utils/RequestApis/mypage/fetchMakerInfo";
+import MenuContent from "../MenuContent";
+import MyFundingList from "./MyFunding";
 
 /**
  * 메이커 탭 클릭시 보여주는 화면
@@ -22,6 +24,9 @@ function MakerContext() {
                 type={1}
                 followerCount={data?.followerCount}
             />
+            <MenuContent>
+                <MyFundingList />
+            </MenuContent>
             {isMobile && <Logout />}
         </React.Fragment>
     );
