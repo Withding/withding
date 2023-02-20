@@ -597,7 +597,7 @@ public class ProjectService {
      * @param cursor 시작점을 가리키는 커서
      * @return
      */
-    public List<GetMyProjects> getMyProjects(User user, Long page, Long cursor) {
+    public List<GetMyProjects> getMyProjects(User user, Long page, Long cursor, int count) {
         EntityManager em = JpaConfig.emf.createEntityManager();
 
         List<Funding> fundingList = new ArrayList<>();
@@ -608,7 +608,7 @@ public class ProjectService {
                             "ORDER BY f.createdAt DESC")
                     .setParameter("user", user)
                     .setFirstResult((page.intValue() - 1) * 6 )
-                    .setMaxResults(beanConfig.getGET_MY_PROJECT_PAGE_PER_COUNT())
+                    .setMaxResults(count)
                     .getResultList();
         } else {
             fundingList = em.createQuery("SELECT f FROM Funding f " +
@@ -618,7 +618,7 @@ public class ProjectService {
                             "ORDER BY f.createdAt DESC")
                     .setParameter("user", user)
                     .setParameter("cursor", cursor)
-                    .setMaxResults(beanConfig.getGET_MY_PROJECT_PAGE_PER_COUNT())
+                    .setMaxResults(count)
                     .getResultList();
         }
         List<GetMyProjects> getMyProjectsList = new ArrayList<>();
