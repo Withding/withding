@@ -1,66 +1,23 @@
 import { css } from "@emotion/react";
 import React from "react";
 import MyFundingItem from "./MyFundingItem";
+import Funding from "@/types/Funding";
 /**
  * 내가 작성한 펀딩 목록들
  */
-function MyFundingList() {
-    const itme = [
-        {
-            id: 1,
-            title: "펀딩 제목",
-            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbQqT18Hak_4HP9MnJmEQG3D0tQX1ttFzVNQ&usqp=CAU",
-            state: "펀딩 상태",
-            isDeleteAble: false
-        },
-        {
-            id: 2,
-            title: "펀딩 제목",
-            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbQqT18Hak_4HP9MnJmEQG3D0tQX1ttFzVNQ&usqp=CAU",
-            state: "펀딩 상태",
-            isDeleteAble: false
-        },
-        {
-            id: 3,
-            title: "펀딩 제목",
-            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbQqT18Hak_4HP9MnJmEQG3D0tQX1ttFzVNQ&usqp=CAU",
-            state: "펀딩 상태",
-            isDeleteAble: false
-        },
-        {
-            id: 4,
-            title: "펀딩 제목",
-            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbQqT18Hak_4HP9MnJmEQG3D0tQX1ttFzVNQ&usqp=CAU",
-            state: "펀딩 상태",
-            isDeleteAble: false
-        },
-        {
-            id: 5,
-            title: "펀딩 제목",
-            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbQqT18Hak_4HP9MnJmEQG3D0tQX1ttFzVNQ&usqp=CAU",
-            state: "펀딩 상태",
-            isDeleteAble: false
-        },
-        {
-            id: 6,
-            title: "펀딩 제목",
-            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbQqT18Hak_4HP9MnJmEQG3D0tQX1ttFzVNQ&usqp=CAU",
-            state: "펀딩 상태",
-            isDeleteAble: false
-        },
-    ];
+function MyFundingList(props: {
+    list?: Funding[]
+}) {
     return (
         <ul
             css={style}
         >
-            {itme.map((item) => (
+            {props.list?.map((item) => (
                 <MyFundingItem
                     key={item.id}
                     {...item}
                 />
             ))}
-
-
         </ul>
     );
 }

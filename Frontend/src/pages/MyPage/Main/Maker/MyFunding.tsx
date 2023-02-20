@@ -1,19 +1,27 @@
 import { css } from "@emotion/react";
 import React from "react";
 import MyFundingList from "./MyFundingList";
+import { useQuery } from "react-query";
+import fetchMyFunding from "@/utils/RequestApis/funding/fetchMyFunding";
 
 /**
  * 내가 작성한 펀딩 목록
  * @returns 
  */
 function MyFunding() {
+    const { data } = useQuery(["makerMyFunding"], () => fetchMyFunding({}), {
+        useErrorBoundary: false,
+        suspense: false
+    });
     return (
         <section
             css={style}
         >
             <p className="more">더보기</p>
-            <span><p className="title">만든 프로젝트</p><b className="funding-count">1</b></span>
-            <MyFundingList />
+            <span><p className="title">만든 프로젝트</p><b className="funding-count">{data?.fundingCount}</b></span>
+            <MyFundingList
+                list={data?.fundingList}
+            />
         </section>
     );
 }
