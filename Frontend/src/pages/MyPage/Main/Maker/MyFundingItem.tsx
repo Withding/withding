@@ -1,6 +1,7 @@
 import Funding from "@/types/Funding";
 import { css } from "@emotion/react";
-import React from "react";
+import React, { useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 
 /**
  * 내가 작성한 펀딩
@@ -9,9 +10,20 @@ import React from "react";
 function MyFundingItem(
     props: Funding
 ) {
+    const navigate = useNavigate();
+    const onClick = useCallback((event: React.MouseEvent<HTMLElement>) => {
+        if (props.state === "진행중" || props.state === "종료") {
+            // 프로젝트 진행 페이지로
+        } else {
+            // 프로젝트 생성페이지로
+            navigate(`/project/make?step=1&project=${props.id}`);
+        }
+        event.stopPropagation();
+    }, [navigate, props.id, props.state]);
     return (
         <li
             css={style}
+            onClick={onClick}
         >
             <figure>
                 <img src={props.image} alt="프로젝트 이미지" />
