@@ -28,6 +28,7 @@ const style = css`
     overflow-x: scroll;
     width: 100%;
     margin-top: 1rem;
+    padding-bottom: 1rem;
     li {
         min-width: 20%;
         margin-right: 0.5rem;

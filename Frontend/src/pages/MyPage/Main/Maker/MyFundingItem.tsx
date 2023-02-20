@@ -16,7 +16,12 @@ function MyFundingItem(
             <figure>
                 <img src={props.image} alt="프로젝트 이미지" />
             </figure>
-            <h1>{props.title}</h1>
+            {
+                props.title.length === 0 ?
+                    <h1>{"제목을 입력해주세요"}</h1>
+                    :
+                    <h1>{props.title}</h1>
+            }
             <p className="state">{props.state}</p>
         </li>
     );
@@ -24,18 +29,21 @@ function MyFundingItem(
 
 const style = css`
     cursor: pointer;
-
     display: flex;
     flex-direction: column;
     line-height: 1.3;
     figure {
         margin-bottom: 0.5rem;
+        width: 100%;
+        height: 5rem;
         img {
-            border-radius: 4px;;
+            border-radius: 4px;
         }
     }
     h1 {
-        font-size: 1.1rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 0.9rem;
         font-weight: 600;
     }
     p.state {
