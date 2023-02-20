@@ -17,6 +17,8 @@
         <class>com.example.demo.DTO.Article</class>
         <class>com.example.demo.DTO.Thumbnail</class>
         <class>com.example.demo.DTO.FundingStateCode</class>
+        <class>com.example.demo.DTO.PointHistory</class>
+        <class>com.example.demo.DTO.PointType</class>
         <properties>
         <!-- 필수 속성 -->
             <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
