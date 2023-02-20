@@ -452,6 +452,7 @@ public class ProjectController {
     @RequestMapping(value = "/maker/projects", method = RequestMethod.GET)
     public ResponseEntity<Object> getMyProjects(@RequestParam(value = "page",required = false)Long page,
                                                 @RequestParam(value = "cursor", required = false)Long cursor,
+                                                @RequestParam(value = "count") int count,
                                                 HttpServletRequest request) {
         // ------------------------------ 인증 --------------------------------------------------------------------------
         User user = userService.setUserToHttpServletRequestAttribute(request);
@@ -461,12 +462,19 @@ public class ProjectController {
         // -------------------------------------------------------------------------------------------------------------
 
         Long fundingCount = projectService.getCountToUserId(user.getUserId());
-        System.out.println(fundingCount);
+        Long lastPage = 0L;
 
         GetMyProjectsFinal getMyProjectsFinal = new GetMyProjectsFinal();
         getMyProjectsFinal.setFundingCount(fundingCount);
-        getMyProjectsFinal.setFundingList(projectService.getMyProjects(user, page, cursor));
-        getMyProjectsFinal.setLastPage((fundingCount / beanConfig.getGET_MY_PROJECT_PAGE_PER_COUNT()) + 1);
+        getMyProjectsFinal.setFundingList(projectService.getMyProjects(user, page, cursor,count));
+
+        if (fundingCount % count == 0){
+            lastPage = fundingCount / count;
+        } else {
+            lastPage = (fundingCount / count) + 1;
+        }
+        getMyProjectsFinal.setLastPage(lastPage);
+
         return new ResponseEntity<>(getMyProjectsFinal, HttpStatus.OK);
     }
 

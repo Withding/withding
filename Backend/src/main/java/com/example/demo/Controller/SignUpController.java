@@ -7,6 +7,7 @@ import com.example.demo.DTO.Request.SignUpRequest;
 import com.example.demo.Repository.EmailAuthRepo;
 import com.example.demo.Repository.UserRepo;
 import com.example.demo.Service.MailService;
+import com.example.demo.Service.PointService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +34,9 @@ public class SignUpController {
 
     @Autowired
     private EmailAuthRepo emailAuthRepo;
+
+    @Autowired
+    private PointService pointService;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;                                                                // 단방향 암호화
@@ -151,8 +155,10 @@ public class SignUpController {
         if (    emailAuths != null
                 && (emailAuths.get(0).getSecretKey().equals(request.getSecretKey()))                                    // SecretKey와 Email이 매칭된 튜플이 존재
                 && (tempUser.isEmail() && tempUser.isNickName() && tempUser.isPwd())                                    // email, nickName, pwd 셋 다 통과
-                && userRepo.save(user)) {                                                                               // User 테이블에 요청온 User 객체 저장 성공
+                && userRepo.save(user)
+                ) {                                                                    // User 테이블에 요청온 User 객체 저장 성공
             emailAuthRepo.deleteEmailAuthToSecretKeyAndEmail(emailAuth);
+            pointService.chargePoint(user, 5000L);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);                                                        // 그 외에 모든 경우(secretKey 인증 실패 or 검증식 통과 실패 or User 객체 저장 실패 등등...)
