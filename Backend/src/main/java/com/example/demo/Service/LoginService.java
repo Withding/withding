@@ -39,11 +39,8 @@ public class LoginService {
     @Autowired
     private UserRepo userRepo;
 
-    //@Autowired
-    //private EntityManager em;
-
-    //@Autowired
-    //private EntityTransaction tr;
+    @Autowired
+    private PointService pointService;
 
     @Autowired
     private AES256 aes256;
@@ -110,6 +107,9 @@ public class LoginService {
                 user.setLogoutAt(logoutTime);                                                                           // 로그아웃 시간 세팅
                 em.persist(user);
                 tr.commit();
+                em.clear();
+                user = em.find(User.class, user.getUserId());
+                pointService.chargePoint(user, 5000L, "회원가입 이벤트");
                 em.close();
                 return user;
             } else if (users.size() <= 1 && users.get(0).getState().getStateCode() == 0) {

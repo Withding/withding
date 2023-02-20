@@ -598,13 +598,17 @@ public class ProjectService {
      * @return
      */
     public List<GetMyProjects> getMyProjects(User user, Long page, Long cursor, int count) {
+        if (1 > count || count > 21){
+            count = 5;
+        }
+
         EntityManager em = JpaConfig.emf.createEntityManager();
 
         List<Funding> fundingList = new ArrayList<>();
         if (cursor == null) {
             fundingList = em.createQuery("SELECT f FROM Funding f " +
                             "WHERE f.userId =: user " +
-                            "AND f.fundingStateCode.stateCode NOT IN (2 , 3)" +
+                            "AND f.fundingStateCode.stateCode NOT IN (3)" +
                             "ORDER BY f.createdAt DESC")
                     .setParameter("user", user)
                     .setFirstResult((page.intValue() - 1) * 6 )
@@ -614,7 +618,7 @@ public class ProjectService {
             fundingList = em.createQuery("SELECT f FROM Funding f " +
                             "WHERE f.userId =: user " +
                             "AND f.id < :cursor " +
-                            "AND f.fundingStateCode.stateCode NOT IN (2 , 3)" +
+                            "AND f.fundingStateCode.stateCode NOT IN (3)" +
                             "ORDER BY f.createdAt DESC")
                     .setParameter("user", user)
                     .setParameter("cursor", cursor)

@@ -34,7 +34,7 @@ public class PointController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         // -------------------------------------------------------------------------------------------------------------
-        if (pointService.chargePoint(user, point)){
+        if (pointService.chargePoint(user, point, "회원가입 이벤트")){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
