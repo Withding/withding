@@ -449,7 +449,7 @@ public class ProjectController {
      * @param request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
      * @return 정상 처리 200 + List<GetMyProject> 객체, 비정상 200, 비어있는 List<GetMyProject> 객체
      */
-    @RequestMapping(value = "/projects", method = RequestMethod.GET)
+    @RequestMapping(value = "/myprojects", method = RequestMethod.GET)
     public ResponseEntity<Object> getMyProjects(@RequestParam(value = "page",required = false)Long page,
                                                 @RequestParam(value = "cursor", required = false)Long cursor,
                                                 @RequestParam(value = "count") int count,
