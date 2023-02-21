@@ -1,0 +1,88 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '2.7.6'
+	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+}
+
+
+bootJar{
+	//----------- build 후 jar 파일 생성 위치 설정 ---------
+	destinationDir = file("$rootDir")  // jar 파일 생성 위치를 project root로 설정
+	//------------------------------------------------
+
+	//----------- build 후 jar 파일 이름 변경 설정 ---------
+	archivesBaseName = '1' 	// 원하는 이름
+	archiveFileName = '1.jar' // 원하는 이름.jar
+	archiveVersion = "0.0.0"
+	//------------------------------------------------
+
+	//------------- 빌드시 jar을 실행하는 설정 -------------
+	//jar.enabled = true
+	//------------------------------------------------
+}
+
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	compileOnly 'org.projectlombok:lombok'
+	runtimeOnly 'com.mysql:mysql-connector-j'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+
+	// https://mvnrepository.com/artifact/commons-io/commons-io
+	implementation group: 'commons-io', name: 'commons-io', version: '2.11.0'
+
+	// https://mvnrepository.com/artifact/org.springframework/spring-context
+	implementation group: 'org.springframework', name: 'spring-context', version: '5.3.18'								// 자바 메일에서 사용
+
+	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-mail
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '1.2.0.RELEASE'		// 자바 메일 발송
+
+	// https://mvnrepository.com/artifact/com.google.code.gson/gson
+	implementation 'com.google.code.gson:gson:2.10'																		// GSON
+
+	// https://mvnrepository.com/artifact/org.hibernate/hibernate-core
+	implementation group: 'org.hibernate', name: 'hibernate-core', version: '5.6.10.Final'								// JPA 관련
+
+	// https://mvnrepository.com/artifact/org.hibernate/hibernate-entitymanager
+	implementation group: 'org.hibernate', name: 'hibernate-entitymanager', version: '5.6.10.Final'						// JPA 관련
+
+	// https://mvnrepository.com/artifact/org.hibernate.javax.persistence/hibernate-jpa-2.1-api
+	implementation group: 'org.hibernate.javax.persistence', name: 'hibernate-jpa-2.1-api', version: '1.0.0.Final'		// JPA 관련
+
+	// https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-api
+	implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'										// jwt 관련
+	// https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-impl
+	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2'											// jwt 관련
+	// https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-jackson
+	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'										// jwt 관련
+
+
+	implementation 'org.springframework.boot:spring-boot-starter-security'												// spring security (인터셉터 설정에 필요)
+
+	// https://mvnrepository.com/artifact/com.mysql/mysql-connector-j
+	implementation group: 'com.mysql', name: 'mysql-connector-j', version: '8.0.31'
+
+
+
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}

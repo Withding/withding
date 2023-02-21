@@ -2,15 +2,23 @@
   "compilerOptions": {
     "outDir": "./dist/",
     "noImplicitAny": true,
-    "module": "es6",
+    "module": "ESNext",
     "target": "es5",
     "jsx": "react-jsx",
     "jsxImportSource": "@emotion/react",
     "allowJs": true,
     "moduleResolution": "node",
-    "sourceMap": true, 
+    "sourceMap": true,
+    "esModuleInterop": true,
     "strict": true, // enable all strict type-checking options
     "alwaysStrict": true, // 자바스크립트에서 use Strict를 사용하게 해줌
-    "removeComments": true // 컴파일시 주석 제거
+    "removeComments": true, // 컴파일시 주석 제거
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"] // @로 시작하는 경로를 src로 시작하는 경로로 매핑
+    },
+    "lib": ["ES2021.String", "DOM", "DOM.Iterable", "ScriptHost"]
+    // lib 옵션은 컴파일러가 어떤 라이브러리를 사용할지 정의
+    // target: es5 지만 ES2021.String을 사용하고 싶다면 lib에 추가해줘야함
   }
 }

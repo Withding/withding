@@ -1,1 +1,8 @@
 .DS_store
+
+Backend/src/main/resource
+Backend/profileImages
+Backend/articleImage
+Backend/thumbnailImages
+Backend/*.jar
+Backend/contentImages
