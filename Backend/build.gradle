@@ -74,6 +74,7 @@ dependencies {
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'										// jwt 관련
 
 
+
 	implementation 'org.springframework.boot:spring-boot-starter-security'												// spring security (인터셉터 설정에 필요)
 
 	// https://mvnrepository.com/artifact/com.mysql/mysql-connector-j
