@@ -407,8 +407,6 @@ public class ProjectController {
     }
 
 
-
-
     /**
      * 프로젝트 내용에 삽입되는 이미지 파일을 저장하는 컨트롤러
      * @param imageFile 삽입된 이미지 파일
@@ -477,10 +475,6 @@ public class ProjectController {
 
         return new ResponseEntity<>(getMyProjectsFinal, HttpStatus.OK);
     }
-
-
-
-
 
 
     /**
