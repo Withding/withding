@@ -131,12 +131,12 @@ public class UserService {
         EntityManager em = JpaConfig.emf.createEntityManager();
         EntityTransaction tr = em.getTransaction();
         try{
+            tr.begin();
             User user = em.find(User.class, userId);
             if (!user.getProfileImage().getProfileImage().equals(beanConfig.DEFAULT_USER_IMAGE)){                       // 프로필 이미지가 default.png가 아닌경우
                 fileService.deleteImage(user.getProfileImage().getProfileImage(), beanConfig.USER_PROFILE_DIRECTORY_NAME);  // 기존 프로필 이미지 파일 삭제
                 em.remove(em.find(ProfileImage.class, user.getProfileImage().getProfileImage()));                       // profileimage 테이블에서 삭제
             }
-            tr.begin();
             user.setProfileImage(new ProfileImage("default.png", "default.png"));             // 변경
             tr.commit();
             em.close();
