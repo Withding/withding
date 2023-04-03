@@ -1,19 +1,13 @@
-import customAxios from "@/utils/customAxios";
+import httpClient from "@/utils/httpClient";
 import { AxiosResponse } from "axios";
 /**
  * 프로젝트 썸네일 삭제 API 
  * @returns 
  */
 function deleteThumbnail(id: number): Promise<AxiosResponse> {
-    const axios = customAxios();
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
-    const accessToken = user?.accessToken;
-    return axios({
+    return httpClient({
         url: `/projects/thumbnail/${id}`,
         method: "DELETE",
-        headers: {
-            "authorization": accessToken,
-        },
     });
 }
 

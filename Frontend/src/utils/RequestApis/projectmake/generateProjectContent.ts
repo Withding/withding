@@ -1,4 +1,4 @@
-import customAxios from "@/utils/customAxios";
+import httpClient from "@/utils/httpClient";
 import { AxiosResponse } from "axios";
 
 /**
@@ -11,15 +11,9 @@ function generateProjectContent({
     content: string;
     project: number;
 }): Promise<AxiosResponse> {
-    const axios = customAxios();
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
-    const accessToken = user?.accessToken;
-    return axios({
+    return httpClient({
         url: `/projects/2/${project}`,
         method: "PUT",
-        headers: {
-            "authorization": accessToken,
-        },
         data: {
             content
         }

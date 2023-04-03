@@ -1,4 +1,4 @@
-import customAxios from "@/utils/customAxios";
+import httpClient from "@/utils/httpClient";
 import { AxiosResponse } from "axios";
 
 /**
@@ -6,15 +6,9 @@ import { AxiosResponse } from "axios";
  * @returns 
  */
 function projectFianlCheck(project: number): Promise<AxiosResponse> {
-    const axios = customAxios();
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
-    const accessToken = user?.accessToken;
-    return axios({
+    return httpClient({
         url: `/projects/${project}`,
         method: "PATCH",
-        headers: {
-            "authorization": accessToken,
-        },
     });
 }
 

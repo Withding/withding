@@ -1,5 +1,4 @@
-
-import customAxios from "@/utils/customAxios";
+import httpClient from "@/utils/httpClient";
 import { AxiosResponse } from "axios";
 
 /**
@@ -10,15 +9,9 @@ function deleteProduct({ project, productId }: { project: number, productId: num
     status: number
     productId: number
 }> {
-    const axios = customAxios();
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
-    const accessToken = user?.accessToken;
-    return axios({
+    return httpClient({
         url: `/projects/3/${project}`,
         method: "DELETE",
-        headers: {
-            "authorization": accessToken,
-        },
         data: {
             id: productId
         }

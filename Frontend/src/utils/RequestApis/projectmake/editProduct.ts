@@ -1,6 +1,6 @@
-import customAxios from "@/utils/customAxios";
 import Product  from "@/types/Product";
 import { AxiosResponse } from "axios";
+import httpClient from "@/utils/httpClient";
 /**
  * 프로젝트 상품 수정 API
  * @returns 
@@ -12,15 +12,9 @@ function editProduct({
     _product: Product;
     project: number;
 }): Promise<AxiosResponse> {
-    const axios = customAxios();
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
-    const accessToken = user?.accessToken;
-    return axios({
+    return httpClient({
         url: `/projects/3/${project}`,
         method: "PUT",
-        headers: {
-            "authorization": accessToken,
-        },
         data: {
             ..._product
         }
