@@ -1,20 +1,15 @@
 import Product from "@/types/Product";
 import customAxios from "@/utils/customAxios";
+import httpClient from "@/utils/httpClient";
 
 /**
  * 프로젝트 상품들 리스트를 가져오는  API
  * @returns 
  */
 function fetchProductList(project: number): Promise<{ articles: Product[] }> {
-    const axios = customAxios();
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
-    const accessToken = user?.accessToken;
-    return axios({
+    return httpClient({
         url: `/projects/3/${project}`,
         method: "GET",
-        headers: {
-            "authorization": accessToken,
-        },
     }).then(res => res.data);
 }
 

@@ -1,8 +1,8 @@
-import axios from "axios";
 import KakaoAuthType from "@/types/KakaoAuthType";
+import httpClient from "@/utils/httpClient";
 
 function fetchKakaoAuthCode(code: string): Promise<KakaoAuthType> {
-    return axios({
+    return httpClient({
         url: "https://kauth.kakao.com/oauth/token",
         method: "POST",
         headers: {

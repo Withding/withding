@@ -1,17 +1,14 @@
-import customAxios from "@/utils/customAxios";
+import httpClient from "@/utils/httpClient";
+
 /**
  * 프로필 이미지 변경 API
  * @returns 
  */
 function replaceProfileImage(image: File): Promise<{ profileImage: string}> {
-    const axios = customAxios();
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
-    const accessToken = user?.accessToken;
-    return axios({
+    return httpClient({
         url: "/user/image",
         method: "PUT",
         headers: {
-            "authorization": accessToken,
             "Content-Type": "multipart/form-data",
         },
         data: {

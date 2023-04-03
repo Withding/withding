@@ -1,5 +1,5 @@
 import  User  from "@/types/User";
-import customAxios from "@/utils/customAxios";
+import httpClient from "@/utils/httpClient";
 
 /**
  * 카카오 로그인 이후 유저 정보 가져오는 API
@@ -7,8 +7,7 @@ import customAxios from "@/utils/customAxios";
  * @returns 
  */
 function fetchUserInfo(accessToken: string): Promise<User> {
-    const axios = customAxios();
-    return axios({
+    return httpClient({
         method: "POST",
         url: "/auth/kakao",
         headers: {

@@ -1,5 +1,5 @@
 import User from "@/types/User";
-import customAxios from "@/utils/customAxios";
+import httpClient from "@/utils/httpClient";
 
 /**
  * 이메일 로그인 API
@@ -13,13 +13,9 @@ function fetchUserInfo({
     email: string;
     password: string;
 }): Promise<User> {
-    const axios = customAxios();
-    return axios({
+    return httpClient({
         method: "POST",
         url: "/login",
-        headers: {
-            "Content-Type": "application/json"
-        },
         data: {
             email,
             password

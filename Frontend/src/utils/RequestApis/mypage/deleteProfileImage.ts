@@ -1,18 +1,12 @@
-import customAxios from "@/utils/customAxios";
+import httpClient from "@/utils/httpClient";
 /**
  * 프로필 이미지 삭제 API
  * @returns 
  */
 function replaceProfileImage(): Promise<{ profileImage: string}> {
-    const axios = customAxios();
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
-    const accessToken = user?.accessToken;
-    return axios({
+    return httpClient({
         url: "/user/image",
         method: "DELETE",
-        headers: {
-            "authorization": accessToken,
-        },
     }).then(res => res.data);
 }
 
