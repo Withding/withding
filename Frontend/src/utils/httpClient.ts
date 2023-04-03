@@ -19,7 +19,7 @@ export default function httpClient({
         method,
         headers: {
             "Content-Type": "application/json",
-            "authorization": `bearer $${accessToken}`,
+            "authorization": `${accessToken}`,
             ...headers,
         },
         data: {
