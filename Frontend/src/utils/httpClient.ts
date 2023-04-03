@@ -11,12 +11,15 @@ export default function httpClient({
   headers?: Record<string, string>;
   data?: any;
 }) {
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    const accessToken = user?.accessToken;
     const axios = customAxios();
     return axios({
         url,
         method,
         headers: {
             "Content-Type": "application/json",
+            "authorization": `bearer $${accessToken}`,
             ...headers,
         },
         data: {
