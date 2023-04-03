@@ -39,7 +39,7 @@ public class User {
     private String nickName;                // 닉네임
 
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne
     @JoinColumn(name = "profile_image")
     private ProfileImage profileImage;        // 프로필 이미지
 
