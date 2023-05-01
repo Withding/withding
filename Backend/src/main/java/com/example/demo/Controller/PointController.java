@@ -25,6 +25,12 @@ public class PointController {
     @Autowired
     private UserService userService;
 
+    /**
+     * 이벤트로 포인트 지급
+     * @param point 지급할 포인트
+     * @param request request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
+     * @return
+     */
     @RequestMapping(value = "/point", method = RequestMethod.POST)
     public ResponseEntity<Object> chargePoint(@RequestParam Long point,
                                               HttpServletRequest request) {
