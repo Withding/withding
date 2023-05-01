@@ -38,12 +38,13 @@ public class UserService {
     private FileService fileService;
 
 
-    @Synchronized
+
     /**
      * jwtService에서 HttpServletRequest에 설정한 속성들을 User 객체에 세팅해서 반환
      * @param request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
      * @return userNum, nickName, loginTime을 세팅한 User 객체
      */
+    @Synchronized
     public User setUserToHttpServletRequestAttribute(HttpServletRequest request){
         EntityManager em = JpaConfig.emf.createEntityManager();
         try{

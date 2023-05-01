@@ -21,14 +21,12 @@ public class FollowService {
      */
     public GetFollowList getFollowList(final User user){
         EntityManager em = JpaConfig.emf.createEntityManager();
-//new Follower(f.follow_id, f.follower)
         List<Follower> followList = (List<Follower>) em.createQuery("SELECT new Follower(f.follow_id, f.follower) FROM Follower f WHERE f.user =: user")
                 .setParameter("user", user)
                 .getResultList();
         GetFollowList getFollowList = new GetFollowList();
-        System.out.println(followList);
         getFollowList.setFollows(followList);
-
+        em.close();
         return getFollowList;
     }
 

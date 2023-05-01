@@ -24,10 +24,11 @@ public class FollowController {
 
     /**
      * 팔로우 목록 호출
+     *
      * @param request request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
      * @return 정상 = 200, 인증실패 = 401
      */
-    @RequestMapping(value = "/user/follow", method = RequestMethod.GET)
+    @GetMapping("/user/follow")
     public ResponseEntity<Object> getFollow(HttpServletRequest request)
     {
         // ------------------------------ 인증 --------------------------------------------------------------------------
@@ -42,10 +43,11 @@ public class FollowController {
 
     /**
      * 팔로우
+     *
      * @param request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
      * @return 정상 = 204, 비정상 = 400, 인증 실패 = 401
      */
-    @RequestMapping(value = "/user/follow", method = RequestMethod.POST)
+    @PostMapping("/user/follow")
     public ResponseEntity<Object> follow(HttpServletRequest request,
                                  @RequestParam("userId") Long tagetId){
         // ------------------------------ 인증 --------------------------------------------------------------------------
@@ -65,10 +67,11 @@ public class FollowController {
 
     /**
      * 팔로우 해제
+     *
      * @param request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
      * @return 정상 = 204, 비정상 = 400, 인증실패 = 401
      */
-    @RequestMapping(value = "/user/follow", method = RequestMethod.DELETE)
+    @DeleteMapping("/user/follow")
     public ResponseEntity<Object> unFollow(HttpServletRequest request,
                                    @RequestParam("followId") Long followId){
         // ------------------------------ 인증 --------------------------------------------------------------------------

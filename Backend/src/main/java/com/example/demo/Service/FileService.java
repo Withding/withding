@@ -25,12 +25,6 @@ public class FileService {
     @Autowired
     private BeanConfig beanConfig;
 
-    //@Autowired
-    //private EntityManager em;
-
-    //@Autowired
-    //private EntityTransaction tr;
-
 
     /**
      * 변경하기 위한 이미지의 이름에 현재시간을 추가하고 공백들을 제거 및 profileImages 폴더에 저장하기 위한 함수
