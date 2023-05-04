@@ -2,7 +2,7 @@ package com.example.demo.Service;
 
 import com.example.demo.Config.JpaConfig;
 import com.example.demo.DTO.Follower;
-import com.example.demo.DTO.Response.GetFollowList;
+import com.example.demo.Controller.FollowController.DTO.GetFollowList;
 import com.example.demo.DTO.User;
 import org.springframework.stereotype.Service;
 

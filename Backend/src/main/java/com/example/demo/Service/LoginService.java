@@ -5,7 +5,7 @@ import com.example.demo.Config.BeanConfig;
 import com.example.demo.Config.JpaConfig;
 import com.example.demo.DTO.*;
 
-import com.example.demo.DTO.Response.Login;
+import com.example.demo.Controller.LoginController.DTO.Login;
 import com.example.demo.Gson.Gson;
 import com.example.demo.Repository.UserRepo;
 import lombok.Data;
@@ -20,7 +20,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 @Service

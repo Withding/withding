@@ -72,6 +72,19 @@ public class Funding {
     @JoinColumn(name = "state_code")
     private FundingStateCode fundingStateCode;  // 글 상태
 
-
+    /**
+     * 특정 사용자 정보 호출에서 사용
+     *
+     * @param id 특정 사용자가 작성한 펀딩 글
+     * @param title 특정 사용자가 작서한 펀딩 글의 제목
+     * @param thumbnail 특정 사용자가 작서한 펀딩 글의 썸네일
+     * @param fundingStateCode 특정 사용자가 작서한 펀딩 글의 상태
+     */
+    public Funding(Long id, String title, Thumbnail thumbnail, FundingStateCode fundingStateCode) {
+        this.id = id;
+        this.title = title;
+        this.thumbnail = thumbnail;
+        this.fundingStateCode = fundingStateCode;
+    }
 
 }

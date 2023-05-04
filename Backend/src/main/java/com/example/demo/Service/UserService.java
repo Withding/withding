@@ -3,8 +3,9 @@ package com.example.demo.Service;
 
 import com.example.demo.Config.BeanConfig;
 import com.example.demo.Config.JpaConfig;
+import com.example.demo.Controller.UserController.DTO.UserInfo;
+import com.example.demo.DTO.FundingStateCode;
 import com.example.demo.DTO.ProfileImage;
-import com.example.demo.DTO.State;
 import com.example.demo.DTO.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,7 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.servlet.http.HttpServletRequest;
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -36,6 +36,13 @@ public class UserService {
 
     @Autowired
     private FileService fileService;
+
+
+    public User getUserToUserId(Long userId){
+        EntityManager em = JpaConfig.emf.createEntityManager();
+        return em.find(User.class, userId);
+    }
+
 
 
 
@@ -149,4 +156,34 @@ public class UserService {
             return false;
         }
     }
+
+    /**
+     * 특정 사용자의 정보를 호출하는 함수
+     * @param user 호출할 유저
+     * @return
+     */
+    public UserInfo getUserInfo(User user) {
+
+        EntityManager em = JpaConfig.emf.createEntityManager();
+        UserInfo userInfo = new UserInfo();
+
+        FundingStateCode progressFunding = new FundingStateCode(1);
+        FundingStateCode endFunding = new FundingStateCode(2);
+
+        userInfo.setFundingList(em.createQuery("SELECT new Funding(f.id, f.title, f.thumbnail, f.fundingStateCode) FROM Funding f where f.userId =: user and f.fundingStateCode IN (:progressFunding, :endFunding)")
+                .setParameter("user", user)
+                .setParameter("progressFunding", progressFunding)
+                .setParameter("endFunding", endFunding)
+                .getResultList());
+        userInfo.setFollowerCount((Long) em.createQuery("SELECT COUNT(f) FROM Follower f where f.follower =: userId")
+                .setParameter("userId", user.getUserId())
+                .getSingleResult());
+        userInfo.setFollowingCount((Long) em.createQuery("SELECT COUNT(f) FROM Follower f where f.user =: user")
+                .setParameter("user", user)
+                .getSingleResult());
+
+        return userInfo;
+    }
+
+
 }

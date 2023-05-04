@@ -1,8 +1,8 @@
 package com.example.demo.Service;
 
 import com.example.demo.Config.BeanConfig;
-import com.example.demo.DTO.Response.MyPageMaker;
-import com.example.demo.DTO.Response.MyPageSupporter;
+import com.example.demo.Controller.MyPageController.DTO.MyPageMaker;
+import com.example.demo.Controller.MyPageController.DTO.MyPageSupporter;
 import com.example.demo.DTO.User;
 import com.example.demo.Repository.FollowerRepo;
 import com.example.demo.Repository.VoteRepo;
