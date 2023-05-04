@@ -186,6 +186,7 @@ const style = css`
         --padding-ios: 0px 24px;
         --padding-undefined: 0px 24px;
         --main-padding: 0px 48px;
+        --pc-max-width: 1025px;
     }
     .notosanskr * {
         font-family: 'Noto Sans KR', sans-serif;
@@ -210,6 +211,7 @@ const style = css`
         height: 100%;
         object-fit: fill;
     }
+
 `;
 
 export default GlobalStyle;
