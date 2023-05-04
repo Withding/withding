@@ -59,7 +59,9 @@ module.exports = (env, argv) => {
                 emitWarning: false
             }),
             new webpack.DefinePlugin({
-                "process.env": JSON.stringify(dotenv.config().parsed)
+                "process.env": JSON.stringify(dotenv.config({ 
+                    path: prod ? ".env.production" : ".env.development" 
+                }).parsed)
             })
         ],
         optimization: {
