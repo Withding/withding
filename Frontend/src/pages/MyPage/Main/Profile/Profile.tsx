@@ -38,9 +38,9 @@ function Profile(props: ProfileProps) {
                         <b>{nickName}</b>
                         {nameDecorator[props.type ?? 0]}
                     </p>
-                    {props.followerCount
+                    {props.followerCount !== undefined
                         &&
-                        <p className="follower">내 팔로워 {props.followerCount}명</p>
+                        <p className="follower">{`내 팔로워 ${props.followerCount} 명`}</p>
                     }
                 </section>
             </section>
