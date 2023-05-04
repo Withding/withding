@@ -1,6 +1,6 @@
-import React, { useContext } from "react";
-import UserContext from "@/store/UserContext";
+import React from "react";
 import { css } from "@emotion/react";
+import useIsLogin from "@/hooks/useIsLogin";
 
 interface GuestRouteProps {
     RouteComponent: any;
@@ -30,8 +30,7 @@ const View = () => {
  */
 function GuestRoute(props: GuestRouteProps) {
     const { RouteComponent } = props;
-    const { isLogin } = useContext(UserContext);
-    console.log(isLogin);
+    const isLogin = useIsLogin();
     return (
         <React.Fragment>
             {!isLogin ? <RouteComponent /> : <View />}

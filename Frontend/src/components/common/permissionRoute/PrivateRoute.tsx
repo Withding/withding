@@ -1,6 +1,6 @@
-import React, { useContext } from "react";
-import UserContext from "@/store/UserContext";
+import React from "react";
 import { Navigate } from "react-router-dom";
+import useIsLogin from "@/hooks/useIsLogin";
 
 interface PrivateRoouteProps {
     RouteComponent: any;
@@ -18,7 +18,7 @@ interface PrivateRoouteProps {
 
 function PrivateRoute(props: PrivateRoouteProps) {
     const { path, RouteComponent } = props;
-    const { isLogin } = useContext(UserContext);
+    const isLogin = useIsLogin();
     return (
         <React.Fragment>
             {isLogin ? <RouteComponent /> : <Navigate to={`/signin?callback=${path}`} />}
