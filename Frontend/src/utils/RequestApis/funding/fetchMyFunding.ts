@@ -16,7 +16,9 @@ function fetchMyFunding({
     return httpClient({
         url: `/myprojects?page=${page}&cursor=${cursor}&count=${count}`,
         method: "GET",
-    }).then(res => res.data);
+    }).then(res => {
+        return { ...res.data, currentPage: page };
+    });
 }
 
 export default fetchMyFunding;

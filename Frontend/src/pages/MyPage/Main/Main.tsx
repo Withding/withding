@@ -34,6 +34,7 @@ const style = css`
     .content {
         width: 100%;
     }
+    
     @media screen and (min-width: 1096px) {
         .menus {
             max-width: 1025px;
