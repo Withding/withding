@@ -4,6 +4,7 @@ import Funding from "@/types/Funding";
 import { css } from "@emotion/react";
 import { useNavigate } from "react-router-dom";
 import styled from "@emotion/styled";
+import LazyImage from "@/components/common/LazyImage";
 
 
 const getStateColor = (state: string) => {
@@ -48,6 +49,70 @@ function TextArea(props: Funding) {
     );
 }
 
+function MyFundingItem(props: Funding) {
+    const navigator = useNavigate();
+    return (
+        <li css={style}>
+            <LazyImage
+                src={props.image}
+                alt={props.id.toString()}
+                className="img"
+                objectFit="cover"
+            />
+            <TextArea
+                {...props}
+            />
+            <section
+                className="go-studio"
+                onClick={() => navigator(`/project/make?project=${props.id}`)}
+            >
+                <p> {"스튜디오 바로가기"}</p>
+            </section>
+        </li>
+    );
+}
+
+const style = css`
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--grey-200);
+    width: 100%;
+    min-height: 23rem;
+
+    & > .img {
+            width: 100%;
+    }
+
+
+    .go-studio {
+        width: 100%;
+        cursor: pointer;
+        border-top: 1px solid var(--grey-200);
+        text-align: center;
+        display: block;
+        padding: 1.5rem 0 1.5rem 0;
+        p {
+            color: var(--grey-500);
+            font-weight: 200;
+        }
+    }
+    @media screen and (min-width: 1096px) {
+        & > .img {
+            min-height: 15rem;
+            max-height: 15rem;
+        }
+    }
+
+    @media screen and (max-width: 1095px) {
+        & > .img {
+            min-height: 12rem;
+            max-height: 12rem;
+        }
+    }
+    
+`;
+
 const State = styled.span<{ color: string }>`
     margin-top: 1rem;
     font-size: 0.8rem;
@@ -68,61 +133,15 @@ const State = styled.span<{ color: string }>`
 
 const textAreaStyle = css`
     padding: 1rem;
+    height: 100%;
     & > h3 {
         color: var(--black);
         font-weight: 600;
         font-size: 1.2rem;
     }
-
+    border-top: 1px solid var(--grey-200);
     color: var(--grey-300);
 `;
 
-
-function MyFundingItem(props: Funding) {
-    const navigator = useNavigate();
-    return (
-        <li css={style}>
-            {props.title}
-            {props.id}
-            <TextArea
-                {...props}
-            />
-            <section
-                className="go-studio"
-                onClick={() => navigator(`/project/make?project=${props.id}`)}
-            >
-                <p> {"스튜디오 바로가기"}</p>
-            </section>
-        </li>
-    );
-}
-
-const style = css`
-    background-color: white;
-    display: flex;
-    flex-direction: column;
-    border: 1px solid var(--grey-200);
-    width: 100%;
-
-    .go-studio {
-        cursor: pointer;
-        border-top: 1px solid var(--grey-200);
-        text-align: center;
-        display: block;
-        padding: 1.5rem 0 1.5rem 0;
-        p {
-            color: var(--grey-500);
-            font-weight: 200;
-        }
-    }
-    @media screen and (min-width: 1096px) {
-        
-    }
-
-    @media screen and (max-width: 1095px) {
-        /* width: 100vw */
-    }
-    
-`;
 
 export default MyFundingItem;
