@@ -7,6 +7,7 @@ interface MyFundingResponse {
     fundingCount: number;
     lastPage: number;
     fundingList: Funding[];
+    currentPage: number;
 }
 
 export default MyFundingResponse;
