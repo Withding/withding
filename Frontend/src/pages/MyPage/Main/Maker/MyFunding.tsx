@@ -1,8 +1,9 @@
 import { css } from "@emotion/react";
-import React, { useCallback } from "react";
+import React from "react";
 import MyFundingList from "./MyFundingList";
 import { useQuery } from "react-query";
 import fetchMyFunding from "@/utils/RequestApis/funding/fetchMyFunding";
+import { useNavigate } from "react-router-dom";
 
 /**
  * 내가 작성한 펀딩 목록
@@ -13,11 +14,18 @@ function MyFunding() {
         useErrorBoundary: false,
         suspense: false
     });
+
+    const navigator = useNavigate();
     return (
         <section
             css={style}
         >
-            <p className="more">더보기</p>
+            <p
+                className="more"
+                onClick={() => navigator("/mypage/myfunding")}
+            >
+                {"더보기"}
+            </p>
             <span><p className="title">만든 프로젝트</p><b className="funding-count">{data?.fundingCount}</b></span>
             <MyFundingList
                 list={data?.fundingList}
