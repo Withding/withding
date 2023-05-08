@@ -597,12 +597,12 @@ public class ProjectService {
 
         EntityManager em = JpaConfig.emf.createEntityManager();
 
-        List<Funding> fundingList = new ArrayList<>();
+        List<Funding> fundingList;
         if (cursor == null) {
             fundingList = em.createQuery("SELECT f FROM Funding f " +
                             "WHERE f.userId =: user " +
                             "AND f.fundingStateCode.stateCode NOT IN (3)" +
-                            "ORDER BY f.createdAt DESC")
+                            "ORDER BY f.id DESC")
                     .setParameter("user", user)
                     .setFirstResult((page.intValue() - 1) * 6 )
                     .setMaxResults(count)
@@ -612,7 +612,7 @@ public class ProjectService {
                             "WHERE f.userId =: user " +
                             "AND f.id < :cursor " +
                             "AND f.fundingStateCode.stateCode NOT IN (3)" +
-                            "ORDER BY f.createdAt DESC")
+                            "ORDER BY f.id DESC")
                     .setParameter("user", user)
                     .setParameter("cursor", cursor)
                     .setMaxResults(count)
