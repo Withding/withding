@@ -3,13 +3,10 @@ package com.example.demo.Service;
 import com.example.demo.Config.BeanConfig;
 import com.example.demo.Config.JpaConfig;
 import com.example.demo.DTO.*;
-import com.example.demo.DTO.Response.GetMyProjects;
-import com.example.demo.DTO.Response.GetProject_0Level;
-import com.example.demo.DTO.Response.GetProject_1Level;
-import com.example.demo.DTO.Response.GetProject_2Level;
+import com.example.demo.Controller.ProjectController.DTO.GetMyProjects;
+import com.example.demo.Controller.ProjectController.DTO.GetProject_1Level;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Synchronized;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -600,12 +597,12 @@ public class ProjectService {
 
         EntityManager em = JpaConfig.emf.createEntityManager();
 
-        List<Funding> fundingList = new ArrayList<>();
+        List<Funding> fundingList;
         if (cursor == null) {
             fundingList = em.createQuery("SELECT f FROM Funding f " +
                             "WHERE f.userId =: user " +
                             "AND f.fundingStateCode.stateCode NOT IN (3)" +
-                            "ORDER BY f.createdAt DESC")
+                            "ORDER BY f.id DESC")
                     .setParameter("user", user)
                     .setFirstResult((page.intValue() - 1) * 6 )
                     .setMaxResults(count)
@@ -615,7 +612,7 @@ public class ProjectService {
                             "WHERE f.userId =: user " +
                             "AND f.id < :cursor " +
                             "AND f.fundingStateCode.stateCode NOT IN (3)" +
-                            "ORDER BY f.createdAt DESC")
+                            "ORDER BY f.id DESC")
                     .setParameter("user", user)
                     .setParameter("cursor", cursor)
                     .setMaxResults(count)
