@@ -3,9 +3,10 @@ import React from "react";
 import { useInfiniteQuery } from "react-query";
 import MyFundingItem from "./MyFundingItem";
 import { css } from "@emotion/react";
+import InfinityScroll from "@/components/common/InfinityScroll";
 
 function MyFundingList() {
-    const { data, hasNextPage, fetchNextPage }
+    const { data, hasNextPage, fetchNextPage, isFetchingNextPage }
         = useInfiniteQuery(["fetchMyFundingList"], ({ pageParam = 1 }) => fetchMyFunding({
             page: pageParam
         }), {
@@ -15,14 +16,20 @@ function MyFundingList() {
         });
     const fundingList = data?.pages.map((page) => page.fundingList).flat();
     return (
-        <ul css={style}>
-            {fundingList?.map((item) => (
-                <MyFundingItem
-                    key={item.id}
-                    {...item}
-                />
-            ))}
-        </ul>
+        <InfinityScroll
+            hasNextPage={hasNextPage}
+            fetchNextPage={fetchNextPage}
+            isFetchingNextPage={isFetchingNextPage}
+        >
+            <ul css={style}>
+                {fundingList?.map((item) => (
+                    <MyFundingItem
+                        key={item.id}
+                        {...item}
+                    />
+                ))}
+            </ul>
+        </InfinityScroll>
     );
 }
 
