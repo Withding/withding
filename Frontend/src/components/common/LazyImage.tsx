@@ -31,7 +31,6 @@ function LazyImage(props: BaseProps & LazyImageProps) {
                 if (entry.isIntersecting) { // 관찰되고 있는 entry가 보여지게 된 다면
                     io.unobserve(entry.target); // 관찰 종료
                     setIsShown(true); // 로딩 체크
-                    console.log("보임");
                 }
             });
         }, []);
