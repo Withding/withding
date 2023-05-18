@@ -10,6 +10,7 @@ const Signup = React.lazy(() => import("./pages/Signup/Index"));
 const Oauth = React.lazy(() => import("./pages/Oauth/Index"));
 const MyPage = React.lazy(() => import("./pages/MyPage/Index"));
 const Project = React.lazy(() => import("./pages/Project/Index"));
+const Users = React.lazy(() => import("./pages/Users/Index"));
 
 import { Suspense } from "react";
 import Auth from "./components/auth/Auth";
@@ -59,6 +60,7 @@ function App() {
                                 <Route path="/mypage/*" element={
                                     <PrivateRoute RouteComponent={MyPage} path={"/mypage"} />
                                 } />
+                                <Route path="/users/*" element={<Users />} />
                                 <Route path="/project/*" element={<Project />} />
                             </Routes>
                         </Suspense>
