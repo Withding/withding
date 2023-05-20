@@ -20,6 +20,7 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @Controller
 @CrossOrigin("*")
@@ -41,7 +42,7 @@ public class ProjectController {
      * @param request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
      * @return
      */
-    @RequestMapping(value = "/projects", method = RequestMethod.POST)
+    @PostMapping(value = "/projects")
     public ResponseEntity<Object> createProject_0Level(HttpServletRequest request){
         System.out.println("프로젝트 0단계 저장 진입");
         // ------------------------------ 인증 --------------------------------------------------------------------------
@@ -64,7 +65,7 @@ public class ProjectController {
      * 프로젝트 1단계 호출
      * @return 인증 실패 401, 정상 처리 200 + getProject_1Level, 비정상처리 400
      */
-    @RequestMapping(value = "/projects/1/{projectNum}", method = RequestMethod.GET)
+    @GetMapping(value = "/projects/1/{projectNum}")
     public ResponseEntity<Object> getProject_1Level(@PathVariable("projectNum") final Long projectId,
                                                     HttpServletRequest request){
         // ------------------------------ 인증 --------------------------------------------------------------------------
@@ -90,7 +91,7 @@ public class ProjectController {
      * @param request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
      * @return 인증실패 401, 정상 처리 204, 비정상 처리 400
      */
-    @RequestMapping(value = "/projects/1/{projectNum}", method = RequestMethod.PUT)
+    @PutMapping(value = "/projects/1/{projectNum}")
     public ResponseEntity<Object> createProject_1Level(
             @PathVariable("projectNum") Long id,                                                                        // 프로젝트 번호
             @RequestParam(value = "title", required = false) String title,                                              // 프로젝트 이름
@@ -224,7 +225,7 @@ public class ProjectController {
      * @param request request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
      * @return 인증실패 401, 정상 처리 204, 비정상 처리 400
      */
-    @RequestMapping(value = "/projects/2/{projectNum}", method = RequestMethod.PUT)
+    @PutMapping(value = "/projects/2/{projectNum}")
     public ResponseEntity<Object> createProject_2Level(@PathVariable("projectNum") Long projectId,
                                                 @RequestBody createProject_2Level project2Level,
                                                 HttpServletRequest request)
@@ -250,7 +251,7 @@ public class ProjectController {
      * @param request request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
      * @return 인증실패 401, 정상 처리 200 + content, 비정상 처리 400
      */
-    @RequestMapping(value = "/projects/2/{projectNum}", method = RequestMethod.GET)
+    @GetMapping(value = "/projects/2/{projectNum}")
     public ResponseEntity<Object> getProject_2Level(@PathVariable("projectNum") Long projectId,
                                                     HttpServletRequest request)
     {
@@ -278,7 +279,7 @@ public class ProjectController {
      * @param request request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
      * @return
      */
-    @RequestMapping(value = "/projects/3/{projectNum}", method = RequestMethod.POST)
+    @PostMapping(value = "/projects/3/{projectNum}")
     public ResponseEntity<Object> createProject_3Level(@PathVariable("projectNum") Long projectId,
                                                     @RequestBody Article article,
                                                     HttpServletRequest request)
@@ -305,7 +306,7 @@ public class ProjectController {
      * @param request request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
      * @return 해당 프로젝트 Id에 등록된 물품들을 담은 List<Article> 타입을 반환
      */
-    @RequestMapping(value = "/projects/3/{projectNum}", method = RequestMethod.GET)
+    @GetMapping(value = "/projects/3/{projectNum}")
     public ResponseEntity<Object> getProject_3Level(@PathVariable("projectNum") Long projectId,
                                                        HttpServletRequest request)
     {
@@ -328,7 +329,7 @@ public class ProjectController {
      * @param request request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
      * @return 인증실패 401, 정상 처리 204, 비정상 처리 400
      */
-    @RequestMapping(value = "/projects/3/{projectNum}", method = RequestMethod.PUT)
+    @PutMapping(value = "/projects/3/{projectNum}")
     public ResponseEntity<Object> changeProject_3Level(@PathVariable("projectNum") Long projectId,
                                                        @RequestBody Article article,
                                                        HttpServletRequest request){
@@ -353,7 +354,7 @@ public class ProjectController {
      * @param request request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
      * @return
      */
-    @RequestMapping(value = "/projects/3/{projectNum}", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/projects/3/{projectNum}")
     public ResponseEntity<Object> deleteArticle(@PathVariable("projectNum") Long projectId,
                                                 @RequestBody Article article,
                                                 HttpServletRequest request) {
@@ -371,13 +372,14 @@ public class ProjectController {
         }
     }
 
+
     /**
      * 프로젝트 최종 검사 후 등록하는 컨트롤러
      * @param projectId 프로젝트 Id
      * @param request request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
      * @return
      */
-    @RequestMapping(value = "/projects/{ProjectNum}", method = RequestMethod.PATCH)
+    @PatchMapping(value = "/projects/{ProjectNum}")
     public ResponseEntity<Object> validateProject(@PathVariable("ProjectNum")Long projectId,
                                                 HttpServletRequest request){
 
@@ -406,46 +408,13 @@ public class ProjectController {
 
 
     /**
-     * 프로젝트 내용에 삽입되는 이미지 파일을 저장하는 컨트롤러
-     * @param imageFile 삽입된 이미지 파일
-     * @param request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
-     * @return
-     */
-    @RequestMapping(value = "/content/image", method = RequestMethod.PUT, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Object> createContentImage(@RequestParam(value = "image") MultipartFile imageFile, HttpServletRequest request){
-        System.out.println(request.getAttribute("userNum"));
-        // ------------------------------ 인증 --------------------------------------------------------------------------
-        User user = userService.setUserToHttpServletRequestAttribute(request);
-        if (user == null){
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
-        // -------------------------------------------------------------------------------------------------------------
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-        String imageFileName = dateFormat.format(
-                new Timestamp(System.currentTimeMillis()))
-                + "_"
-                + imageFile.getOriginalFilename().replaceAll(" ", "");
-
-        if (projectService.createContentImage(imageFile, imageFileName)){
-            return new ResponseEntity<>(
-                    CreateContentImage.builder().preview(beanConfig.SERVER_URL + ":" + beanConfig.SERVER_PORT + beanConfig.CONTENT_IMAGE_URL + imageFileName).build(),
-                    HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-    }
-
-
-    //=============================================완성된 프로젝트들 ========================================================
-
-    /**
      * 마이페이지 메이커에서 내가 작성한 프로젝트 호출
      * @param page 호출할 페이지
      * @param cursor 시작점을 가리키는 커서
      * @param request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
      * @return 정상 처리 200 + List<GetMyProject> 객체, 비정상 200, 비어있는 List<GetMyProject> 객체
      */
-    @RequestMapping(value = "/myprojects", method = RequestMethod.GET)
+    @GetMapping(value = "/myprojects")
     public ResponseEntity<Object> getMyProjects(@RequestParam(value = "page",required = false)Long page,
                                                 @RequestParam(value = "cursor", required = false)Long cursor,
                                                 @RequestParam(value = "count") int count,
@@ -474,14 +443,27 @@ public class ProjectController {
         return new ResponseEntity<>(getMyProjectsFinal, HttpStatus.OK);
     }
 
+    /**
+     * 특정 사용자의 진행중인 펀딩, 종료한 펀딩을 호출
+     * @param userNum
+     * @return
+     */
+    @GetMapping(value = "/projects")
+    public ResponseEntity<Object> getProjectsToUser(@RequestParam(value = "userNum") Long userNum){
+        User findUser = userService.getUserToUserId(userNum);
+        GetFundingListToUserNum fundingList = projectService.getFundingListToUserNum(findUser);
+        return new ResponseEntity<>(fundingList, HttpStatus.OK);
+    }
+
 
     /**
      * 프로젝트 카테고리 호출
      * @return 정상 = 200 + 카테고리 목록, 비정상 = 400
      */
     @Synchronized
-    @RequestMapping(value = "/categorys", method = RequestMethod.GET)
-    public ResponseEntity<Object> getCategory() {
+    @GetMapping(value = "/categorys")
+    public ResponseEntity<Object> getCategory()
+    {
         ProjectCategory category = new ProjectCategory();
         category.setCategoryList(projectService.getCategoryList());
 
@@ -497,9 +479,10 @@ public class ProjectController {
      * 프로젝트 1단계에서 썸네일을 삭제하는 API
      * @return 인증실패 401, 정상 204, 실패 400
      */
-    @RequestMapping(value = "/projects/thumbnail/{projectNum}", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/projects/thumbnail/{projectNum}")
     public ResponseEntity<Object> deleteThumbnail(@PathVariable(value = "projectNum") Long id,
-                                                  HttpServletRequest request){
+                                                  HttpServletRequest request)
+    {
         // ------------------------------ 인증 --------------------------------------------------------------------------
         User user = userService.setUserToHttpServletRequestAttribute(request);
         System.out.println(user);
