@@ -163,19 +163,13 @@ public class UserService {
      * @return
      */
     public UserInfo getUserInfo(User user) {
-
         EntityManager em = JpaConfig.emf.createEntityManager();
         UserInfo userInfo = new UserInfo();
 
-        FundingStateCode progressFunding = new FundingStateCode(1);
-        FundingStateCode endFunding = new FundingStateCode(2);
+        userInfo.setUserImage(beanConfig.SERVER_URL + ":"+ beanConfig.SERVER_PORT + beanConfig.PROFILE_IMAGE_URL + user.getProfileImage().getProfileImage());
 
-        userInfo.setFundingList(em.createQuery("SELECT new Funding(f.id, f.title, f.thumbnail, f.fundingStateCode) FROM Funding f where f.userId =: user and f.fundingStateCode IN (:progressFunding, :endFunding)")
-                .setParameter("user", user)
-                .setParameter("progressFunding", progressFunding)
-                .setParameter("endFunding", endFunding)
-                .getResultList());
-        userInfo.setFollowerCount((Long) em.createQuery("SELECT COUNT(f) FROM Follower f where f.follower =: userId")
+        userInfo.setFollowerCount(
+                (Long) em.createQuery("SELECT COUNT(f) FROM Follower f where f.follower =: userId")
                 .setParameter("userId", user.getUserId())
                 .getSingleResult());
         userInfo.setFollowingCount((Long) em.createQuery("SELECT COUNT(f) FROM Follower f where f.user =: user")

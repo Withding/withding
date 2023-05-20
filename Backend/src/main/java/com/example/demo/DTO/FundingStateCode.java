@@ -24,4 +24,5 @@ public class FundingStateCode {
         this.stateCode = stateCode;
     }
 
+
 }
