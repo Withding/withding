@@ -3,9 +3,11 @@ package com.example.demo.Controller.MyPageController;
 import com.example.demo.Config.BeanConfig;
 import com.example.demo.Controller.MyPageController.DTO.MyPageMaker;
 import com.example.demo.Controller.MyPageController.DTO.MyPageSupporter;
+import com.example.demo.Controller.ProjectController.DTO.GetMyProjectsFinal;
 import com.example.demo.DTO.User;
 import com.example.demo.Repository.UserRepo;
 import com.example.demo.Service.MyPageService;
+import com.example.demo.Service.ProjectService;
 import com.example.demo.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -32,6 +35,9 @@ public class MyPageController {
 
     @Autowired
     private BeanConfig beanConfig;
+
+    @Autowired
+    private ProjectService projectService;
 
     /**
      * 마이페이지 서포터
@@ -77,6 +83,7 @@ public class MyPageController {
         MyPageMaker myPageMaker = myPageService.setMyPageMaker(user);
         return new ResponseEntity<>(myPageMaker, HttpStatus.OK);
     }
+
 
 
 

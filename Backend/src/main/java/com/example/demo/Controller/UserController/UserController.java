@@ -97,7 +97,8 @@ public class UserController {
      * @return 인증 실패 401, 호출 성공 200
      */
     @GetMapping(value = "/user")
-    public ResponseEntity<Object> getUserInfo(HttpServletRequest request, @RequestParam("userId") Long userId) {
+    public ResponseEntity<Object> getUserInfo(HttpServletRequest request,
+                                              @RequestParam("userId") Long userId) {
         // ------------------------------ 인증 --------------------------------------------------------------------------
         User user = userService.setUserToHttpServletRequestAttribute(request);
         if (user == null){
@@ -111,6 +112,9 @@ public class UserController {
         UserInfo userInfo = userService.getUserInfo(findUser);
         return new ResponseEntity<>(userInfo, HttpStatus.OK);
     }
+
+
+
 
 
 }

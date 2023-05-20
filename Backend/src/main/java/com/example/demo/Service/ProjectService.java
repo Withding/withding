@@ -2,6 +2,7 @@ package com.example.demo.Service;
 
 import com.example.demo.Config.BeanConfig;
 import com.example.demo.Config.JpaConfig;
+import com.example.demo.Controller.ProjectController.DTO.GetFundingListToUserNum;
 import com.example.demo.DTO.*;
 import com.example.demo.Controller.ProjectController.DTO.GetMyProjects;
 import com.example.demo.Controller.ProjectController.DTO.GetProject_1Level;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -671,4 +673,37 @@ public class ProjectService {
         em.close();
         return count;
     }
+
+
+    /**
+     * User 객체를 넘겨받아 해당 User의 진행중인 펀딩, 종료한 펀딩을 호출함
+     * @param user 펀딩 글을 호출할 타겟
+     * @return 해당 타겟이 작성한 List<Funding> 타입의 펀딩 목록
+     */
+    public GetFundingListToUserNum getFundingListToUserNum(User user) {
+        EntityManager em = JpaConfig.emf.createEntityManager();
+
+        // 진행중인 펀딩 상태 코드
+        FundingStateCode progressFunding = new FundingStateCode((Integer) em.createQuery("SELECT f.stateCode FROM FundingStateCode f WHERE f.state =: state")
+                .setParameter("state", "진행중")
+                .getSingleResult());
+
+        //FundingStateCode endFunding = new FundingStateCode(2);      // 종료한 펀딩 상태 코드
+        // 종료한 펀딩 상태 코드
+        FundingStateCode endFunding = new FundingStateCode((Integer) em.createQuery("SELECT f.stateCode FROM FundingStateCode f WHERE f.state =: state")
+                .setParameter("state", "종료")
+                .getSingleResult());
+        GetFundingListToUserNum fundingList = new GetFundingListToUserNum();
+
+        fundingList.setFundingList(em.createQuery("SELECT new Funding(f.id, f.title, f.thumbnail, f.fundingStateCode) FROM Funding f where f.userId =: user and f.fundingStateCode IN (:progressFunding, :endFunding)")
+        .setParameter("user", user)
+        .setParameter("progressFunding", progressFunding)
+        .setParameter("endFunding", endFunding)
+        .getResultList());
+
+        return fundingList;
+    }
+
+
+
 }

@@ -9,7 +9,9 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 public class UserInfo {
-    private List<Funding> fundingList;
+    private String nickname;
+    private String userImage;
     private Long followerCount;
     private Long followingCount;
+    private boolean isFollowing;
 }

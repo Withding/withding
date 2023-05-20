@@ -1,9 +1,11 @@
 package com.example.demo.Controller.FileController;
 
 import com.example.demo.Config.BeanConfig;
+import com.example.demo.Controller.ProjectController.DTO.CreateContentImage;
 import com.example.demo.DTO.ProfileImage;
 import com.example.demo.DTO.User;
 import com.example.demo.Service.FileService;
+import com.example.demo.Service.ProjectService;
 import com.example.demo.Service.UserService;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,12 @@ public class FileController {
 
     @Autowired
     private BeanConfig beanConfig;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private ProjectService projectService;
 
 
 
@@ -67,6 +75,35 @@ public class FileController {
     }
 
 
+    /**
+     * 프로젝트 내용에 삽입되는 이미지 파일을 저장하는 컨트롤러
+     * @param imageFile 삽입된 이미지 파일
+     * @param request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
+     * @return
+     */
+    @RequestMapping(value = "/content/image", method = RequestMethod.PUT, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Object> createContentImage(@RequestParam(value = "image") MultipartFile imageFile, HttpServletRequest request){
+        System.out.println(request.getAttribute("userNum"));
+        // ------------------------------ 인증 --------------------------------------------------------------------------
+        User user = userService.setUserToHttpServletRequestAttribute(request);
+        if (user == null){
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        // -------------------------------------------------------------------------------------------------------------
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String imageFileName = dateFormat.format(
+                new Timestamp(System.currentTimeMillis()))
+                + "_"
+                + imageFile.getOriginalFilename().replaceAll(" ", "");
+
+        if (projectService.createContentImage(imageFile, imageFileName)){
+            return new ResponseEntity<>(
+                    CreateContentImage.builder().preview(beanConfig.SERVER_URL + ":" + beanConfig.SERVER_PORT + beanConfig.CONTENT_IMAGE_URL + imageFileName).build(),
+                    HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 
 
 
