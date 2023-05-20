@@ -169,6 +169,7 @@ const style = css`
         --blue-300: #64B5F6;
         --blue-200: #90CAF9;
         --blue-100: #BBDEFB;
+        --blue-50: #E3F2FD;
         --yellow: #fede03;
         --orange: #ffa100;
         --orange-200: #FFCC80;
