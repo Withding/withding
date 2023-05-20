@@ -7,9 +7,10 @@ import React from "react";
  */
 function ContentInner(props: {
     children: React.ReactNode;
+    className?: string;
 }) {
     return (
-        <div css={style} className=".inner">{props.children}</div>
+        <div css={style} className={`.inner ${props?.className}`}>{props.children}</div>
     );
 }
 
