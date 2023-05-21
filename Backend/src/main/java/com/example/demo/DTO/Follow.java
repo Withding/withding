@@ -3,20 +3,20 @@ package com.example.demo.DTO;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.stereotype.Repository;
+
 import javax.persistence.*;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @NoArgsConstructor
 @Data
 @Entity
 @Table(name = "follow")
-public class Follower {
+public class Follow {
 
-    public Follower(User user, Long targetId) {
+    public Follow(User user, Long targetId) {
         this.user = user;
         this.follower = targetId;
     }
-    public Follower(Long follow_id, Long follower){
+    public Follow(Long follow_id, Long follower){
         this.follow_id = follow_id;
         this.follower = follower;
     }
