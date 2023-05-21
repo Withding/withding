@@ -4,13 +4,17 @@ package com.example.demo.Service;
 import com.example.demo.Config.BeanConfig;
 import com.example.demo.Config.JpaConfig;
 import com.example.demo.Controller.UserController.DTO.UserInfo;
+import com.example.demo.DTO.Follow;
 import com.example.demo.DTO.FundingStateCode;
 import com.example.demo.DTO.ProfileImage;
 import com.example.demo.DTO.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.Synchronized;
+import org.hibernate.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -159,22 +163,36 @@ public class UserService {
 
     /**
      * 특정 사용자의 정보를 호출하는 함수
-     * @param user 호출할 유저
+     * @param user 로그인한 유저
+     * @param target 정보를 가져올 사용자
      * @return
      */
-    public UserInfo getUserInfo(User user) {
+    public UserInfo getUserInfo(User user, User target) {
         EntityManager em = JpaConfig.emf.createEntityManager();
         UserInfo userInfo = new UserInfo();
 
-        userInfo.setUserImage(beanConfig.SERVER_URL + ":"+ beanConfig.SERVER_PORT + beanConfig.PROFILE_IMAGE_URL + user.getProfileImage().getProfileImage());
+        userInfo.setNickname(target.getNickName());
+        userInfo.setUserImage(beanConfig.SERVER_URL + ":"+ beanConfig.SERVER_PORT + beanConfig.PROFILE_IMAGE_URL + target.getProfileImage().getProfileImage());
+        userInfo.setFundingCount((Long) em.createQuery("SELECT COUNT(f) FROM Funding f where f.userId =: userId")
+                .setParameter("userId", target)
+                .getSingleResult());
+        userInfo.setFollowerCount((Long) em.createQuery("SELECT COUNT(f) FROM Follow f where f.follower =: userId")
+                .setParameter("userId", target.getUserId())
+                .getSingleResult());
+        userInfo.setFollowingCount((Long) em.createQuery("SELECT COUNT(f) FROM Follow f where f.user =: target")
+                .setParameter("target", target)
+                .getSingleResult());
 
-        userInfo.setFollowerCount(
-                (Long) em.createQuery("SELECT COUNT(f) FROM Follower f where f.follower =: userId")
+        // 팔로잉 중인지 확인(1이상이면 팔로잉중. 참고로 2이상일 수가 없음)
+        Long followCount = (Long) em.createQuery("select COUNT(f) from Follow f where f.follower =: userId AND f.user =: target")
                 .setParameter("userId", user.getUserId())
-                .getSingleResult());
-        userInfo.setFollowingCount((Long) em.createQuery("SELECT COUNT(f) FROM Follower f where f.user =: user")
-                .setParameter("user", user)
-                .getSingleResult());
+                .setParameter("target", target)
+                .getSingleResult();
+        if (followCount > 0){
+            userInfo.setIsFollowing(true);
+        }else {
+            userInfo.setIsFollowing(false);
+        }
 
         return userInfo;
     }

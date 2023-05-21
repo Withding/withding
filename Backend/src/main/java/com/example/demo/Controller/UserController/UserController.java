@@ -100,16 +100,19 @@ public class UserController {
     public ResponseEntity<Object> getUserInfo(HttpServletRequest request,
                                               @RequestParam("userId") Long userId) {
         // ------------------------------ 인증 --------------------------------------------------------------------------
+        // 헤더에 jwt가 없어도 정상동작 해야됨(있으면 팔로잉 상태 true, 없으면 false)
         User user = userService.setUserToHttpServletRequestAttribute(request);
         if (user == null){
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            user = new User();
         }
+
         // -------------------------------------------------------------------------------------------------------------
+
         User findUser = userService.getUserToUserId(userId);
         if (findUser == null){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        UserInfo userInfo = userService.getUserInfo(findUser);
+        UserInfo userInfo = userService.getUserInfo(user, findUser);
         return new ResponseEntity<>(userInfo, HttpStatus.OK);
     }
 

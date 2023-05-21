@@ -1,7 +1,7 @@
 package com.example.demo.Service;
 
 import com.example.demo.Config.JpaConfig;
-import com.example.demo.DTO.Follower;
+import com.example.demo.DTO.Follow;
 import com.example.demo.Controller.FollowController.DTO.GetFollowList;
 import com.example.demo.DTO.User;
 import org.springframework.stereotype.Service;
@@ -21,7 +21,7 @@ public class FollowService {
      */
     public GetFollowList getFollowList(final User user){
         EntityManager em = JpaConfig.emf.createEntityManager();
-        List<Follower> followList = (List<Follower>) em.createQuery("SELECT new Follower(f.follow_id, f.follower) FROM Follower f WHERE f.user =: user")
+        List<Follow> followList = (List<Follow>) em.createQuery("SELECT new Follow(f.follow_id, f.follower) FROM Follow f WHERE f.user =: user")
                 .setParameter("user", user)
                 .getResultList();
         GetFollowList getFollowList = new GetFollowList();
@@ -43,7 +43,7 @@ public class FollowService {
         EntityTransaction tr = em.getTransaction();
 
         User target = em.find(User.class, targetId);
-        Long followNum = (Long) em.createQuery("SELECT COUNT(f) FROM Follower f WHERE f.user =: user AND f.follower =: targetId")
+        Long followNum = (Long) em.createQuery("SELECT COUNT(f) FROM Follow f WHERE f.user =: user AND f.follower =: targetId")
                 .setParameter("user", user)
                 .setParameter("targetId", targetId)
                 .getSingleResult();
@@ -56,7 +56,7 @@ public class FollowService {
 
         try{
             tr.begin();
-            em.persist(new Follower(user, targetId));
+            em.persist(new Follow(user, targetId));
             tr.commit();
             em.close();
         } catch (Exception e){
@@ -80,7 +80,7 @@ public class FollowService {
         EntityManager em = JpaConfig.emf.createEntityManager();
         EntityTransaction tr = em.getTransaction();
 
-        Follower follow = em.find(Follower.class, followId);
+        Follow follow = em.find(Follow.class, followId);
         System.out.println(follow);
         if (follow == null || follow.getUser().equals(user)){
             em.close();
