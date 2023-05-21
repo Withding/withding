@@ -23,7 +23,7 @@ public class FollowerRepo {
     public Long getCountToUserId(Long user_id){
         EntityManager em = JpaConfig.emf.createEntityManager();
 
-        Long count = (Long) em.createQuery("SELECT COUNT(f.user.userId) FROM Follower f WHERE f.user.userId =: user_id")
+        Long count = (Long) em.createQuery("SELECT COUNT(f.user.userId) FROM Follow f WHERE f.user.userId =: user_id")
                 .setParameter("user_id", user_id)
                 .getSingleResult();
         em.close();
