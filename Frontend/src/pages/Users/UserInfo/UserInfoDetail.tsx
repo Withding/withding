@@ -1,4 +1,5 @@
 import Button from "@/components/common/Button";
+import useUserInfoContext from "@/hooks/useUserInfoContext";
 import { css } from "@emotion/react";
 import React from "react";
 
@@ -7,29 +8,30 @@ import React from "react";
  * @returns 
  */
 function UserInfoDetail() {
-    const name = "aaaa";
+    const { nickname, fundingCount, followerCount, followingCount, isFollowing }
+        = useUserInfoContext();
     return (
         <section css={style}>
             <div className="top">
-                <h2>{`${name}`}</h2>
+                <h2>{`${nickname}`}</h2>
                 <Button
-                    className={"event-btn"}
-                    value={`팔로잉 하기`}
+                    className={`event-btn ${isFollowing ? "follow-active" : "follow-inactive"}`}
+                    value={""}
                 />
             </div>
 
             <ul>
                 <li>
                     <p>{`펀딩`}</p>
-                    <span className="count">0</span>
+                    <span className="count">{fundingCount}</span>
                 </li>
                 <li>
                     <p>{`팔로잉`}</p>
-                    <span className="count">0</span>
+                    <span className="count">{followingCount}</span>
                 </li>
                 <li>
                     <p>{`팔로워`}</p>
-                    <span className="count">0</span>
+                    <span className="count">{followerCount}</span>
                 </li>
             </ul>
         </section>
@@ -82,6 +84,18 @@ const style = css`
     .count {
         font-weight: 600;
         margin-left: 0.3rem;
+    }
+    
+    .follow-inactive::before {
+        content: "팔로우 하기"
+    }
+
+    .follow-active::before {
+        content: "팔로우 중"
+    }
+
+    .follow-active:hover::before {
+        content: "언팔로우 하기"
     }
 
     @media screen and (min-width: 1096px) {
