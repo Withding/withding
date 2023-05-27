@@ -7,7 +7,7 @@ import Header from "./Header";
 import UserInfoContext from "@/store/UserInfoContext";
 import UserInfoResponse from "@/types/UserInfoResponse";
 import followUser from "@/utils/RequestApis/users/followUser";
-import unfollowUser from "@/utils/RequestApis/users/unFollowUser";
+import unfollowUser from "@/utils/RequestApis/users/unfollowUser";
 
 /**
  * /users/:userId 
