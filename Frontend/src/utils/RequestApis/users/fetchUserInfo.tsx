@@ -8,7 +8,7 @@ import httpClient from "@/utils/httpClient";
 
 function fetchUserInfo(userId: number) {
     return httpClient({
-        url: `/users/userId=${userId}`,
+        url: `/user?userId=${userId}`,
         method: "GET",
     });
 }
