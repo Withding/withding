@@ -8,8 +8,17 @@ import React from "react";
  * @returns 
  */
 function UserInfoDetail() {
-    const { nickname, fundingCount, followerCount, followingCount, isFollowing }
+    const { nickname, fundingCount, followerCount, followingCount, isFollowing, onFollow, onUnfollow }
         = useUserInfoContext();
+    console.log(isFollowing);
+    const onClickBtn = () => {
+        if (isFollowing) {
+            onUnfollow();
+        } else {
+            onFollow();
+        }
+    };
+
     return (
         <section css={style}>
             <div className="top">
@@ -17,6 +26,7 @@ function UserInfoDetail() {
                 <Button
                     className={`event-btn ${isFollowing ? "follow-active" : "follow-inactive"}`}
                     value={""}
+                    onClick={onClickBtn}
                 />
             </div>
 

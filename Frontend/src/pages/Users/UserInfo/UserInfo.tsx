@@ -1,11 +1,13 @@
 import fetchUserInfo from "@/utils/RequestApis/users/fetchUserInfo";
 import { css } from "@emotion/react";
 import React from "react";
-import { useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useParams } from "react-router-dom";
 import Header from "./Header";
 import UserInfoContext from "@/store/UserInfoContext";
 import UserInfoResponse from "@/types/UserInfoResponse";
+import followUser from "@/utils/RequestApis/users/followUser";
+import unfollowUser from "@/utils/RequestApis/users/unFollowUser";
 
 /**
  * /users/:userId 
@@ -14,15 +16,36 @@ import UserInfoResponse from "@/types/UserInfoResponse";
  */
 function UserInfo() {
     const { userId } = useParams<{ userId: string }>();
-
+    const queryClient = useQueryClient();
     const { data } = useQuery<UserInfoResponse>({
         queryKey: ["userInfo", userId],
         queryFn: () => fetchUserInfo(Number(userId)),
     });
 
+    const { mutate: onFollow } = useMutation(
+        () => followUser(Number(userId)),
+        {
+            onSettled: () => {
+                queryClient.invalidateQueries("userInfo");
+            }
+        }
+    );
+
+    const { mutate: onUnfollow } = useMutation(
+        () => unfollowUser(Number(userId)),
+        {
+            onSettled: () => {
+                console.log("ss");
+                queryClient.invalidateQueries("userInfo");
+            }
+        }
+    );
+
     return (
         <UserInfoContext.Provider value={{
-            ...data
+            ...data,
+            onFollow: onFollow,
+            onUnfollow: onUnfollow,
         }}>
             <div css={style}>
                 <Header />
