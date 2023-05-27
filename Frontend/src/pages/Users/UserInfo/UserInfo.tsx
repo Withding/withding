@@ -4,6 +4,8 @@ import React from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import Header from "./Header";
+import UserInfoContext from "@/store/UserInfoContext";
+import UserInfoResponse from "@/types/UserInfoResponse";
 
 /**
  * /users/:userId 
@@ -13,15 +15,21 @@ import Header from "./Header";
 function UserInfo() {
     const { userId } = useParams<{ userId: string }>();
 
-    const { data } = useQuery(["userIno", userId], () => {
-        fetchUserInfo(parseInt(userId || "0"));
+    const { data } = useQuery<UserInfoResponse>({
+        queryKey: ["userInfo", userId],
+        queryFn: () => fetchUserInfo(Number(userId)),
     });
 
     return (
-        <div css={style}>
-            <Header />
-            {userId}
-        </div>
+        <UserInfoContext.Provider value={{
+            ...data
+        }}>
+            <div css={style}>
+                <Header />
+                {userId}
+            </div>
+        </UserInfoContext.Provider>
+
     );
 }
 
