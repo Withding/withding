@@ -1,3 +1,4 @@
+import UserInfoResponse from "@/types/UserInfoResponse";
 import httpClient from "@/utils/httpClient";
 
 /**
@@ -6,11 +7,11 @@ import httpClient from "@/utils/httpClient";
      * @returns 
      */
 
-function fetchUserInfo(userId: number) {
+function fetchUserInfo(userId: number): Promise<UserInfoResponse> {
     return httpClient({
         url: `/user?userId=${userId}`,
         method: "GET",
-    });
+    }).then((response): UserInfoResponse => response.data);
 }
 
 export default fetchUserInfo;
