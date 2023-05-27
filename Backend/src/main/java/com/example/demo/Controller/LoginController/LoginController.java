@@ -48,7 +48,7 @@ public class LoginController {
         else {
             return new ResponseEntity (
                     new Login(
-                            "bearer "+ jwtService.generateJwtToken(user.getUserId(), user.getNickName(), user.getLoginTime())
+                            jwtService.generateJwtToken(user.getUserId(), user.getNickName(), user.getLoginTime())
                             , user.getNickName()
                             ,beanConfig.SERVER_URL + ":" + beanConfig.SERVER_PORT + beanConfig.PROFILE_IMAGE_URL + user.getProfileImage().getProfileImage()
                     )

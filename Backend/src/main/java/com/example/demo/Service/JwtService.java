@@ -86,7 +86,7 @@ public class JwtService implements InitializingBean {
             Claims claims = (Claims) Jwts.parserBuilder()
                     .setSigningKey(key)
                     .build()
-                    .parseClaimsJws(jwt.replace("bearer", "")) // jwt에서 "bearer " 제거
+                    .parseClaimsJws(jwt.replace("Bearer", "")) // jwt에서 "bearer " 제거
                     .getBody();
 
             map.put("userNum", claims.get("userNum",Long.class));
