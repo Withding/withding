@@ -23,6 +23,7 @@ import javax.persistence.EntityTransaction;
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @Service
 @NoArgsConstructor
@@ -58,26 +59,30 @@ public class UserService {
     @Synchronized
     public User setUserToHttpServletRequestAttribute(HttpServletRequest request){
         EntityManager em = JpaConfig.emf.createEntityManager();
+        User user = new User();
         try{
             System.out.println("setUserToHttpServletRequestAttribute = " + request.getAttribute("userNum"));
+            if (request.getAttribute("userNum") != null){
+                user = em.find(User.class, request.getAttribute("userNum"));
+                user.setLoginTime((String) request.getAttribute("loginTime"));
+                System.out.println("인증 함수 user = " + user);
 
-            User user = em.find(User.class, request.getAttribute("userNum"));
-
-            user.setLoginTime((String) request.getAttribute("loginTime"));
-            System.out.println("인증 함수 user = " + user);
-
-            // ------------------------------ String 타입의 시간 -> Date 타입의 시간으로 변경 -----------------------------------
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            Date loginDate = dateFormat.parse(user.getLoginTime());
-            Date logoutDate = dateFormat.parse(user.getLogoutAt());
-            // ---------------------------------------------------------------------------------------------------------
-            if (       user != null                                                                                     // 해당 userId에 대한 유저가 존재
-                    && user.getState().getStateCode() == 0                                                              // 해당 유저의 stateCode가 0(활동중)인 상태임
-                    && loginDate.after(logoutDate) == true) {                                                           // 로그아웃(logoutDate) 시간은 로그인(loginDate) 시간보다 이전(before)이다 == true == 탈취당한게 아님
-                em.close();
-                return user;
-            } else {
-                em.close();
+                // ------------------------------ String 타입의 시간 -> Date 타입의 시간으로 변경 -----------------------------------
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date loginDate = dateFormat.parse(user.getLoginTime());
+                Date logoutDate = dateFormat.parse(user.getLogoutAt());
+                // ---------------------------------------------------------------------------------------------------------
+                if (       user != null                                                                                     // 해당 userId에 대한 유저가 존재
+                        && user.getState().getStateCode() == 0                                                              // 해당 유저의 stateCode가 0(활동중)인 상태임
+                        && loginDate.after(logoutDate) == true) {                                                           // 로그아웃(logoutDate) 시간은 로그인(loginDate) 시간보다 이전(before)이다 == true == 탈취당한게 아님
+                    em.close();
+                    return user;
+                } else {
+                    em.close();
+                    return null;
+                }
+            }
+            else {
                 return null;
             }
         } catch (Exception e){
@@ -163,32 +168,36 @@ public class UserService {
 
     /**
      * 특정 사용자의 정보를 호출하는 함수
-     * @param user 로그인한 유저
+     * @param me 로그인한 유저
      * @param target 정보를 가져올 사용자
      * @return
      */
-    public UserInfo getUserInfo(User user, User target) {
+    public UserInfo getUserInfo(User me, User target) {
         EntityManager em = JpaConfig.emf.createEntityManager();
         UserInfo userInfo = new UserInfo();
 
         userInfo.setNickname(target.getNickName());
         userInfo.setUserImage(beanConfig.SERVER_URL + ":"+ beanConfig.SERVER_PORT + beanConfig.PROFILE_IMAGE_URL + target.getProfileImage().getProfileImage());
-        userInfo.setFundingCount((Long) em.createQuery("SELECT COUNT(f) FROM Funding f where f.userId =: userId")
-                .setParameter("userId", target)
+        userInfo.setFundingCount((Long) em.createQuery("SELECT COUNT(f) FROM Funding f where f.userId =: target")
+                .setParameter("target", target)
                 .getSingleResult());
-        userInfo.setFollowerCount((Long) em.createQuery("SELECT COUNT(f) FROM Follow f where f.follower =: userId")
-                .setParameter("userId", target.getUserId())
+        userInfo.setFollowerCount((Long) em.createQuery("SELECT COUNT(f) FROM Follow f where f.follower =: target")
+                .setParameter("target", target.getUserId())
                 .getSingleResult());
         userInfo.setFollowingCount((Long) em.createQuery("SELECT COUNT(f) FROM Follow f where f.user =: target")
                 .setParameter("target", target)
                 .getSingleResult());
 
         // 팔로잉 중인지 확인(1이상이면 팔로잉중. 참고로 2이상일 수가 없음)
-        Long followCount = (Long) em.createQuery("select COUNT(f) from Follow f where f.follower =: userId AND f.user =: target")
-                .setParameter("userId", user.getUserId())
+        Long followCount = (Long) em.createQuery("select COUNT(f) from Follow f where f.user =: target AND f.follower =: me")
                 .setParameter("target", target)
+                .setParameter("me", me.getUserId())
                 .getSingleResult();
-        if (followCount > 0){
+
+        System.out.println(me.getUserId());
+        System.out.println(followCount);
+
+        if (followCount > 0L){
             userInfo.setIsFollowing(true);
         }else {
             userInfo.setIsFollowing(false);
