@@ -156,7 +156,7 @@ public class LoginService {
                     && bCryptPasswordEncoder.matches(requestPwd, user.getPassword()) == true                            // && 비밀번호 확인
             ) {
                 return new Login(
-                        jwtService.generateJwtToken(user.getUserId(), user.getNickName(), user.getLoginTime())
+                        "bearer "+ jwtService.generateJwtToken(user.getUserId(), user.getNickName(), user.getLoginTime())
                         , user.getNickName()
                         ,beanConfig.SERVER_URL + ":" + beanConfig.SERVER_PORT + beanConfig.PROFILE_IMAGE_URL + user.getProfileImage().getProfileImage()
                 );

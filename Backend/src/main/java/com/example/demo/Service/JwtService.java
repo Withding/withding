@@ -28,6 +28,12 @@ public class JwtService implements InitializingBean {
 
     private final Long expiredTime = 1000 * 60L * 60L * 24L * 365L; // 유효시간 365일 (밀리초 1000 = 1초 * 60 * 60  = 1시간 * 24 = 24시간 * 365L = 365일)
 
+
+
+
+    //
+    //
+    //
     @Override
     public void afterPropertiesSet() throws Exception {
         System.out.println("애프터 프로퍼티 셋 실행");
@@ -54,10 +60,10 @@ public class JwtService implements InitializingBean {
         Date now = new Date();
         return Jwts.builder()
                 //.setSubject()                                         // 보통 username
-                .setHeader(createHeader())
-                .claim("userNum", userNum)
+                .setHeader(createHeader())                              //
+                .claim("userNum", userNum)                        //
                 .claim("nickName", nickName)                      //
-                .claim("loginTime", loginTime)
+                .claim("loginTime", loginTime)                    //
                 //.setClaims(createClaims(usernum))                     // 클레임, 토큰에 포함될 정보
                 .setExpiration(new Date(now.getTime() + expiredTime))   // 만료일
                 .signWith(key)
@@ -75,13 +81,12 @@ public class JwtService implements InitializingBean {
                 return null;
             }
             Map<String, Object> map = new HashMap<>();
-
             System.out.println("this.key : " + key.getEncoded());
             System.out.println("validateToken jwt = " + jwt);
             Claims claims = (Claims) Jwts.parserBuilder()
                     .setSigningKey(key)
                     .build()
-                    .parseClaimsJws(jwt)
+                    .parseClaimsJws(jwt.replace("bearer", "")) // jwt에서 "bearer " 제거
                     .getBody();
 
             map.put("userNum", claims.get("userNum",Long.class));
