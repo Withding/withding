@@ -72,9 +72,9 @@ public class UserService {
                 Date loginDate = dateFormat.parse(user.getLoginTime());
                 Date logoutDate = dateFormat.parse(user.getLogoutAt());
                 // ---------------------------------------------------------------------------------------------------------
-                if (       user != null                                                                                     // 해당 userId에 대한 유저가 존재
-                        && user.getState().getStateCode() == 0                                                              // 해당 유저의 stateCode가 0(활동중)인 상태임
-                        && loginDate.after(logoutDate) == true) {                                                           // 로그아웃(logoutDate) 시간은 로그인(loginDate) 시간보다 이전(before)이다 == true == 탈취당한게 아님
+                if (       user != null                                                                                 // 해당 userId에 대한 유저가 존재
+                        && user.getState().getStateCode() == 0                                                          // 해당 유저의 stateCode가 0(활동중)인 상태임
+                        && loginDate.after(logoutDate) == true) {                                                       // 로그아웃(logoutDate) 시간은 로그인(loginDate) 시간보다 이전(before)이다 == true == 탈취당한게 아님
                     em.close();
                     return user;
                 } else {

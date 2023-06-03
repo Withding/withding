@@ -80,13 +80,17 @@ public class JwtService implements InitializingBean {
             if (jwt == null) {
                 return null;
             }
+            String[] arrStr = jwt.split("Bearer ");
+            if (arrStr[1] == null){
+                return null;
+            }
             Map<String, Object> map = new HashMap<>();
             System.out.println("this.key : " + key.getEncoded());
             System.out.println("validateToken jwt = " + jwt);
             Claims claims = (Claims) Jwts.parserBuilder()
                     .setSigningKey(key)
                     .build()
-                    .parseClaimsJws(jwt.replace("Bearer", "")) // jwt에서 "bearer " 제거
+                    .parseClaimsJws(jwt.replace("Bearer ", "")) // jwt에서 "bearer " 제거
                     .getBody();
 
             map.put("userNum", claims.get("userNum",Long.class));
