@@ -56,7 +56,7 @@ public class FollowService {
 
         try{
             tr.begin();
-            em.persist(new Follow(user, targetId));
+            em.persist(new Follow(target, user.getUserId()));
             tr.commit();
             em.close();
         } catch (Exception e){
