@@ -73,15 +73,19 @@ public class FollowService {
     /**
      * 언팔로우 함수
      * @param user
-     * @param followId 삭제할 팔로우
+     * @param unfollowNum 팔로우 해제할 사람
      * @return 정상 true, 비정상 false
      */
-    public boolean unFollow(User user, Long followId){
+    public boolean unFollow(User user, Long unfollowNum){
         EntityManager em = JpaConfig.emf.createEntityManager();
         EntityTransaction tr = em.getTransaction();
 
+        User unfollwer = em.find(User.class, unfollowNum);
+        Long followId = (Long)em.createQuery("SELECT f.follow_id FROM Follow f WHERE f.follower =: me AND f.user =: unfollower")
+                .setParameter("me", user.getUserId())
+                .setParameter("unfollower", unfollwer)
+                .getSingleResult();
         Follow follow = em.find(Follow.class, followId);
-        System.out.println(follow);
         if (follow == null || follow.getUser().equals(user)){
             em.close();
             return false;
