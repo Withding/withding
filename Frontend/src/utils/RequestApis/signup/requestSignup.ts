@@ -1,5 +1,5 @@
 import EmailSignupType from "@/types/EmailSignupType";
-import customAxios from "@/utils/customAxios";
+import httpClient from "@/utils/httpClient";
 import { AxiosResponse } from "axios";
 
 /**
@@ -9,8 +9,7 @@ import { AxiosResponse } from "axios";
  */
 
 function requestSignup(user: EmailSignupType): Promise<AxiosResponse> {
-    const axios = customAxios();
-    return axios({
+    return httpClient({
         method: "POST",
         url: `/user`,
         data: {

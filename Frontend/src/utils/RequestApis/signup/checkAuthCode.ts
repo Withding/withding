@@ -1,5 +1,5 @@
-import customAxios from "@/utils/customAxios";
-import { AxiosResponse } from "axios";
+
+import httpClient from "@/utils/httpClient";
 
 /**
  * 이메일 인증코드가 유효한지 확인하는 API
@@ -9,8 +9,7 @@ import { AxiosResponse } from "axios";
  */
 
 function requestAuthCode(email: string,authCode : string): Promise<{secretKey: string}> {
-    const axios = customAxios();
-    return axios({
+    return httpClient({
         method: "POST",
         url: `/user/auth/check`,
         data: {

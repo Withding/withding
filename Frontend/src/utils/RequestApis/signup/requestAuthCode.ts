@@ -1,4 +1,4 @@
-import customAxios from "@/utils/customAxios";
+import httpClient from "@/utils/httpClient";
 import { AxiosResponse } from "axios";
 
 /**
@@ -8,8 +8,7 @@ import { AxiosResponse } from "axios";
  */
 
 function requestAuthCode(email : string): Promise<AxiosResponse> {
-    const axios = customAxios();
-    return axios({
+    return httpClient({
         method: "GET",
         url: `/user/auth/email?email=${email}`,
     }).then((res) => res.data);
