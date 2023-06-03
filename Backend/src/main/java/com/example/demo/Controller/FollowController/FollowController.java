@@ -73,7 +73,7 @@ public class FollowController {
      */
     @DeleteMapping("/user/follow")
     public ResponseEntity<Object> unFollow(HttpServletRequest request,
-                                   @RequestParam("followId") Long followId){
+                                   @RequestParam("userId")Long unfollowNum){
         // ------------------------------ 인증 --------------------------------------------------------------------------
         User user = userService.setUserToHttpServletRequestAttribute(request);
         if (user == null){                                                                                              // 인증
@@ -81,7 +81,7 @@ public class FollowController {
         }
         // -------------------------------------------------------------------------------------------------------------
 
-        if (followService.unFollow(user, followId)){
+        if (followService.unFollow(user, unfollowNum)){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
