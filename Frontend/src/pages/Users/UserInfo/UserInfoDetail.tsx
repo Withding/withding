@@ -10,7 +10,7 @@ import React from "react";
 function UserInfoDetail() {
     const { nickname, fundingCount, followerCount, followingCount, isFollowing, onFollow, onUnfollow }
         = useUserInfoContext();
-    console.log(isFollowing);
+
     const onClickBtn = () => {
         if (isFollowing) {
             onUnfollow();

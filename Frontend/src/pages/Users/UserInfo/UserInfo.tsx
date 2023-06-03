@@ -35,7 +35,6 @@ function UserInfo() {
         () => unfollowUser(Number(userId)),
         {
             onSettled: () => {
-                console.log("ss");
                 queryClient.invalidateQueries("userInfo");
             }
         }
