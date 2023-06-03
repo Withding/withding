@@ -6,10 +6,10 @@ export default function httpClient({
     headers,
     data
 }: {
-  url: string;
-  method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
-  headers?: Record<string, string>;
-  data?: any;
+    url: string;
+    method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
+    headers?: Record<string, string>;
+    data?: any;
 }) {
     const user = JSON.parse(localStorage.getItem("user") || "{}");
     const accessToken = user?.accessToken;
@@ -19,7 +19,7 @@ export default function httpClient({
         method,
         headers: {
             "Content-Type": "application/json",
-            "authorization": `${accessToken}`,
+            "authorization": `Bearer ${accessToken}`,
             ...headers,
         },
         data: {
