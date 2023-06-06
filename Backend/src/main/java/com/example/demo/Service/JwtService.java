@@ -80,7 +80,7 @@ public class JwtService implements InitializingBean {
             if (jwt == null) {
                 return null;
             }
-            String[] arrStr = jwt.split("Bearer ");
+            String[] arrStr = jwt.replace(" ", "").split("Bearer");
             if (arrStr[1] == null){
                 return null;
             }
@@ -90,7 +90,7 @@ public class JwtService implements InitializingBean {
             Claims claims = (Claims) Jwts.parserBuilder()
                     .setSigningKey(key)
                     .build()
-                    .parseClaimsJws(jwt.replace("Bearer ", "")) // jwt에서 "bearer " 제거
+                    .parseClaimsJws(jwt.replace(" ", "").replace("Bearer", "")) // jwt에서 "bearer " 제거
                     .getBody();
 
             map.put("userNum", claims.get("userNum",Long.class));
