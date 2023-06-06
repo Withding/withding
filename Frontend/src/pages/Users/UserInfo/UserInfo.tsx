@@ -8,6 +8,7 @@ import UserInfoContext from "@/store/UserInfoContext";
 import UserInfoResponse from "@/types/UserInfoResponse";
 import followUser from "@/utils/RequestApis/users/followUser";
 import unfollowUser from "@/utils/RequestApis/users/unfollowUser";
+import Content from "./Content";
 
 /**
  * /users/:userId 
@@ -48,7 +49,7 @@ function UserInfo() {
         }}>
             <div css={style}>
                 <Header />
-                {userId}
+                <Content />
             </div>
         </UserInfoContext.Provider>
 
