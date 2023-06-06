@@ -1,9 +1,9 @@
 import fetchMyFunding from "@/utils/RequestApis/funding/fetchMyFunding";
 import React from "react";
 import { useInfiniteQuery } from "react-query";
-import MyFundingItem from "./MyFundingItem";
-import { css } from "@emotion/react";
 import InfinityScroll from "@/components/common/InfinityScroll";
+import UserFundingList from "@/components/common/UserFunding/UserFundingList";
+import UserFundingItem from "@/components/common/UserFunding/UserFundingItem";
 
 function MyFundingList() {
     const { data, hasNextPage, fetchNextPage, isFetchingNextPage }
@@ -21,38 +21,21 @@ function MyFundingList() {
             fetchNextPage={fetchNextPage}
             isFetchingNextPage={isFetchingNextPage}
         >
-            <ul css={style}>
+            <UserFundingList>
                 {fundingList?.map((item) => (
-                    <MyFundingItem
+                    <UserFundingItem
                         key={item.id}
-                        {...item}
+                        title={item.title}
+                        imgSrc={item.image}
+                        alt={item.id.toString()}
+                        url={`/project/make?project=${item.id}`}
+                        state={item.state}
+                        underText={"스튜디오 바로가기"}
                     />
                 ))}
-            </ul>
+            </UserFundingList>
         </InfinityScroll>
     );
 }
-
-const style = css`
-    width: 100%;
-    display: flex;
-    margin-top: 1rem;
-    @media screen and (min-width: 1096px) {
-        flex-wrap: wrap;
-        justify-content: space-around;
-        li {
-            max-width: 30%;
-            margin-bottom: 0.5rem;
-        }
-    }
-
-    @media screen and (max-width: 1095px) {
-        flex-direction: column;
-        padding: 0 1rem 0 1rem;
-        li {
-            margin-bottom: 1rem;
-        }
-    }
-`;
 
 export default MyFundingList;
