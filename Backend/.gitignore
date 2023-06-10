@@ -4,9 +4,10 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
-application.properties
-persistence.xml
 
+
+src/main/resources/application.properties
+src/main/resources/META-INF/persistence.xml
 ### STS ###
 .apt_generated
 .classpath
