@@ -1,7 +1,7 @@
 import fetchUserInfo from "@/utils/RequestApis/users/fetchUserInfo";
 import { css } from "@emotion/react";
 import React from "react";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "react-query";
 import { useParams } from "react-router-dom";
 import Header from "./Header";
 import UserInfoContext from "@/store/UserInfoContext";
@@ -9,6 +9,8 @@ import UserInfoResponse from "@/types/UserInfoResponse";
 import followUser from "@/utils/RequestApis/users/followUser";
 import unfollowUser from "@/utils/RequestApis/users/unfollowUser";
 import Content from "./Content";
+import UserFundingListResponse from "@/types/UserFundingListResponse";
+import fetchUserFundingList from "@/utils/RequestApis/users/fetchUserFundingList";
 
 /**
  * /users/:userId 
@@ -18,10 +20,20 @@ import Content from "./Content";
 function UserInfo() {
     const { userId } = useParams<{ userId: string }>();
     const queryClient = useQueryClient();
+
     const { data } = useQuery<UserInfoResponse>({
         queryKey: ["userInfo", userId],
         queryFn: () => fetchUserInfo(Number(userId)),
     });
+
+    const { data: fundingList, hasNextPage, fetchNextPage, isFetchingNextPage }
+        = useInfiniteQuery<UserFundingListResponse>({
+            queryKey: ["userFundligList", userId],
+            queryFn: ({ pageParam = 1 }) => fetchUserFundingList(Number(userId)),
+            getNextPageParam: (lastPage, allPage) => {
+                if (lastPage.currentPage < lastPage.lastPage) return lastPage.currentPage + 1;
+            }
+        });
 
     const { mutate: onFollow } = useMutation(
         () => followUser(Number(userId)),
