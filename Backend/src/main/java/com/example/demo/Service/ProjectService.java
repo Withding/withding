@@ -2,7 +2,7 @@ package com.example.demo.Service;
 
 import com.example.demo.Config.BeanConfig;
 import com.example.demo.Config.JpaConfig;
-import com.example.demo.Controller.ProjectController.DTO.GetFundingListToUserNum;
+import com.example.demo.Controller.ProjectController.DTO.ProjectSmallForm;
 import com.example.demo.DTO.*;
 import com.example.demo.Controller.ProjectController.DTO.GetMyProjects;
 import com.example.demo.Controller.ProjectController.DTO.GetProject_1Level;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -680,7 +679,7 @@ public class ProjectService {
      * @param user 펀딩 글을 호출할 타겟
      * @return 해당 타겟이 작성한 List<Funding> 타입의 펀딩 목록
      */
-    public GetFundingListToUserNum getFundingListToUserNum(User user) {
+    public List<ProjectSmallForm> getFundingListToUserNum(User user) {
         EntityManager em = JpaConfig.emf.createEntityManager();
 
         // 진행중인 펀딩 상태 코드
@@ -693,15 +692,31 @@ public class ProjectService {
         FundingStateCode endFunding = new FundingStateCode((Integer) em.createQuery("SELECT f.stateCode FROM FundingStateCode f WHERE f.state =: state")
                 .setParameter("state", "종료")
                 .getSingleResult());
-        GetFundingListToUserNum fundingList = new GetFundingListToUserNum();
+        List<Funding> fundingList = new ArrayList<>();
 
-        fundingList.setFundingList(em.createQuery("SELECT new Funding(f.id, f.title, f.thumbnail, f.fundingStateCode) FROM Funding f where f.userId =: user and f.fundingStateCode IN (:progressFunding, :endFunding)")
+        fundingList = (em.createQuery("SELECT new Funding(f.id, f.title, f.thumbnail, f.fundingStateCode) FROM Funding f where f.userId =: user and f.fundingStateCode IN (:progressFunding, :endFunding)")
         .setParameter("user", user)
         .setParameter("progressFunding", progressFunding)
         .setParameter("endFunding", endFunding)
         .getResultList());
+        System.out.println(fundingList);
 
-        return fundingList;
+        List<ProjectSmallForm> resultList = new ArrayList<>();
+        for (int i = 0; i < fundingList.size(); i++){
+            ProjectSmallForm projectSmallForm = new ProjectSmallForm();
+            projectSmallForm.setId(fundingList.get(i).getId());
+            projectSmallForm.setTitle(fundingList.get(i).getTitle());
+            projectSmallForm.setImage(beanConfig.SERVER_URL + ":" + beanConfig.SERVER_PORT + beanConfig.THUMBNAIL_IMAGE_URL + fundingList.get(i).getThumbnail().getImage());
+            projectSmallForm.setState(fundingList.get(i).getFundingStateCode().getState());
+
+            // 현재 요청에서는 사용하지 않는 필드
+            projectSmallForm.setView(null);
+            projectSmallForm.setVote(null);
+            projectSmallForm.setIsDeleteAble(null);
+            resultList.add(projectSmallForm);
+        }
+
+        return resultList;
     }
 
 

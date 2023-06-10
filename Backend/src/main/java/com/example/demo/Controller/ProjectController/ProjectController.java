@@ -9,7 +9,6 @@ import com.example.demo.Service.UserService;
 import lombok.Synchronized;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -409,7 +408,7 @@ public class ProjectController {
 
     /**
      * 마이페이지 메이커에서 내가 작성한 프로젝트 호출
-     * @param page 호출할 페이지
+     * @param page 호출할 페이지가
      * @param cursor 시작점을 가리키는 커서
      * @param request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
      * @return 정상 처리 200 + List<GetMyProject> 객체, 비정상 200, 비어있는 List<GetMyProject> 객체
@@ -444,14 +443,15 @@ public class ProjectController {
     }
 
     /**
-     * 특정 사용자의 진행중인 펀딩, 종료한 펀딩을 호출
+     * 특정 유저의 펀딩 리스트 호출
      * @param userNum
      * @return
      */
     @GetMapping(value = "/projects")
     public ResponseEntity<Object> getProjectsToUser(@RequestParam(value = "userNum") Long userNum){
+        ResponseProjectList fundingList = new ResponseProjectList();
         User findUser = userService.getUserToUserId(userNum);
-        GetFundingListToUserNum fundingList = projectService.getFundingListToUserNum(findUser);
+        fundingList.setFundingList(projectService.getFundingListToUserNum(findUser));
         return new ResponseEntity<>(fundingList, HttpStatus.OK);
     }
 
