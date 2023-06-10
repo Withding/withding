@@ -6,8 +6,8 @@ build/
 !**/src/test/**/build/
 
 
-src/main/resources/application.properties
-src/main/resources/META-INF/persistence.xml
+!**/src/main/resources/
+
 ### STS ###
 .apt_generated
 .classpath
