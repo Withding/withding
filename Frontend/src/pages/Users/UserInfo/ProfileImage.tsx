@@ -3,10 +3,10 @@ import { css } from "@emotion/react";
 import React from "react";
 
 function ProfileImage() {
-    const { userImage } = useUserInfoContext();
+    const { userInfo } = useUserInfoContext();
     return (
         <figure css={style}>
-            <img src={userImage} alt="프로필 이미지" />
+            <img src={userInfo.userImage} alt="프로필 이미지" />
         </figure>
     );
 }

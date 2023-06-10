@@ -43,9 +43,11 @@ function UserInfo() {
 
     return (
         <UserInfoContext.Provider value={{
-            ...data,
-            onFollow: onFollow,
-            onUnfollow: onUnfollow,
+            userInfo: {
+                ...data,
+                onFollow: onFollow,
+                onUnfollow: onUnfollow
+            }
         }}>
             <div css={style}>
                 <Header />

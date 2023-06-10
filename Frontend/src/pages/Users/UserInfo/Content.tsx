@@ -1,13 +1,13 @@
 import ContentInner from "@/components/common/ContentInner";
 import { css } from "@emotion/react";
 import React from "react";
-import UserFundingList from "./UserFundingList";
+import List from "./List";
 
 function Content() {
     return (
         <main css={style}>
             <ContentInner>
-                <UserFundingList />
+                <List />
             </ContentInner>
         </main>
     );

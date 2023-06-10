@@ -8,8 +8,9 @@ import React from "react";
  * @returns 
  */
 function UserInfoDetail() {
+    const { userInfo } = useUserInfoContext();
     const { nickname, fundingCount, followerCount, followingCount, isFollowing, onFollow, onUnfollow }
-        = useUserInfoContext();
+        = userInfo;
 
     const onClickBtn = () => {
         if (isFollowing) {
