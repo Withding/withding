@@ -52,13 +52,20 @@ function UserInfo() {
             }
         }
     );
-
+    console.log(fundingList?.pages);
     return (
         <UserInfoContext.Provider value={{
             userInfo: {
                 ...data,
                 onFollow: onFollow,
                 onUnfollow: onUnfollow
+            },
+            list: {
+                fundingList: fundingList?.pages.map((page) => page.fundingList).flat(),
+                hasNextPage: hasNextPage,
+                fetchNextPage: fetchNextPage,
+                isFetchingNextPage: isFetchingNextPage,
+                lastPage: 0
             }
         }}>
             <div css={style}>
