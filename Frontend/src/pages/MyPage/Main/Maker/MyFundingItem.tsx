@@ -1,4 +1,4 @@
-import Funding from "@/types/Funding";
+import Funding from "@/types/UserFunding";
 import { css } from "@emotion/react";
 import React, { useCallback } from "react";
 import { useNavigate } from "react-router-dom";

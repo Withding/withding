@@ -1,4 +1,4 @@
-import Funding from "./Funding";
+import Funding from "./UserFunding";
 
 /**
  * FundingList
