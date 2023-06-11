@@ -6,7 +6,6 @@ import React from "react";
 
 function List() {
     const { list } = useUserInfoContext();
-    console.log(list.fundingList);
     return (
         <InfinityScroll
             hasNextPage={list.hasNextPage}

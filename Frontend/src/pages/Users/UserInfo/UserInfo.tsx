@@ -29,7 +29,10 @@ function UserInfo() {
     const { data: fundingList, hasNextPage, fetchNextPage, isFetchingNextPage }
         = useInfiniteQuery<UserFundingListResponse>({
             queryKey: ["userFundligList", userId],
-            queryFn: ({ pageParam = 1 }) => fetchUserFundingList(Number(userId)),
+            queryFn: ({ pageParam = 1 }) => fetchUserFundingList({
+                userNum: Number(userId),
+                page: pageParam,
+            }),
             getNextPageParam: (lastPage, allPage) => {
                 if (lastPage.currentPage < lastPage.lastPage) return lastPage.currentPage + 1;
             }
@@ -52,7 +55,6 @@ function UserInfo() {
             }
         }
     );
-    console.log(fundingList?.pages);
     return (
         <UserInfoContext.Provider value={{
             userInfo: {
