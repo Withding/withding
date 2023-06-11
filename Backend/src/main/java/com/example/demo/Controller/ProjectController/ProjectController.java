@@ -409,8 +409,9 @@ public class ProjectController {
     /**
      * 마이페이지 메이커에서 내가 작성한 프로젝트 호출
      * @param page 호출할 페이지가
-     * @param cursor 시작점을 가리키는 커서
+     * @param cursor 마지막을 가리키는 커서
      * @param request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
+     * @param count 페이지당 글 갯수
      * @return 정상 처리 200 + List<GetMyProject> 객체, 비정상 200, 비어있는 List<GetMyProject> 객체
      */
     @GetMapping(value = "/myprojects")
@@ -425,7 +426,7 @@ public class ProjectController {
         }
         // -------------------------------------------------------------------------------------------------------------
 
-        Long fundingCount = projectService.getCountToUserId(user.getUserId());
+        Long fundingCount = projectService.getFundingCountToUserId(user.getUserId());
         Long lastPage = 0L;
 
         GetMyProjectsFinal getMyProjectsFinal = new GetMyProjectsFinal();
@@ -445,13 +446,29 @@ public class ProjectController {
     /**
      * 특정 유저의 펀딩 리스트 호출
      * @param userNum
+     * @param page 호출할 페이지가
+     * @param cursor 마지막을 가리키는 커서
+     * @param count 페이지당 글 갯수
      * @return
      */
     @GetMapping(value = "/projects")
-    public ResponseEntity<Object> getProjectsToUser(@RequestParam(value = "userNum") Long userNum){
+    public ResponseEntity<Object> getProjectsToUser(@RequestParam(value = "userNum") Long userNum,
+                                                    @RequestParam(value = "page", required = false) Long page,
+                                                    @RequestParam(value = "cursor", required = false) Long cursor,
+                                                    @RequestParam(value = "count") int count) {
         ResponseProjectList fundingList = new ResponseProjectList();
         User findUser = userService.getUserToUserId(userNum);
-        fundingList.setFundingList(projectService.getFundingListToUserNum(findUser));
+        fundingList.setFundingList(projectService.getFundingListToUserNum(findUser, page, cursor, count));
+        Long fundingCount;
+        fundingCount = projectService.getFundingCountToUserIdAndFundingState(userNum, "진행중") + projectService.getFundingCountToUserIdAndFundingState(userNum, "종료");
+
+        if (fundingCount % count == 0){
+            fundingList.setLastPage(fundingCount / count);
+        } else {
+            fundingList.setLastPage((fundingCount / count) + 1);
+        }
+
+
         return new ResponseEntity<>(fundingList, HttpStatus.OK);
     }
 

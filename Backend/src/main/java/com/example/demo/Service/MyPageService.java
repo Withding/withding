@@ -38,7 +38,7 @@ public class MyPageService {
         MyPageSupporter myPageSupporter = new MyPageSupporter();
         myPageSupporter.setNickName(user.getNickName());
         myPageSupporter.setPoint(user.getPoint());
-        myPageSupporter.setFundingCount(projectService.getCountToUserId(user.getUserId()));
+        myPageSupporter.setFundingCount(projectService.getFundingCountToUserId(user.getUserId()));
         myPageSupporter.setProfileImage(beanConfig.SERVER_URL + ":" + beanConfig.SERVER_PORT + beanConfig.PROFILE_IMAGE_URL + user.getProfileImage().getProfileImage());
         return myPageSupporter;
     }

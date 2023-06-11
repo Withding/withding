@@ -588,7 +588,8 @@ public class ProjectService {
      * 커서 기반으로 내가 작성한 프로젝트를 목록으로 반환해주는 함수
      * @param user 프로젝트를 작성한 user
      * @param page 호출할 페이지
-     * @param cursor 시작점을 가리키는 커서
+     * @param cursor 마지막을 가리키는 커서
+     * @param count 한 페이지당 출력할 펀딩 갯수
      * @return
      */
     public List<GetMyProjects> getMyProjects(User user, Long page, Long cursor, int count) {
@@ -605,13 +606,13 @@ public class ProjectService {
                             "AND f.fundingStateCode.stateCode NOT IN (3)" +
                             "ORDER BY f.id DESC")
                     .setParameter("user", user)
-                    .setFirstResult((page.intValue() - 1) * 6 )
+                    .setFirstResult((page.intValue() - 1) * count )
                     .setMaxResults(count)
                     .getResultList();
         } else {
             fundingList = em.createQuery("SELECT f FROM Funding f " +
                             "WHERE f.userId =: user " +
-                            "AND f.id < :cursor " +
+                            "AND f.id <= :cursor " +
                             "AND f.fundingStateCode.stateCode NOT IN (3)" +
                             "ORDER BY f.id DESC")
                     .setParameter("user", user)
@@ -660,11 +661,11 @@ public class ProjectService {
 
 
     /**
-     * 내가 작성한 프로젝트 글 갯수 호출
+     * 특정 유저 펀딩 글 갯수 호출
      * @param user_id userId
-     * @return Long 타입의 내가 작성한 프로젝트 글 갯수
+     * @return Long 특정 유저의 프로젝트 글 갯수
      */
-    public Long getCountToUserId(Long user_id) {
+    public Long getFundingCountToUserId(Long user_id) {
         EntityManager em = JpaConfig.emf.createEntityManager();
         Long count = (Long) em.createQuery("SELECT COUNT(f.id) FROM Funding f WHERE f.userId.userId =: user_id")
                 .setParameter("user_id", user_id)
@@ -675,11 +676,38 @@ public class ProjectService {
 
 
     /**
+     * 특정 유저의 펀딩 글 중에서 특정 상태인 펀딩의 갯수 호출
+     * @param userNum 유저 번호
+     * @param fundingState 호출할 상태값
+     * @return
+     */
+    public Long getFundingCountToUserIdAndFundingState(Long userNum, final String fundingState) {
+        EntityManager em = JpaConfig.emf.createEntityManager();
+        Long count = (Long) em.createQuery("SELECT COUNT(f.id) FROM Funding f WHERE f.userId.userId =: userNum " +
+                        "AND f.fundingStateCode.state =: fundingState")
+                .setParameter("userNum", userNum)
+                .setParameter("fundingState", fundingState)
+                .getSingleResult();
+        em.close();
+        return count;
+
+
+
+    }
+
+
+    /**
      * User 객체를 넘겨받아 해당 User의 진행중인 펀딩, 종료한 펀딩을 호출함
      * @param user 펀딩 글을 호출할 타겟
+     * @param page 호출할 페이지
+     * @param cursor 마지막을 가리키는 커서
+     * @param count 한 페이지당 출력할 펀딩 갯수
      * @return 해당 타겟이 작성한 List<Funding> 타입의 펀딩 목록
      */
-    public List<ProjectSmallForm> getFundingListToUserNum(User user) {
+    public List<ProjectSmallForm> getFundingListToUserNum(User user, Long page, Long cursor, int count) {
+        if (1 > count || count > 21){
+            count = 5;
+        }
         EntityManager em = JpaConfig.emf.createEntityManager();
 
         // 진행중인 펀딩 상태 코드
@@ -687,18 +715,32 @@ public class ProjectService {
                 .setParameter("state", "진행중")
                 .getSingleResult());
 
-        //FundingStateCode endFunding = new FundingStateCode(2);      // 종료한 펀딩 상태 코드
         // 종료한 펀딩 상태 코드
         FundingStateCode endFunding = new FundingStateCode((Integer) em.createQuery("SELECT f.stateCode FROM FundingStateCode f WHERE f.state =: state")
                 .setParameter("state", "종료")
                 .getSingleResult());
-        List<Funding> fundingList = new ArrayList<>();
 
-        fundingList = (em.createQuery("SELECT new Funding(f.id, f.title, f.thumbnail, f.fundingStateCode) FROM Funding f where f.userId =: user and f.fundingStateCode IN (:progressFunding, :endFunding)")
-        .setParameter("user", user)
-        .setParameter("progressFunding", progressFunding)
-        .setParameter("endFunding", endFunding)
-        .getResultList());
+        List<Funding> fundingList;
+        if (cursor == null){
+            fundingList = (em.createQuery("SELECT new Funding(f.id, f.title, f.thumbnail, f.fundingStateCode) " +
+                            "FROM Funding f WHERE f.userId =: user AND f.fundingStateCode IN (:progressFunding, :endFunding)")
+                    .setParameter("user", user)
+                    .setParameter("progressFunding", progressFunding)
+                    .setParameter("endFunding", endFunding)
+                    .setFirstResult((page.intValue() - 1) * count )
+                    .setMaxResults(count)
+                    .getResultList());
+        } else {
+            fundingList = (em.createQuery("SELECT new Funding(f.id, f.title, f.thumbnail, f.fundingStateCode) " +
+                            "FROM Funding f WHERE f.userId =: user AND f.fundingStateCode IN (:progressFunding, :endFunding) " +
+                            "AND f.id <= :cursor ")
+                    .setParameter("user", user)
+                    .setParameter("progressFunding", progressFunding)
+                    .setParameter("endFunding", endFunding)
+                    .setParameter("cursor", cursor)
+                    .setMaxResults(count)
+                    .getResultList());
+        }
         System.out.println(fundingList);
 
         List<ProjectSmallForm> resultList = new ArrayList<>();
