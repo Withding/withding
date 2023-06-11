@@ -1,6 +1,6 @@
 /* eslint-disable indent */
 import React from "react";
-import Funding from "@/types/Funding";
+import Funding from "@/types/UserFunding";
 import { css } from "@emotion/react";
 import { useNavigate } from "react-router-dom";
 import styled from "@emotion/styled";

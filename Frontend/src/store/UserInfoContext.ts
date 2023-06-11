@@ -11,6 +11,13 @@ const UserInfoContext = React.createContext<UserInfoContextProps>({
         userImage: "",
         onFollow: () => {},
         onUnfollow: () => {}
+    },
+    list: {
+        fundingList: [],
+        lastPage: 0,
+        isFetchingNextPage: false,
+        fetchNextPage: () => {},
+        hasNextPage: false
     }
     
 });

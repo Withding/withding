@@ -1,7 +1,7 @@
 import { css } from "@emotion/react";
 import React from "react";
 import MyFundingItem from "./MyFundingItem";
-import Funding from "@/types/Funding";
+import Funding from "@/types/UserFunding";
 /**
  * 내가 작성한 펀딩 목록들
  */

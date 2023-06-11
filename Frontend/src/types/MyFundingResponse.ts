@@ -1,4 +1,4 @@
-import Funding from "./Funding";
+import UserFunding from "./UserFunding";
 
 /**
  * fetchMyFunding API Response
@@ -6,7 +6,7 @@ import Funding from "./Funding";
 interface MyFundingResponse {
     fundingCount: number;
     lastPage: number;
-    fundingList: Funding[];
+    fundingList: UserFunding[];
     currentPage: number;
 }
 
