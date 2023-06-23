@@ -87,4 +87,17 @@ public class Funding {
         this.fundingStateCode = fundingStateCode;
     }
 
+    public Funding(Long userId, String fundingState){
+        this.userId.setUserId(userId);
+        this.fundingStateCode.setState(fundingState);
+    }
+
+
+
+
+
+
+
+
+
 }
