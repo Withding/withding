@@ -30,13 +30,13 @@ public class BeanConfig {
     public final String PROFILE_IMAGE_URL = "/user/image/";                                                             // 유저 프로필 호출 URL
     public final String PROFILE_IMAGE_PATH = System.getProperty("user.dir") + File.separator + "profileImages/";        // 유저 이미지 파일 저장 경로
 
-    public final String THUMBNAIL_IMAGE_URL = "/thumbnail/image/";                                                      // 썸네일 호출 URL
+    public final String THUMBNAIL_IMAGE_URL = "/thumbnail/images/";                                                     // 썸네일 호출 URL
     public final String THUMBNAIL_IMAGE_PATH = System.getProperty("user.dir") + File.separator + "thumbnailImages/";    // 썸네일 이미지 파일 저장 경로
 
-    public final String CONTENT_IMAGE_URL = "/content/image/";                                                          // 컨텐츠 이미지 호출 URL
+    public final String CONTENT_IMAGE_URL = "/content/images/";                                                         // 컨텐츠 이미지 호출 URL
     public final String CONTENT_IMAGE_PATH = System.getProperty("user.dir") + File.separator + "contentImages/";        // 컨텐츠 이미지 파일 저장 경로
 
-    public final String ARTICLE_IMAGE_URL = "/article/image/";                                                          // 물품 이미지 호출 URL
+    public final String ARTICLE_IMAGE_URL = "/article/images/";                                                         // 물품 이미지 호출 URL
     public final String ARTICLE_IMAGE_PATH = System.getProperty("user.dir") + File.separator + "articleImages/";        // 물품 이미지 파일 저장 경로
 
 

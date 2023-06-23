@@ -2,6 +2,7 @@ package com.example.demo.Controller.FileController;
 
 import com.example.demo.Config.BeanConfig;
 import com.example.demo.Controller.ProjectController.DTO.CreateContentImage;
+import com.example.demo.DTO.Funding;
 import com.example.demo.DTO.ProfileImage;
 import com.example.demo.DTO.User;
 import com.example.demo.Service.FileService;
@@ -35,36 +36,53 @@ public class FileController {
     private UserService userService;
 
     @Autowired
+    private FileService fileService;
+
+    @Autowired
     private ProjectService projectService;
 
 
-
-
     /**
-     * 모든 이미지를 담당하는 컨트롤러
-     * @param type 호출할 이미지 타입 (UserProfile, thumbnail, 등등)
+     * 모든 이미지 호출
+     * @param type 호출할 이미지 타입 (user = 유저 프로필 이미지, thumbnail = 펀딩 썸네일 이미지, article = 펀딩 물품 이미지, content = 펀딩 글 내용에 삽입된 이마지)
      * @param imageName 호출할 파일 이름
-     * @return 호출한 이미지
+     * @return 호출 성공 = (200, 호출한 이미지 파일), 호출 실패 = 400, 인증 실패 = 401
      * @throws IOException
      */
-    @RequestMapping(value = "/{type}/image/{fileName}", method = RequestMethod.GET, produces = MediaType.IMAGE_JPEG_VALUE)
-    public ResponseEntity<byte[]> sendImage(
-            @PathVariable("type") final String type,
-            @PathVariable("fileName") final String imageName) throws IOException
+    @RequestMapping(value = "/{type}/images/{fileName}", method = RequestMethod.GET, produces = MediaType.IMAGE_JPEG_VALUE)
+    public ResponseEntity<byte[]> sendImage(HttpServletRequest request,
+                                            @PathVariable("type") final String type,
+                                            @PathVariable("fileName") final String imageName) throws IOException
     {
-        InputStream imageStream;
+        User user = new User();
+
+        // type이 user가 아니라면 header의 authorization를 통해서 인증 절차 수행
+        if (!(type.equals("user") || (type.equals("content"))) || !(imageName.equals("default.png") || imageName.equals("default.jpeg"))){
+            user = userService.setUserToHttpServletRequestAttribute(request);
+            if (user == null){                                                                                          // 인증
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+        }
+
+        InputStream imageStream = null;
         switch (type){
             case "user":
+                // 유저 프로필 이미지는 권한 검사가 필요 없음
                 imageStream = new FileInputStream(beanConfig.PROFILE_IMAGE_PATH + imageName);
                 break;
-            case "thumbnail":
-                imageStream = new FileInputStream(beanConfig.THUMBNAIL_IMAGE_PATH + imageName);
-                break;
             case "content":
+                // 펀딩의 content 부분에 들어가는 이미지는 권한 검사를 할 수가 없음 DB에 테이블이 없이 관리
                 imageStream = new FileInputStream(beanConfig.CONTENT_IMAGE_PATH + imageName);
                 break;
+            case "thumbnail":
+                if (imageName.equals("default.png") || fileService.isVisibleImage(user.getUserId(), imageName, type)) {
+                    imageStream = new FileInputStream(beanConfig.THUMBNAIL_IMAGE_PATH + imageName);
+                }
+                break;
             case "article":
-                imageStream = new FileInputStream(beanConfig.ARTICLE_IMAGE_PATH + imageName);
+                if (imageName.equals("default.png") || fileService.isVisibleImage(user.getUserId(), imageName, type)){
+                    imageStream = new FileInputStream(beanConfig.ARTICLE_IMAGE_PATH + imageName);
+                }
                 break;
             default:
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -76,7 +94,7 @@ public class FileController {
 
 
     /**
-     * 프로젝트 내용에 삽입되는 이미지 파일을 저장하는 컨트롤러
+     * 펀딩 글 내용에 삽입되는 이미지 파일을 저장하는 컨트롤러
      * @param imageFile 삽입된 이미지 파일
      * @param request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
      * @return
@@ -106,5 +124,63 @@ public class FileController {
     }
 
 
+    /**
+     * 유저의 프로필 이미지를 특정 이미지로 변경
+     * @param image 변경할 이미지 파일
+     * @param request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
+     * @return 인증실패 401, 성공 204, 정상 처리 실패 400
+     */
+    @RequestMapping(value = "/user/image", method = RequestMethod.PUT, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Object> changeUserImage(@RequestParam(value = "image") MultipartFile image, HttpServletRequest request)
+    {
+        // ------------------------------ 인증 --------------------------------------------------------------------------
+        User user = userService.setUserToHttpServletRequestAttribute(request);
+        if (user == null){
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        // -------------------------------------------------------------------------------------------------------------
 
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        final String imageName = dateFormat.format(new Timestamp(System.currentTimeMillis()))                           // 현재 시간을 2023-01-14_21:22:23 등과 같이 표현
+                + "_"                                                                                                   // 구분자
+                + image.getOriginalFilename().replaceAll(" ", "");                                     // 파일 이름에 공백이 들어있을 수 있으므로 공백 제거
+
+        if (userService.changeUserImage(user, image, imageName)){
+            ProfileImage profileImage = new ProfileImage();
+            profileImage.setProfileImage(beanConfig.SERVER_URL + ":" + beanConfig.SERVER_PORT + beanConfig.PROFILE_IMAGE_URL + imageName);
+            profileImage.setOriginProfileImage(null);
+            return new ResponseEntity<>(
+                    profileImage,
+                    HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
+    /**
+     * 유저의 프로필 이미지를 기본 이미지로 변경
+     * @param request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
+     * @return 인증실패 401, 성공 204, 정상 처리 실패 400
+     */
+    @RequestMapping(value = "/user/image", method = RequestMethod.DELETE)
+    public ResponseEntity<Object> deleteUserImage(HttpServletRequest request)
+    {
+        // ------------------------------ 인증 --------------------------------------------------------------------------
+        User user = userService.setUserToHttpServletRequestAttribute(request);
+        if (user == null){
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        // -------------------------------------------------------------------------------------------------------------
+
+        if (userService.deleteUserImage(user.getUserId())) {
+            ProfileImage profileImage = new ProfileImage();
+            profileImage.setProfileImage(beanConfig.SERVER_URL + ":" + beanConfig.SERVER_PORT + beanConfig.PROFILE_IMAGE_URL + beanConfig.DEFAULT_USER_IMAGE);
+            profileImage.setOriginProfileImage(null);
+            return new ResponseEntity<>(profileImage, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+    }
 }

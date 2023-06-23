@@ -2,8 +2,11 @@ package com.example.demo.Service;
 
 import com.example.demo.Config.BeanConfig;
 import com.example.demo.Config.JpaConfig;
+import com.example.demo.Controller.FileController.DTO.ImageAuth;
+import com.example.demo.DTO.Funding;
 import com.example.demo.DTO.ProfileImage;
 import com.example.demo.DTO.User;
+import com.sun.istack.Nullable;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,8 @@ import javax.persistence.EntityTransaction;
 import java.io.File;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @NoArgsConstructor
@@ -78,9 +83,6 @@ public class FileService {
             return null;
         }
     }
-
-
-
 
 
 
@@ -160,4 +162,57 @@ public class FileService {
             return false;
         }
     }
+
+
+    /**
+     * 펀딩의 상태와 펀딩 작성자를 확인해서 보여줘도 되는 이미지인지 판단하는 함수
+     *
+     * @param userId 이미지를 요청한 유저의 id
+     * @param fileName 요청한 이미지 파일
+     * @param type 이미지의 타입(user, thumbnail, content, article)
+     * @return true = 보여줘도 되는 이미지, false = 보여주면 안되는 이미지
+     */
+    public boolean isVisibleImage(Long userId, String fileName, String type) {
+        EntityManager em = JpaConfig.emf.createEntityManager();
+
+        Funding funding;
+        switch (type){
+            case "article":
+                funding = (Funding) em.createQuery(
+                                "SELECT new Funding(f.userId.userId, f.fundingStateCode.state) FROM Funding f " +
+                                        "INNER JOIN Article a on f.id = a.fundingId.id " +
+                                        "where a.articleImage =: fileName")
+                        .setParameter("fileName", fileName)
+                        .getSingleResult();
+                break;
+            case "thumbnail":
+                funding = (Funding) em.createQuery(
+                                "SELECT new Funding(f.userId.userId, f.fundingStateCode.state) FROM Funding f " +
+                                        "INNER JOIN Thumbnail t on f.thumbnail.image = t.image " +
+                                        "where t.image =: fileName")
+                        .setParameter("fileName", fileName)
+                        .getSingleResult();
+                break;
+            default:
+                System.out.println("isVisibleThumbnailImage switch 문에서 default로 처리");
+                return false;
+        }
+
+        ImageAuth imageAuth = new ImageAuth(funding.getUserId().getUserId(), funding.getFundingStateCode().getState());
+
+        // 펀딩을 작성한 유저와 이미지를 호출한 유저가 같음 && 펀딩이 진행중이거나 종료된 상태임(종합적으로 판단했을 때 보여줘도 되는 상태)
+        if (imageAuth.isVisibleFuningState()){
+            return true;
+        }
+        // 펀딩이 진행중, 종료 상태가 아니라서 보여주면 안되지만 펀딩을 작성한 사람이므로 보여줘도 됨
+        else if (imageAuth.isVisibleUser(userId) && !imageAuth.isVisibleFuningState()){
+            return true;
+        }
+        // 나머지 경우 보여주면 안 됨
+        else {
+            return false;
+        }
+    }
+
+
 }
