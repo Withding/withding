@@ -80,7 +80,7 @@ public class LoginController {
      * @param request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
      * @return
      */
-    @RequestMapping(value = "/user/logout", method = RequestMethod.PUT)
+    @RequestMapping(value = "/logout", method = RequestMethod.HEAD)
     public ResponseEntity<Object> logout(HttpServletRequest request) {
         // ------------------------------ 인증 --------------------------------------------------------------------------
         User user = userService.setUserToHttpServletRequestAttribute(request);

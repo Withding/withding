@@ -108,7 +108,7 @@ public class LoginService {
                 tr.commit();
                 em.clear();
                 user = em.find(User.class, user.getUserId());
-                pointService.chargePoint(user, 5000L, "회원가입 이벤트");
+                pointService.chargePoint(user.getUserId(), 5000L, "회원가입 이벤트");
                 em.close();
                 return user;
             } else if (users.size() <= 1 && users.get(0).getState().getStateCode() == 0) {
