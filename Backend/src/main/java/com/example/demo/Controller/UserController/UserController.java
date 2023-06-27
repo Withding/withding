@@ -41,9 +41,9 @@ public class UserController {
      * @param userId 정보를 호출할 유저의 userId
      * @return 인증 실패 401, 호출 성공 200
      */
-    @GetMapping(value = "/user")
+    @GetMapping(value = "/users/{userId}")
     public ResponseEntity<Object> getUserInfo(HttpServletRequest request,
-                                              @RequestParam("userId") Long userId) {
+                                              @PathVariable("userId") Long userId) {
         // ------------------------------ 인증 --------------------------------------------------------------------------
         // 헤더에 jwt가 없어도 정상동작 해야됨(있으면 팔로잉 상태 true, 없으면 false)
         User user = userService.setUserToHttpServletRequestAttribute(request);
