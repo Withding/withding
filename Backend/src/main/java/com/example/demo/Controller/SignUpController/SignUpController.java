@@ -158,7 +158,7 @@ public class SignUpController {
                 && userRepo.save(user)
                 ) {                                                                                                     // User 테이블에 요청온 User 객체 저장 성공
             emailAuthRepo.deleteEmailAuthToSecretKeyAndEmail(emailAuth);
-            pointService.chargePoint(user, 5000L, "회원가입 이벤트");
+            pointService.chargePoint(user.getUserId(), 5000L, "회원가입 이벤트");
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);                                                        // 그 외에 모든 경우(secretKey 인증 실패 or 검증식 통과 실패 or User 객체 저장 실패 등등...)
