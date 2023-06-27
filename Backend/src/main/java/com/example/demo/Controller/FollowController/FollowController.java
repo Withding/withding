@@ -41,13 +41,13 @@ public class FollowController {
     }
 
     /**
-     * 특정 사용자의 팔로우 목록 호출
+     * 특정 사용자의 팔로워 목록 호출(특정 사용자를 팔로우하는 사람들 목록 호출)
      *
      * @param request request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
      * @param userId 팔로우 목록을 호출할 사용자의 userId
      * @return 정상 = 200, 인증실패 = 401
      */
-    @GetMapping("/users/{userId}/follows")
+    @GetMapping("/users/{userId}/followers")
     public ResponseEntity<Object> getFollow(HttpServletRequest request,
                                             @PathVariable("userId") Long userId) {
         // ------------------------------ 인증 --------------------------------------------------------------------------
@@ -64,11 +64,12 @@ public class FollowController {
      * 팔로우
      *
      * @param request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
+     * @param tagetId 내가 팔로우할 대상의 UserId
      * @return 정상 = 204, 비정상 = 400, 인증 실패 = 401
      */
-    @PostMapping("/user/follow")
+    @PostMapping("/users/{userId}")
     public ResponseEntity<Object> follow(HttpServletRequest request,
-                                 @RequestParam("userId") Long tagetId){
+                                 @PathVariable("userId") Long tagetId){
         // ------------------------------ 인증 --------------------------------------------------------------------------
         User user = userService.setUserToHttpServletRequestAttribute(request);
         if (user == null){                                                                                              // 인증
@@ -76,6 +77,7 @@ public class FollowController {
         }
         // -------------------------------------------------------------------------------------------------------------
 
+        // 스스로를 팔로우하지 않는 경우 && 이미 팔로우한 적이 없는 경우
         if ((user.getUserId() != tagetId) && followService.follow(user, tagetId)){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
@@ -88,11 +90,12 @@ public class FollowController {
      * 팔로우 해제
      *
      * @param request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
+     * @param targetId 팔로우 해제할 유저의 UserId
      * @return 정상 = 204, 비정상 = 400, 인증실패 = 401
      */
-    @DeleteMapping("/user/follow")
+    @DeleteMapping("/users/{userId}")
     public ResponseEntity<Object> unFollow(HttpServletRequest request,
-                                   @RequestParam("userId")Long unfollowNum){
+                                   @PathVariable("userId") Long targetId){
         // ------------------------------ 인증 --------------------------------------------------------------------------
         User user = userService.setUserToHttpServletRequestAttribute(request);
         if (user == null){                                                                                              // 인증
@@ -100,7 +103,7 @@ public class FollowController {
         }
         // -------------------------------------------------------------------------------------------------------------
 
-        if (followService.unFollow(user, unfollowNum)){
+        if (followService.unFollow(user, targetId)){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
