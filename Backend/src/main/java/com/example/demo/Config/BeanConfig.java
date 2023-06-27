@@ -27,7 +27,7 @@ public class BeanConfig {
     public final String CONTENT_DIRECTORY_NAME = "contentImages";                                                       // 컨텐트에 담기는 이미지 파일 디렉터리명
     public final String ARTICLE_DIRECTORY_NAME = "articleImages";                                                       // 물품 이미지 파일 저장 디렉터리명
 
-    public final String PROFILE_IMAGE_URL = "/user/image/";                                                             // 유저 프로필 호출 URL
+    public final String PROFILE_IMAGE_URL = "/user/images/";                                                             // 유저 프로필 호출 URL
     public final String PROFILE_IMAGE_PATH = System.getProperty("user.dir") + File.separator + "profileImages/";        // 유저 이미지 파일 저장 경로
 
     public final String THUMBNAIL_IMAGE_URL = "/thumbnail/images/";                                                     // 썸네일 호출 URL
@@ -38,7 +38,6 @@ public class BeanConfig {
 
     public final String ARTICLE_IMAGE_URL = "/article/images/";                                                         // 물품 이미지 호출 URL
     public final String ARTICLE_IMAGE_PATH = System.getProperty("user.dir") + File.separator + "articleImages/";        // 물품 이미지 파일 저장 경로
-
 
     @Value("${server.url}")
     public String SERVER_URL;
