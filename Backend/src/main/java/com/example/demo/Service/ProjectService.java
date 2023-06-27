@@ -690,9 +690,6 @@ public class ProjectService {
                 .getSingleResult();
         em.close();
         return count;
-
-
-
     }
 
 

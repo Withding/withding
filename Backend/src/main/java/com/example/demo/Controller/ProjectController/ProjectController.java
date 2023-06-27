@@ -444,15 +444,15 @@ public class ProjectController {
     }
 
     /**
-     * 특정 유저의 펀딩 리스트 호출
+     * 특정 유저의 펀딩 목록 호출
      * @param userNum
      * @param page 호출할 페이지가
      * @param cursor 마지막을 가리키는 커서
      * @param count 페이지당 글 갯수
      * @return
      */
-    @GetMapping(value = "/projects")
-    public ResponseEntity<Object> getProjectsToUser(@RequestParam(value = "userNum") Long userNum,
+    @GetMapping(value = "/users/{userId}/projects")
+    public ResponseEntity<Object> getProjectsToUser(@PathVariable(value = "userId") Long userNum,
                                                     @RequestParam(value = "page", required = false) Long page,
                                                     @RequestParam(value = "cursor", required = false) Long cursor,
                                                     @RequestParam(value = "count") int count) {
