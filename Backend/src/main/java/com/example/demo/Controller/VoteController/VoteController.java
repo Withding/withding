@@ -29,18 +29,22 @@ public class VoteController {
      * 찜
      *
      * @param request request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
-     * @param vote fundingId가 담겨있는 Vote 객체
+     * @param fundingId 찜할 펀딩의 fundingId
      * @return 인증실패 = 401, 성공 204, 실패 400
      */
-    @PostMapping(value = "/vote")
-    public ResponseEntity<Object> createVote(HttpServletRequest request, @RequestBody Vote vote){
+    @PostMapping(value = "/votes/{fundingId}")
+    public ResponseEntity<Object> createVote(HttpServletRequest request,
+                                             @PathVariable("fundingId") Long fundingId){
         // -------------------------------------------- 인증 ------------------------------------------------------------
         User user = userService.setUserToHttpServletRequestAttribute(request);
         if (user == null){
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         // -------------------------------------------------------------------------------------------------------------
+        Vote vote = new Vote();
+        vote.setFundingId(fundingId);
         vote.setUserId(user.getUserId());
+
         if (voteService.createVote(vote)){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
@@ -55,8 +59,9 @@ public class VoteController {
      * @param fundingId 확인할 펀딩 아이디
      * @return 인증실패 = 401, 특정 글을 팔로우 상태 204, 특정 글을 팔로우하지 않는 상태 401
      */
-    @GetMapping("/vote")
-    public ResponseEntity<Object> getVote(HttpServletRequest request, @RequestParam("fundingid") Long fundingId){
+    @GetMapping("/votes/{fundingId}")
+    public ResponseEntity<Object> getVote(HttpServletRequest request,
+                                          @PathVariable("fundingid") Long fundingId){
         // -------------------------------------------- 인증 ------------------------------------------------------------
         User user = userService.setUserToHttpServletRequestAttribute(request);
         if (user == null) {
@@ -74,12 +79,12 @@ public class VoteController {
     }
 
     /**
-     * 찜 목록 호출
+     * 나의 찜 목록 호출
      *
      * @param request request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
      * @return 인증실패 = 401, 정상 = (200, List<Vote>)
      */
-    @GetMapping("/votes")
+    @GetMapping("/my/votes")
     public ResponseEntity<Object> getVotes(HttpServletRequest request){
         // -------------------------------------------- 인증 ------------------------------------------------------------
         User user = userService.setUserToHttpServletRequestAttribute(request);
@@ -97,18 +102,21 @@ public class VoteController {
      * 찜 해제
      *
      * @param request request userNum, nickName, loginTime이 속성으로 들어있는 HttpServletRequest 객체
-     * @param votePK fundingId가 담겨있는 Vote 객체
+     * @param fundingId 찜을 해제할 펀딩의 fundingId
      * @return 인증실패 = 401, 삭제 성공 = 204, 삭제 실패 = 400
      */
-    @DeleteMapping("/vote")
-    public ResponseEntity<Object> deleteVote(HttpServletRequest request, @RequestBody VotePK votePK){
+    @DeleteMapping("/votes/{fundingId}")
+    public ResponseEntity<Object> deleteVote(HttpServletRequest request,
+                                             @PathVariable("fundingId") Long fundingId){
         // -------------------------------------------- 인증 ------------------------------------------------------------
         User user = userService.setUserToHttpServletRequestAttribute(request);
         if (user == null){
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         // -------------------------------------------------------------------------------------------------------------
+        VotePK votePK = new VotePK();
         votePK.setUserId(user.getUserId());
+        votePK.setFundingId(fundingId);
         if (voteService.deleteVote(votePK)){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {

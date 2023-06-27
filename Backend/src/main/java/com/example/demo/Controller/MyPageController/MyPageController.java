@@ -3,7 +3,6 @@ package com.example.demo.Controller.MyPageController;
 import com.example.demo.Config.BeanConfig;
 import com.example.demo.Controller.MyPageController.DTO.MyPageMaker;
 import com.example.demo.Controller.MyPageController.DTO.MyPageSupporter;
-import com.example.demo.Controller.ProjectController.DTO.GetMyProjectsFinal;
 import com.example.demo.DTO.User;
 import com.example.demo.Repository.UserRepo;
 import com.example.demo.Service.MyPageService;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -44,7 +42,7 @@ public class MyPageController {
      * @param request
      * @return
      */
-    @RequestMapping(value = "/user/mypage/supporter", method = RequestMethod.GET)
+    @RequestMapping(value = "/my/supporter", method = RequestMethod.GET)
     public ResponseEntity<Object> getSupporter(HttpServletRequest request){
 
         // ------------------------------ 인증 --------------------------------------------------------------------------
@@ -67,7 +65,7 @@ public class MyPageController {
      * @param request
      * @return
      */
-    @RequestMapping(value = "/user/mypage/maker", method = RequestMethod.GET)
+    @RequestMapping(value = "/my/maker", method = RequestMethod.GET)
     public ResponseEntity<Object> getMaker(HttpServletRequest request){
 
         // ------------------------------ 인증 --------------------------------------------------------------------------
