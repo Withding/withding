@@ -6,8 +6,8 @@ import { AxiosResponse } from "axios";
  */
 function logoutRequest(): Promise<AxiosResponse> {
     return httpClient({
-        url: "/user/logout",
-        method: "PUT",
+        url: "/logout",
+        method: "HEAD",
     }).then(res => res.data);
 }
 
