@@ -7,7 +7,7 @@ export default function httpClient({
     data
 }: {
     url: string;
-    method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
+    method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" | "HEAD";
     headers?: Record<string, string>;
     data?: any;
 }) {
