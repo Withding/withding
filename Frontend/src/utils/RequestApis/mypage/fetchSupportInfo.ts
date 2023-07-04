@@ -6,7 +6,7 @@ import  httpClient  from "@/utils/httpClient";
  */
 function fetchSupportInfo(): Promise<MyPageSupport> {
     return httpClient({
-        url: "/user/mypage/supporter",
+        url: "/my/supporter",
         method: "GET",
     }).then(res => res.data);
 }
