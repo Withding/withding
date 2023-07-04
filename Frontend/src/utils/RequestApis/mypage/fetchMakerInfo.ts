@@ -7,7 +7,7 @@ function fetchMakerInfo(): Promise<{
     followerCount: number
 }> {
     return httpClient({
-        url: "/user/mypage/maker",
+        url: "/my/maker",
         method: "GET",
     }).then(res => res.data);
 }
