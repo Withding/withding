@@ -43,7 +43,8 @@ public class MyPageController {
      * @return
      */
     @RequestMapping(value = "/my/supporter", method = RequestMethod.GET)
-    public ResponseEntity<Object> getSupporter(HttpServletRequest request){
+    public ResponseEntity<Object> getSupporter(HttpServletRequest request)
+    {
 
         // ------------------------------ 인증 --------------------------------------------------------------------------
         User user = userService.setUserToHttpServletRequestAttribute(request);
@@ -66,7 +67,8 @@ public class MyPageController {
      * @return
      */
     @RequestMapping(value = "/my/maker", method = RequestMethod.GET)
-    public ResponseEntity<Object> getMaker(HttpServletRequest request){
+    public ResponseEntity<Object> getMaker(HttpServletRequest request)
+    {
 
         // ------------------------------ 인증 --------------------------------------------------------------------------
         User user = userService.setUserToHttpServletRequestAttribute(request);

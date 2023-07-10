@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
 import java.text.SimpleDateFormat;
@@ -18,6 +20,7 @@ import java.util.Date;
 @DynamicInsert
 @Entity
 @Table(name = "funding")                    // 펀딩
+
 public class Funding {
 
     @Id
@@ -34,6 +37,7 @@ public class Funding {
     @ManyToOne
     // cascade = CascadeType.PERSIST = Funding 영속성 추가할때 이 어노테이션이 달린 객체도 같이 영속성에 추가하는 것
     @JoinColumn(name = "image")
+    @NotFound(action = NotFoundAction.IGNORE)
     private Thumbnail thumbnail;
 
     private String content;                 // 내용
@@ -86,6 +90,7 @@ public class Funding {
         this.thumbnail = thumbnail;
         this.fundingStateCode = fundingStateCode;
     }
+
 
     public Funding(Long userId, String fundingState){
         this.userId.setUserId(userId);

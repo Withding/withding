@@ -4,6 +4,7 @@ import com.example.demo.Config.BeanConfig;
 import com.example.demo.Controller.ProjectController.DTO.*;
 import com.example.demo.DTO.*;
 import com.example.demo.Controller.ProjectController.DTO.createProject_2Level;
+import com.example.demo.Service.FileService;
 import com.example.demo.Service.ProjectService;
 import com.example.demo.Service.UserService;
 import lombok.Synchronized;
@@ -33,6 +34,7 @@ public class ProjectController {
 
     @Autowired
     private BeanConfig beanConfig;
+
 
 
 
@@ -415,10 +417,11 @@ public class ProjectController {
      * @return 정상 처리 200 + List<GetMyProject> 객체, 비정상 200, 비어있는 List<GetMyProject> 객체
      */
     @GetMapping(value = "/myprojects")
-    public ResponseEntity<Object> getMyProjects(@RequestParam(value = "page",required = false)Long page,
-                                                @RequestParam(value = "cursor", required = false)Long cursor,
+    public ResponseEntity<Object> getMyProjects(@RequestParam(value = "page",required = false , defaultValue = "1")Long page,
+                                                @RequestParam(value = "cursor", required = false, defaultValue = "0")Long cursor,
                                                 @RequestParam(value = "count") int count,
-                                                HttpServletRequest request) {
+                                                HttpServletRequest request)
+    {
         // ------------------------------ 인증 --------------------------------------------------------------------------
         User user = userService.setUserToHttpServletRequestAttribute(request);
         if (user == null){
@@ -426,13 +429,12 @@ public class ProjectController {
         }
         // -------------------------------------------------------------------------------------------------------------
 
-        Long fundingCount = projectService.getFundingCountToUserId(user.getUserId());
         Long lastPage = 0L;
 
+        Long fundingCount = projectService.getFundingCountToUserId(user.getUserId(), cursor);
         GetMyProjectsFinal getMyProjectsFinal = new GetMyProjectsFinal();
         getMyProjectsFinal.setFundingCount(fundingCount);
-        getMyProjectsFinal.setFundingList(projectService.getMyProjects(user, page, cursor,count));
-
+        getMyProjectsFinal.setFundingList(projectService.getMyProjects(user, page, cursor, count));
         if (fundingCount % count == 0){
             lastPage = fundingCount / count;
         } else {
@@ -455,7 +457,8 @@ public class ProjectController {
     public ResponseEntity<Object> getProjectsToUser(@PathVariable(value = "userId") Long userNum,
                                                     @RequestParam(value = "page", required = false) Long page,
                                                     @RequestParam(value = "cursor", required = false) Long cursor,
-                                                    @RequestParam(value = "count") int count) {
+                                                    @RequestParam(value = "count") int count)
+    {
         ResponseProjectList fundingList = new ResponseProjectList();
         User findUser = userService.getUserToUserId(userNum);
         fundingList.setFundingList(projectService.getFundingListToUserNum(findUser, page, cursor, count));
@@ -467,7 +470,6 @@ public class ProjectController {
         } else {
             fundingList.setLastPage((fundingCount / count) + 1);
         }
-
 
         return new ResponseEntity<>(fundingList, HttpStatus.OK);
     }

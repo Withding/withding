@@ -38,7 +38,8 @@ public class MyPageService {
         MyPageSupporter myPageSupporter = new MyPageSupporter();
         myPageSupporter.setNickName(user.getNickName());
         myPageSupporter.setPoint(user.getPoint());
-        myPageSupporter.setFundingCount(projectService.getFundingCountToUserId(user.getUserId()));
+
+        myPageSupporter.setFundingCount(projectService.getFundingCountToUserId(user.getUserId(), null));
         myPageSupporter.setProfileImage(beanConfig.SERVER_URL + ":" + beanConfig.SERVER_PORT + beanConfig.PROFILE_IMAGE_URL + user.getProfileImage().getProfileImage());
         return myPageSupporter;
     }
@@ -49,7 +50,8 @@ public class MyPageService {
      * @param user 특정 사용자의 정보가 담긴 객체
      * @return
      */
-    public MyPageMaker setMyPageMaker(User user){
+    public MyPageMaker setMyPageMaker(User user)
+    {
         MyPageMaker myPageMaker = new MyPageMaker();
         myPageMaker.setFollowerCount(followerRepo.getCountToUserId(user.getUserId()));
         return myPageMaker;

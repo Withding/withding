@@ -50,19 +50,9 @@ public class FileController {
      * @throws IOException
      */
     @RequestMapping(value = "/{type}/images/{fileName}", method = RequestMethod.GET, produces = MediaType.IMAGE_JPEG_VALUE)
-    public ResponseEntity<byte[]> sendImage(HttpServletRequest request,
-                                            @PathVariable("type") final String type,
+    public ResponseEntity<byte[]> sendImage(@PathVariable("type") final String type,
                                             @PathVariable("fileName") final String imageName) throws IOException
     {
-        User user = new User();
-
-        // type이 user가 아니라면 header의 authorization를 통해서 인증 절차 수행
-        if (!(type.equals("user") || (type.equals("content"))) || !(imageName.equals("default.png") || imageName.equals("default.jpeg"))){
-            user = userService.setUserToHttpServletRequestAttribute(request);
-            if (user == null){                                                                                          // 인증
-                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-            }
-        }
 
         InputStream imageStream = null;
         switch (type){
@@ -75,14 +65,14 @@ public class FileController {
                 imageStream = new FileInputStream(beanConfig.CONTENT_IMAGE_PATH + imageName);
                 break;
             case "thumbnail":
-                if (imageName.equals("default.png") || fileService.isVisibleImage(user.getUserId(), imageName, type)) {
+                //if (imageName.equals("default.jpeg") || fileService.isVisibleImage(user.getUserId(), imageName, type)) {
                     imageStream = new FileInputStream(beanConfig.THUMBNAIL_IMAGE_PATH + imageName);
-                }
+                //}
                 break;
             case "article":
-                if (imageName.equals("default.png") || fileService.isVisibleImage(user.getUserId(), imageName, type)){
+                //if (imageName.equals("default.png") || fileService.isVisibleImage(user.getUserId(), imageName, type)){
                     imageStream = new FileInputStream(beanConfig.ARTICLE_IMAGE_PATH + imageName);
-                }
+                //}
                 break;
             default:
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

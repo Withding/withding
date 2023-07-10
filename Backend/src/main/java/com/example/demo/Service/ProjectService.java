@@ -8,7 +8,11 @@ import com.example.demo.Controller.ProjectController.DTO.GetMyProjects;
 import com.example.demo.Controller.ProjectController.DTO.GetProject_1Level;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,6 +23,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @NoArgsConstructor
@@ -612,14 +617,17 @@ public class ProjectService {
         } else {
             fundingList = em.createQuery("SELECT f FROM Funding f " +
                             "WHERE f.userId =: user " +
-                            "AND f.id <= :cursor " +
+                            "AND f.id >= :cursor " +
                             "AND f.fundingStateCode.stateCode NOT IN (3)" +
                             "ORDER BY f.id DESC")
                     .setParameter("user", user)
                     .setParameter("cursor", cursor)
+                    .setFirstResult(((page.intValue() - 1) * count))
                     .setMaxResults(count)
                     .getResultList();
         }
+
+
         List<GetMyProjects> getMyProjectsList = new ArrayList<>();
 
         if (fundingList.size() != 0) {
@@ -628,7 +636,6 @@ public class ProjectService {
                 getMyProjects.setId(fundingList.get(i).getId());
                 getMyProjects.setState(fundingList.get(i).getFundingStateCode().getState());
                 getMyProjects.setTitle(fundingList.get(i).getTitle());
-
 
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 Long dateNow = System.currentTimeMillis();
@@ -649,7 +656,8 @@ public class ProjectService {
                 if (fundingList.get(i).getThumbnail() == null) {
                     getMyProjects.setImage(beanConfig.SERVER_URL + ":" + beanConfig.SERVER_PORT + beanConfig.THUMBNAIL_IMAGE_URL + "default.jpeg");
                 } else {
-                    getMyProjects.setImage(beanConfig.SERVER_URL + ":" + beanConfig.SERVER_PORT + beanConfig.THUMBNAIL_IMAGE_URL + fundingList.get(i).getThumbnail().getImage());
+                    getMyProjects.setImage(beanConfig.SERVER_URL + ":" + beanConfig.SERVER_PORT + beanConfig.THUMBNAIL_IMAGE_URL +
+                            fundingList.get(i).getThumbnail().getImage());
                 }
 
                 getMyProjectsList.add(getMyProjects);
@@ -665,10 +673,12 @@ public class ProjectService {
      * @param user_id userId
      * @return Long 특정 유저의 프로젝트 글 갯수
      */
-    public Long getFundingCountToUserId(Long user_id) {
+    public Long getFundingCountToUserId(Long user_id, Long cursor) {
+        cursor = Optional.ofNullable(cursor).orElse(0L);
         EntityManager em = JpaConfig.emf.createEntityManager();
-        Long count = (Long) em.createQuery("SELECT COUNT(f.id) FROM Funding f WHERE f.userId.userId =: user_id")
+        Long count = (Long) em.createQuery("SELECT COUNT(f.id) FROM Funding f WHERE f.userId.userId =: user_id AND f.id >= :cursor")
                 .setParameter("user_id", user_id)
+                .setParameter("cursor", cursor)
                 .getSingleResult();
         em.close();
         return count;
