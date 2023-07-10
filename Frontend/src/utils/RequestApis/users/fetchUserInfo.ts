@@ -9,7 +9,7 @@ import httpClient from "@/utils/httpClient";
 
 function fetchUserInfo(userId: number): Promise<UserInfoResponse> {
     return httpClient({
-        url: `/user?userId=${userId}`,
+        url: `/users/${userId}`,
         method: "GET",
     }).then((response): UserInfoResponse => response.data);
 }
