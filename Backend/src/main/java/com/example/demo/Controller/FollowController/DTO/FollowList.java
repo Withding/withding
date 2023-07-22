@@ -8,6 +8,6 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-public class GetFollowList {
+public class FollowList {
     private List<Follow> follows;
 }

@@ -2,32 +2,78 @@ package com.example.demo.Service;
 
 import com.example.demo.Config.JpaConfig;
 import com.example.demo.DTO.Follow;
-import com.example.demo.Controller.FollowController.DTO.GetFollowList;
+import com.example.demo.Controller.FollowController.DTO.FollowList;
 import com.example.demo.DTO.User;
+import com.example.demo.Enum.FollowEnum;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import java.util.List;
 
 @Service
 public class FollowService {
 
+    /**
+     * 해당 user의 팔로워 목록 호출
+     *
+     * @param me 리퀘스트를 호출한 대상
+     * @param target 목록을 호출할 대상
+     * @return List<Follow> 타입의 목상
+     */
+    public FollowList getFollowerList(final User me, final User target) {
+        EntityManager em = JpaConfig.emf.createEntityManager();
+        List<Follow> myFollowList = (List<Follow>)  em.createQuery("SELECT f FROM Follow f WHERE f.follower =: meId")
+                .setParameter("meId", me.getUserId())
+                .getResultList();
+        List<Follow> followerList = (List<Follow>) em.createQuery("SELECT new Follow(f.user.userId, f.follower) FROM Follow f WHERE f.user =: target")
+                .setParameter("target", target)
+                .getResultList();
+
+        // 나와 관계(팔로우, 팔로워 관계)가 있는지 확인
+        for (Follow f: followerList) {
+            f.isFollowRelationToMe(myFollowList, FollowEnum.Follower);
+        }
+
+        FollowList resultFollowerList = new FollowList();
+        resultFollowerList.setFollows(followerList);
+        em.close();
+        return resultFollowerList;
+    }
+
 
     /**
-     * 해당 user의 팔로우 목록을 호출
-     * @param user 목록을 호출할 대상
+     * 해당 target의 팔로우 목록을 호출
+     *
+     * @param me 리퀘스트를 요청한 대상
+     * @param target 목록을 호출할 대상
      * @return List<Follow> 타입의 목록
      */
-    public GetFollowList getFollowList(final User user){
+    public FollowList getFollowList(final User me, final User target){
         EntityManager em = JpaConfig.emf.createEntityManager();
-        List<Follow> followList = (List<Follow>) em.createQuery("SELECT new Follow(f.follow_id, f.follower) FROM Follow f WHERE f.user =: user")
-                .setParameter("user", user)
+        List<Follow> myFollowList = (List<Follow>)  em.createQuery("SELECT f FROM Follow f WHERE f.follower =: meId")
+                .setParameter("meId", me.getUserId())
                 .getResultList();
-        GetFollowList getFollowList = new GetFollowList();
-        getFollowList.setFollows(followList);
+        List<Follow> followList = (List<Follow>) em.createQuery("SELECT new Follow(f.user, f.follower) FROM Follow f WHERE f.follower =: targetId")
+                .setParameter("targetId", target.getUserId())
+                .getResultList();
+
+        System.out.println("내 팔로우 리스트 : " + myFollowList.get(0).getUser().getUserId());
+        System.out.println("타겟 팔로우 리스트 : " + followList.get(0).getUser().getUserId());
+
+        // 나와 관계(팔로우, 팔로워 관계)가 있는지 확인
+        for (Follow f: followList) {
+
+            //System.out.println("\n" + f + "\n");
+            f.isFollowRelationToMe(myFollowList, FollowEnum.Follow);
+        }
+
+        FollowList resultFollowList = new FollowList();
+        resultFollowList.setFollows(followList);
         em.close();
-        return getFollowList;
+        return resultFollowList;
     }
 
 
@@ -103,5 +149,7 @@ public class FollowService {
             return false;
         }
     }
+
+
 
 }
