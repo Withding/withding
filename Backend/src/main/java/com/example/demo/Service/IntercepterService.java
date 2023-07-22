@@ -30,18 +30,18 @@ public class IntercepterService implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
         String jwt = request.getHeader("authorization");
-        System.out.println("인터셉터 접근 성공, JWT : " + jwt);
+        // System.out.println("인터셉터 접근 성공, JWT : " + jwt);
 
         Map<String, Object> map = jwtService.validateToken(jwt);
         if (map == null){
             request.setAttribute("userNum", null);
             return true;
         }
-        System.out.println("map = " + map);
+        // System.out.println("map = " + map);
         request.setAttribute("userNum", map.get("userNum"));
         request.setAttribute("nickName", map.get("nickName"));
         request.setAttribute("loginTime", map.get("loginTime"));
-        System.out.println("Request 세팅 완료");
+        // System.out.println("Request 세팅 완료");
 
         return true;
 

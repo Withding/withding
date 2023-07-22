@@ -36,10 +36,10 @@ public class JwtService implements InitializingBean {
     //
     @Override
     public void afterPropertiesSet() throws Exception {
-        System.out.println("애프터 프로퍼티 셋 실행");
+        // System.out.println("애프터 프로퍼티 셋 실행");
         key = new SecretKeySpec(Base64.getEncoder().encode(secretKey.getBytes()), SignatureAlgorithm.HS256.getJcaName());
-        System.out.println("key : " + key);
-        System.out.println("secretKey : " + secretKey);
+        // System.out.println("key : " + key);
+        // System.out.println("secretKey : " + secretKey);
     }
 
     //
@@ -85,8 +85,8 @@ public class JwtService implements InitializingBean {
                 return null;
             }
             Map<String, Object> map = new HashMap<>();
-            System.out.println("this.key : " + key.getEncoded());
-            System.out.println("validateToken jwt = " + jwt);
+            // System.out.println("this.key : " + key.getEncoded());
+            // System.out.println("validateToken jwt = " + jwt);
             Claims claims = (Claims) Jwts.parserBuilder()
                     .setSigningKey(key)
                     .build()

@@ -61,11 +61,11 @@ public class UserService {
         EntityManager em = JpaConfig.emf.createEntityManager();
         User user = new User();
         try{
-            System.out.println("setUserToHttpServletRequestAttribute = " + request.getAttribute("userNum"));
+            // System.out.println("setUserToHttpServletRequestAttribute = " + request.getAttribute("userNum"));
             if (request.getAttribute("userNum") != null){
                 user = em.find(User.class, request.getAttribute("userNum"));
                 user.setLoginTime((String) request.getAttribute("loginTime"));
-                System.out.println("인증 함수 user = " + user);
+                //System.out.println("인증 함수 user = " + user);
 
                 // ------------------------------ String 타입의 시간 -> Date 타입의 시간으로 변경 -----------------------------------
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
