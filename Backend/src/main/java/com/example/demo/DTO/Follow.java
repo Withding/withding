@@ -52,16 +52,14 @@ public class Follow {
      */
 
     public void isFollowRelationToMe(final List<Follow> myFollowList, final FollowEnum followEnum) {
+        // user 전체 정보가 아닌 userId만 필요하므로 userId 값 옮기고 user을 null로 초기화
         this.userId = this.getUser().getUserId();
+        this.user = null;
 
         // 내가 follower인 상태임(내가 상대를 팔로우 중)
         switch (followEnum) {
             case Follow:
                 for(Follow myFollow : myFollowList) {
-                    this.user = null;
-                    System.out.println("내 팔로우 : " + myFollow.user.getUserId());
-                    System.out.println("타겟의 팔로우 : " + this.userId);
-
                     if (this.userId.equals(myFollow.getUser().getUserId())) {
                         this.relation = true;
                     }
