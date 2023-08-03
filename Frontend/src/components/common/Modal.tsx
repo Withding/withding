@@ -1,24 +1,56 @@
 import { css } from "@emotion/react";
-import React from "react";
+import React, { useEffect } from "react";
 import ReactDOM from "react-dom";
 
+
+
 const Backdrop = (props:
-    { children: React.ReactNode; }
+    {
+        children: React.ReactNode;
+        isShowing: boolean;
+        onClose: () => void;
+    }
 ) => {
-    return (
-        <div css={backdropStyle}>
-            {props.children}
-        </div >
-    );
+
+    useEffect(() => {
+        const event = (e: React.KeyboardEvent) => {
+            if (e.key === "Escape") {
+                props.onClose();
+            }
+        };
+        document.addEventListener("keydown", (e: KeyboardEvent) => {
+            if (e.key === "Escape") {
+                props.onClose();
+            }
+        });
+    }, [props]);
+    if (props.isShowing) {
+        return (
+            <div css={backdropStyle}
+                onClick={props.onClose}
+            >
+                {props.children}
+            </div >
+        );
+    }
+    else {
+        return <></>;
+    }
 };
 
 function Modal(props:
-    { children?: React.ReactNode; }
+    {
+        children?: React.ReactNode;
+        isShowing: boolean;
+        onClose: () => void;
+    }
 ) {
     const portalElement = document.getElementById("overlay") as HTMLElement;
     return (
         ReactDOM.createPortal(
-            <Backdrop>
+            <Backdrop
+                {...props}
+            >
                 {props.children}
             </Backdrop>
             , portalElement
