@@ -24,7 +24,7 @@ function fetchUserFundingList({
     page = 1
 }: fetchUserFundingListProps): Promise<UserFundingListResponse> {
     return httpClient({
-        url: `/projects?userNum=${userNum}&cursor=${cursor}&count=${count}&page=${page}`,
+        url: `/users/${userNum}/projects?cursor=${cursor}&count=${count}&page=${page}`,
         method: "GET",
     }).then((response): UserFundingListResponse => response.data);
 }
