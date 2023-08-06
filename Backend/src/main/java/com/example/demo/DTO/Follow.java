@@ -59,9 +59,6 @@ public class Follow {
             case Follow:
                 for(Follow myFollow : myFollowList) {
                     this.user = null;
-                    System.out.println("내 팔로우 : " + myFollow.user.getUserId());
-                    System.out.println("타겟의 팔로우 : " + this.userId);
-
                     if (this.userId.equals(myFollow.getUser().getUserId())) {
                         this.relation = true;
                     }
