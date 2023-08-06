@@ -11,19 +11,20 @@ const Backdrop = (props:
         onClose: () => void;
     }
 ) => {
-
     useEffect(() => {
-        const event = (e: React.KeyboardEvent) => {
+        const event = (e: React.KeyboardEvent | KeyboardEvent) => {
             if (e.key === "Escape") {
                 props.onClose();
             }
         };
-        document.addEventListener("keydown", (e: KeyboardEvent) => {
-            if (e.key === "Escape") {
-                props.onClose();
-            }
-        });
+
+        document.addEventListener("keydown", event);
+
+        return () => {
+            document.removeEventListener("keydown", event);
+        };
     }, [props]);
+
     if (props.isShowing) {
         return (
             <div css={backdropStyle}
@@ -59,15 +60,18 @@ function Modal(props:
 
 const backdropStyle = css`
     position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     left: 0;
     top: 0;
     right: 0;
     width: 100vw;
     height: 100vh;
-
+    margin: 0 auto;
     background-color: rgba(0, 0, 0, 0.75);
     backdrop-filter: blur(1px);
-    z-index: 999;
+    z-index: 3;
 `;
 
 export default Modal;
