@@ -8,7 +8,7 @@ import { AxiosResponse } from "axios";
  */
 function followUser(userId: number): Promise<AxiosResponse> {
     return httpClient({
-        url: `/user/follow?userId=${userId}`,
+        url: `/users/${userId}/follow`,
         method: "POST",
     });
 }

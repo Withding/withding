@@ -6,7 +6,7 @@ import { AxiosResponse } from "axios";
  */
 function unfollowUser(userId: number): Promise<AxiosResponse> {
     return httpClient({
-        url: `/user/follow?userId=${userId}`,
+        url: `/users/${userId}/follow`,
         method: "DELETE",
     });
 }
