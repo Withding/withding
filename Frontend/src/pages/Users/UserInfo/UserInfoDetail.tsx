@@ -1,16 +1,21 @@
 import Button from "@/components/common/Button";
 import useUserInfoContext from "@/hooks/useUserInfoContext";
 import { css } from "@emotion/react";
-import React from "react";
+import React, { useCallback, useState } from "react";
+import ListModal from "./ListModal";
+import useShown from "@/hooks/useShown";
 
 /**
  * 특정 유저 정보 디테일
  * @returns 
  */
 function UserInfoDetail() {
+    const [modalTitle, setModalTitle] = useState<string>("");
     const { userInfo } = useUserInfoContext();
     const { nickname, fundingCount, followerCount, followingCount, isFollowing, onFollow, onUnfollow }
         = userInfo;
+
+    const { isShowing, onClose, onOpen } = useShown(true);
 
     const onClickBtn = () => {
         if (isFollowing) {
@@ -20,8 +25,15 @@ function UserInfoDetail() {
         }
     };
 
+    const onClickList = useCallback((name: string) => {
+        setModalTitle(name);
+        onOpen();
+    }, [onOpen]);
+
+    console.log(isShowing);
     return (
         <section css={style}>
+            {isShowing && <ListModal title={modalTitle} isShowing={isShowing} onClose={onClose} />}
             <div className="top">
                 <h2>{`${nickname}`}</h2>
                 <Button
@@ -36,11 +48,11 @@ function UserInfoDetail() {
                     <p>{`펀딩`}</p>
                     <span className="count">{fundingCount}</span>
                 </li>
-                <li>
+                <li onClick={() => onClickList("팔로잉")}>
                     <p>{`팔로잉`}</p>
                     <span className="count">{followingCount}</span>
                 </li>
-                <li>
+                <li onClick={() => onClickList("팔로워")}>
                     <p>{`팔로워`}</p>
                     <span className="count">{followerCount}</span>
                 </li>
@@ -86,6 +98,7 @@ const style = css`
         padding: 1rem;
         display: flex;
         flex-direction: row;
+        cursor: pointer;
     }
 
     & > ul >  li:nth-child(1) {
