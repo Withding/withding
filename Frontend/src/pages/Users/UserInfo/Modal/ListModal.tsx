@@ -53,7 +53,7 @@ const style = css`
     height: 25rem;
     background-color: white;
     border-radius: 5px;
-
+   
     header {
         position: relative;
         padding: 1rem;
@@ -71,6 +71,11 @@ const style = css`
         position: absolute;
         right: 1rem;
         cursor: pointer;
+    }
+
+    main {
+        padding-top: 1rem;
+        overflow-y: scroll;
     }
 `;
 

@@ -4,6 +4,7 @@ import fetchUserFollowList from "@/utils/RequestApis/users/fetchUserFollowList";
 import React from "react";
 import { useInfiniteQuery } from "react-query";
 import { useParams } from "react-router-dom";
+import UserRelationList from "./UserRelationList";
 
 function FollowList() {
     const { userId } = useParams<{ userId: string }>();
@@ -30,7 +31,7 @@ function FollowList() {
             isFetchingNextPage={isFetchingNextPage}
             fetchNextPage={fetchNextPage}
         >
-
+            <UserRelationList />
         </InfinityScroll>
     );
 }
