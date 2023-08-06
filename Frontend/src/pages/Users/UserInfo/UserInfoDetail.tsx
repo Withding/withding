@@ -2,7 +2,7 @@ import Button from "@/components/common/Button";
 import useUserInfoContext from "@/hooks/useUserInfoContext";
 import { css } from "@emotion/react";
 import React, { useCallback, useState } from "react";
-import ListModal from "./ListModal";
+import ListModal from "./Modal/ListModal";
 import useShown from "@/hooks/useShown";
 
 /**
@@ -52,8 +52,8 @@ function UserInfoDetail() {
                     <p>{`팔로잉`}</p>
                     <span className="count">{followingCount}</span>
                 </li>
-                <li onClick={() => onClickList("팔로워")}>
-                    <p>{`팔로워`}</p>
+                <li onClick={() => onClickList("팔로우")}>
+                    <p>{`팔로우`}</p>
                     <span className="count">{followerCount}</span>
                 </li>
             </ul>

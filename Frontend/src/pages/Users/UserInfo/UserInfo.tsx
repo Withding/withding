@@ -11,7 +11,6 @@ import unfollowUser from "@/utils/RequestApis/users/unfollowUser";
 import Content from "./Content";
 import UserFundingListResponse from "@/types/UserFundingListResponse";
 import fetchUserFundingList from "@/utils/RequestApis/users/fetchUserFundingList";
-
 /**
  * /users/:userId 
  * 특정 유저 정보 페이지
@@ -26,6 +25,7 @@ function UserInfo() {
         queryFn: () => fetchUserInfo(Number(userId)),
     });
 
+    // 해당 유저 펀딩 리스트
     const { data: fundingList, hasNextPage, fetchNextPage, isFetchingNextPage }
         = useInfiniteQuery<UserFundingListResponse>({
             queryKey: ["userFundligList", userId],

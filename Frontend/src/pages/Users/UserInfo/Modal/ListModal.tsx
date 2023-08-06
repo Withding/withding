@@ -1,7 +1,12 @@
 import Modal from "@/components/common/Modal";
+import UserFollowListResponse from "@/types/UserFollowListResponse";
+import fetchUserFollowList from "@/utils/RequestApis/users/fetchUserFollowList";
 import { css } from "@emotion/react";
 import React from "react";
 import { AiOutlineClose } from "react-icons/ai";
+import { useInfiniteQuery } from "react-query";
+import { useParams } from "react-router-dom";
+import FollowList from "./FollowList";
 
 function ListModal(props:
     {
@@ -10,6 +15,8 @@ function ListModal(props:
         title: string;
     }
 ) {
+    // 해당 유저 팔로우 리스트
+    const isFollowList = props.title === "팔로우";
     return (
         <Modal
             {...props}
@@ -27,7 +34,11 @@ function ListModal(props:
                 </header>
 
                 <main>
-                    <p>LIST</p>
+                    {isFollowList ?
+                        <FollowList />
+                        :
+                        <>123</>
+                    }
                 </main>
             </section>
         </Modal>
