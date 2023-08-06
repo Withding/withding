@@ -60,6 +60,8 @@ public class Follow {
         switch (followEnum) {
             case Follow:
                 for(Follow myFollow : myFollowList) {
+                    this.user = null;
+                    
                     if (this.userId.equals(myFollow.getUser().getUserId())) {
                         this.relation = true;
                     }
