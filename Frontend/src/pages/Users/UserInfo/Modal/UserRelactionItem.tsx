@@ -1,6 +1,6 @@
-import Button from "@/components/common/Button";
 import { css } from "@emotion/react";
 import React from "react";
+import RelationButton from "../RelacionButton";
 
 function UserRelactionItem(props: {
     name: string;
@@ -11,9 +11,8 @@ function UserRelactionItem(props: {
         <li css={style}>
             <img src={props.img} alt={props.name} />
             <p>{props.name}</p>
-            <Button
-                className={`event-btn ${props.relation} ? "follow-active" : "follow-inactive"}`}
-                value={"ㅇㅇㅇ"}
+            <RelationButton
+                isRelation={props.relation}
                 onClick={() => { }}
             />
         </li>
@@ -34,6 +33,10 @@ const style = css`
         width: 3rem;
         height: 3rem;
         border-radius: 100%;
+    }
+
+    button {
+        max-width: 8rem;
     }
 `;
 

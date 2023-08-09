@@ -4,6 +4,7 @@ import { css } from "@emotion/react";
 import React, { useCallback, useState } from "react";
 import ListModal from "./Modal/ListModal";
 import useShown from "@/hooks/useShown";
+import RelationButton from "./RelacionButton";
 
 /**
  * 특정 유저 정보 디테일
@@ -36,6 +37,10 @@ function UserInfoDetail() {
             {isShowing && <ListModal title={modalTitle} isShowing={isShowing} onClose={onClose} />}
             <div className="top">
                 <h2>{`${nickname}`}</h2>
+                <RelationButton
+                    isRelation={isFollowing ?? false}
+                    onClick={onClickBtn}
+                />
                 <Button
                     className={`event-btn ${isFollowing ? "follow-active" : "follow-inactive"}`}
                     value={""}
@@ -77,18 +82,6 @@ const style = css`
         gap: 10px;
     }
     
-    .top > .event-btn {
-        padding: 0.5rem;
-        border: 1px solid var(--blue-300);
-        color: var(--blue-300);
-        font-size: 0.8rem;
-    }
-
-    .top > .event-btn:hover {
-        background-color: var(--blue-50);
-        transition: 0.5s;
-    }
-
     & > ul {
         display: inline-flex;
         color: var(--grey-500);
@@ -110,17 +103,7 @@ const style = css`
         margin-left: 0.3rem;
     }
     
-    .follow-inactive::before {
-        content: "팔로우 하기"
-    }
 
-    .follow-active::before {
-        content: "팔로우 중"
-    }
-
-    .follow-active:hover::before {
-        content: "언팔로우 하기"
-    }
 
     @media screen and (min-width: 1096px) {
 

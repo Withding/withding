@@ -1,5 +1,4 @@
 // import Button from "@/components/common/Button";
-import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import React from "react";
 
@@ -36,7 +35,7 @@ const Button = styled.button<{ isRelation: boolean }>`
 
     &:hover {
         background-color: var(--blue-50);
-        transition: 0.5s;
+        transition: 0.2s;
     }
 
 
@@ -44,8 +43,8 @@ const Button = styled.button<{ isRelation: boolean }>`
         content: "${props => props.isRelation ? "팔로우중" : "팔로우 하기"}"
     }
 
-    &:hover::before {
-        content: "${props => props.isRelation ? "언팔로우 하기" : "팔로우 하기"}"
+    &:hover {
+        background-color: var(--blue-100);
     }
 `;
 export default RelationButton;

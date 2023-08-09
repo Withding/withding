@@ -1,6 +1,5 @@
 import React from "react";
 import UserRelactionItem from "./UserRelactionItem";
-import { css } from "@emotion/react";
 
 function UserRelationList() {
     return (
