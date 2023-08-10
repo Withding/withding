@@ -24,7 +24,7 @@ const style = css`
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
-    
+    margin-bottom: 1rem;
     p {
         min-width: 60%;
     }

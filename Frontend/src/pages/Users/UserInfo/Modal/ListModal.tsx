@@ -60,18 +60,22 @@ const style = css`
         font-size: 1.2rem;
         min-height: 3.5rem;
         max-height: 3.5rem;
+        min-height: 10%;
     }
 
     header > .close { 
         position: absolute;
         right: 1rem;
         cursor: pointer;
+
     }
 
     main {
         padding-top: 1rem;
-        overflow-y: scroll;
+        overflow-y: scroll;   
+        min-height: 85%;
     }
+
 `;
 
 export default ListModal;

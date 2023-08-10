@@ -1,10 +1,13 @@
 import React from "react";
 import UserRelationItem from "./UserRelationItem";
 import { RelationUser } from "@/types/UserRelationList";
+import { css } from "@emotion/react";
 
 function UserRelationList(props: { list?: RelationUser[] }) {
     return (
-        <ul>
+        <ul css={css`
+            min-width: 100%;
+        `}>
             {
                 props.list?.map((user) => (
                     <UserRelationItem
@@ -15,7 +18,6 @@ function UserRelationList(props: { list?: RelationUser[] }) {
                     />
                 ))
             }
-
         </ul>
     );
 }
