@@ -56,7 +56,7 @@ public class FollowService {
         List<Follow> myFollowList = (List<Follow>)  em.createQuery("SELECT f FROM Follow f WHERE f.follower =: meId")
                 .setParameter("meId", me.getUserId())
                 .getResultList();
-        List<Follow> followList = (List<Follow>) em.createQuery("SELECT new Follow(f.user, f.follower) FROM Follow f WHERE f.follower =: targetId")
+        List<Follow> followList = (List<Follow>) em.createQuery("SELECT new Follow(f.user) FROM Follow f WHERE f.follower =: targetId")
                 .setParameter("targetId", target.getUserId())
                 .getResultList();
 

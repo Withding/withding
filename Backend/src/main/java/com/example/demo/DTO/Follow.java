@@ -17,7 +17,11 @@ import java.util.List;
 @Table(name = "follow")
 public class Follow {
 
-    public Follow(User user, Long targetId) {
+    public Follow(final User user){
+        this.user = user;
+    }
+
+    public Follow(final User user, final Long targetId) {
         this.user = user;
         this.follower = targetId;
     }
@@ -35,7 +39,6 @@ public class Follow {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
     private Long follower;
 
     @Transient
@@ -53,23 +56,20 @@ public class Follow {
      * 상대와 내가 관계가 있는지 확인하는 함수(서로 follow, follower 관계인지 확인)
      * @param myFollowList 나와 관련된 follow 목록
      */
-
     public void isFollowRelationToMe(final List<Follow> myFollowList, final FollowEnum followEnum) {
+        this.userId = user.getUserId();
         this.name = user.getNickName();
-
+        this.user = null;
         // 내가 follower인 상태임(내가 상대를 팔로우 중)
         switch (followEnum) {
             case Follow:
                 for(Follow myFollow : myFollowList) {
-                    if (this.user.getUserId().equals(myFollow.getUser().getUserId())) {
+                    if (this.userId.equals(myFollow.getUser().getUserId())) {
                         this.relation = true;
                     }
                     else {
                         this.relation = false;
                     }
-                    this.userId = this.follower;
-                    this.user = null;
-                    this.follower = null;
                 }
                 break;
             case Follower:
@@ -80,8 +80,6 @@ public class Follow {
                     else {
                         this.relation = false;
                     }
-                    this.userId = this.follower;
-                    this.follower = null;
                 }
                 break;
         }
