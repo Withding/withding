@@ -50,15 +50,18 @@ public class Follow {
     @Transient
     private String name;
 
+    @Transient
+    private String image;
 
 
     /**
      * 상대와 내가 관계가 있는지 확인하는 함수(서로 follow, follower 관계인지 확인)
      * @param myFollowList 나와 관련된 follow 목록
      */
-    public void isFollowRelationToMe(final List<Follow> myFollowList, final FollowEnum followEnum) {
+    public void isFollowRelationToMe(final List<Follow> myFollowList, final FollowEnum followEnum, final String PROFILE_IMAGE_URL) {
         this.userId = user.getUserId();
         this.name = user.getNickName();
+        this.image = PROFILE_IMAGE_URL + user.getProfileImage().getProfileImage();
         this.user = null;
         // 내가 follower인 상태임(내가 상대를 팔로우 중)
         switch (followEnum) {
