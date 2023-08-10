@@ -1,6 +1,6 @@
 import InfinityScroll from "@/components/common/InfinityScroll";
 import fetchUserFollowList from "@/utils/RequestApis/users/fetchUserFollowList";
-import React from "react";
+import React, { useContext } from "react";
 import { useInfiniteQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import UserRelationList from "./UserRelationList";

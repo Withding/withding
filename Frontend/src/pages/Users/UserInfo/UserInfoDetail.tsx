@@ -5,6 +5,7 @@ import React, { useCallback, useState } from "react";
 import ListModal from "./Modal/ListModal";
 import useShown from "@/hooks/useShown";
 import RelationButton from "./RelacionButton";
+import { useParams } from "react-router-dom";
 
 /**
  * 특정 유저 정보 디테일
@@ -17,12 +18,13 @@ function UserInfoDetail() {
         = userInfo;
 
     const { isShowing, onClose, onOpen } = useShown(true);
+    const { userId } = useParams<{ userId: string }>();
 
     const onClickBtn = () => {
         if (isFollowing) {
-            onUnfollow();
+            onUnfollow(Number(userId));
         } else {
-            onFollow();
+            onFollow(Number(userId));
         }
     };
 
