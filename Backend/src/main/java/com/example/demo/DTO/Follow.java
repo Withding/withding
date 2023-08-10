@@ -44,6 +44,8 @@ public class Follow {
     @Transient
     private Long userId;
 
+    @Transient
+    private String nickName;
 
 
     /**
@@ -52,27 +54,24 @@ public class Follow {
      */
 
     public void isFollowRelationToMe(final List<Follow> myFollowList, final FollowEnum followEnum) {
-        // user 전체 정보가 아닌 userId만 필요하므로 userId 값 옮기고 user을 null로 초기화
-        this.userId = this.getUser().getUserId();
-        this.user = null;
+        this.nickName = user.getNickName();
 
         // 내가 follower인 상태임(내가 상대를 팔로우 중)
         switch (followEnum) {
             case Follow:
                 for(Follow myFollow : myFollowList) {
-                    this.user = null;
-                    
-                    if (this.userId.equals(myFollow.getUser().getUserId())) {
+                    if (this.user.getUserId().equals(myFollow.getUser().getUserId())) {
                         this.relation = true;
                     }
                     else {
                         this.relation = false;
                     }
+                    this.user = null;
                 }
                 break;
             case Follower:
                 for(Follow myFollow : myFollowList) {
-                    if (this.getFollower().equals(myFollow.getUser().getUserId())) {
+                    if (this.follower.equals(myFollow.getUser().getUserId())) {
                         this.relation = true;
                     }
                     else {
