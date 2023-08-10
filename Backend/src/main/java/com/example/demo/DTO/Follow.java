@@ -86,17 +86,5 @@ public class Follow {
                 break;
         }
     }
-
-/*
-    public void isFollowRelationToMe(final List<Follow> myFollowList, FollowEnum followEnum) {
-        // 내가 follower인 상태임(내가 상대를 팔로우 중)
-        for (Follow myFollow : myFollowList) {
-            if (this.user.getUserId().equals(myFollow.getUser().getUserId()) || this.getFollower().equals(myFollow.getUser().getUserId())) {
-                this.relation = true;
-            } else {
-                this.relation = false;
-            }
-        }
-    }
-*/
+    
 }

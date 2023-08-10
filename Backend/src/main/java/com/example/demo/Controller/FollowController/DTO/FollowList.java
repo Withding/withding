@@ -9,5 +9,5 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 public class FollowList {
-    private List<Follow> follows;
+    private List<Follow> list;
 }

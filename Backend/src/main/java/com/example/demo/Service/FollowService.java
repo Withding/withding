@@ -38,7 +38,7 @@ public class FollowService {
         }
 
         FollowList resultFollowerList = new FollowList();
-        resultFollowerList.setFollows(followerList);
+        resultFollowerList.setList(followerList);
         em.close();
         return resultFollowerList;
     }
@@ -60,18 +60,14 @@ public class FollowService {
                 .setParameter("targetId", target.getUserId())
                 .getResultList();
 
-//        System.out.println("내 팔로우 리스트 : " + myFollowList.get(0).getUser().getUserId());
-//        System.out.println("타겟 팔로우 리스트 : " + followList.get(0).getUser().getUserId());
 
         // 나와 관계(팔로우, 팔로워 관계)가 있는지 확인
         for (Follow f: followList) {
-
-            //System.out.println("\n" + f + "\n");
             f.isFollowRelationToMe(myFollowList, FollowEnum.Follow);
         }
 
         FollowList resultFollowList = new FollowList();
-        resultFollowList.setFollows(followList);
+        resultFollowList.setList(followList);
         em.close();
         return resultFollowList;
     }
