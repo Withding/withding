@@ -39,7 +39,7 @@ function UserInfo() {
         });
 
     const { mutate: onFollow } = useMutation(
-        () => followUser(Number(userId)),
+        (userId: number) => followUser(userId),
         {
             onSettled: () => {
                 queryClient.invalidateQueries("userInfo");
@@ -48,7 +48,7 @@ function UserInfo() {
     );
 
     const { mutate: onUnfollow } = useMutation(
-        () => unfollowUser(Number(userId)),
+        (userId: number) => unfollowUser(userId),
         {
             onSettled: () => {
                 queryClient.invalidateQueries("userInfo");

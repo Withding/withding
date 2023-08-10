@@ -3,8 +3,8 @@ import UserInfoResponse from "./UserInfoResponse";
 
 interface UserInfoContextProps {
     userInfo: UserInfoResponse & {
-        onFollow: () => void;
-        onUnfollow: () => void;
+        onFollow: (userId: number) => void;
+        onUnfollow: (userId: number) => void;
     }
     list: {
         fundingList?: UserFunding[];
