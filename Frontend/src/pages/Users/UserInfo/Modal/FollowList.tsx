@@ -4,7 +4,7 @@ import React from "react";
 import { useInfiniteQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import UserRelationList from "./UserRelationList";
-import UserRelationListResponse from "@/types/UserRelationList";
+import { UserRelationListResponse }  from "@/types/UserRelationList";
 
 function FollowList() {
     const { userId } = useParams<{ userId: string }>();

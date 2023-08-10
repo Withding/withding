@@ -1,4 +1,4 @@
-import UserRelationListResponse from "@/types/UserRelationList";
+import { UserRelationListResponse } from "@/types/UserRelationList";
 import httpClient from "@/utils/httpClient";
 
 

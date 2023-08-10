@@ -1,14 +1,14 @@
 
-interface User {
+interface RelationUser {
     name: number;
     relation: boolean,
-    id: number,
+    userId: number,
 }
 
 interface UserRelationListResponse {
-    list: User[],
+    list: RelationUser[],
     lastPage: number,
     currentPage: number,
 }
 
-export default UserRelationListResponse;
+export { UserRelationListResponse, RelationUser };
