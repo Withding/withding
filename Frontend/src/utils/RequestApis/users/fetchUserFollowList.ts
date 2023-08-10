@@ -1,4 +1,4 @@
-import UserFollowListResponse from "@/types/UserFollowListResponse";
+import { UserRelationListResponse } from "@/types/UserRelationList";
 import httpClient from "@/utils/httpClient";
 
 
@@ -16,11 +16,11 @@ interface fetchUserFollowListProps {
 function fetchUserFollowList({
     userId,
     page = 1 
-}: fetchUserFollowListProps): Promise<UserFollowListResponse> {
+}: fetchUserFollowListProps): Promise<UserRelationListResponse> {
     return httpClient({
         url: `/users/${userId}/follows?page=${page}`,
         method: "GET",
-    }).then((response): UserFollowListResponse => response.data);
+    }).then((response): UserRelationListResponse => response.data);
 }
 
 export default fetchUserFollowList;

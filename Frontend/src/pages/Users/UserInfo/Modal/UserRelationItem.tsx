@@ -2,7 +2,7 @@ import { css } from "@emotion/react";
 import React from "react";
 import RelationButton from "../RelacionButton";
 
-function UserRelactionItem(props: {
+function UserRelationItem(props: {
     name: string;
     img: string;
     relation: boolean;
@@ -40,4 +40,4 @@ const style = css`
     }
 `;
 
-export default UserRelactionItem;
+export default UserRelationItem;

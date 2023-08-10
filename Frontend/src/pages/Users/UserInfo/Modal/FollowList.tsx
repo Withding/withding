@@ -1,10 +1,10 @@
 import InfinityScroll from "@/components/common/InfinityScroll";
-import UserFollowListResponse from "@/types/UserFollowListResponse";
 import fetchUserFollowList from "@/utils/RequestApis/users/fetchUserFollowList";
 import React from "react";
 import { useInfiniteQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import UserRelationList from "./UserRelationList";
+import { UserRelationListResponse } from "@/types/UserRelationList";
 
 function FollowList() {
     const { userId } = useParams<{ userId: string }>();
@@ -14,7 +14,7 @@ function FollowList() {
         hasNextPage,
         fetchNextPage,
         isFetchingNextPage,
-    } = useInfiniteQuery<UserFollowListResponse>({
+    } = useInfiniteQuery<UserRelationListResponse>({
         queryKey: ["userFollowList", userId],
         queryFn: ({ pageParam = 1 }) => fetchUserFollowList({
             userId: Number(userId),
@@ -31,7 +31,9 @@ function FollowList() {
             isFetchingNextPage={isFetchingNextPage}
             fetchNextPage={fetchNextPage}
         >
-            <UserRelationList />
+            <UserRelationList
+                list={data?.pages.map((page) => page.list).flat()}
+            />
         </InfinityScroll>
     );
 }
