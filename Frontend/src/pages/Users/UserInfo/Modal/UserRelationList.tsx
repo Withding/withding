@@ -1,54 +1,21 @@
 import React from "react";
-import UserRelactionItem from "./UserRelactionItem";
+import UserRelationItem from "./UserRelationItem";
+import { RelationUser } from "@/types/UserRelationList";
 
-function UserRelationList() {
+function UserRelationList(props: { list?: RelationUser[] }) {
     return (
         <ul>
-            <UserRelactionItem
-                name="이름"
-                img="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg"
-                relation={true}
-            />
-            <UserRelactionItem
-                name="이름"
-                img="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg"
-                relation={true}
-            />
-            <UserRelactionItem
-                name="이름"
-                img="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg"
-                relation={true}
-            />
-            <UserRelactionItem
-                name="이름"
-                img="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg"
-                relation={true}
-            />
-            <UserRelactionItem
-                name="이름"
-                img="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg"
-                relation={true}
-            />
-            <UserRelactionItem
-                name="이름"
-                img="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg"
-                relation={true}
-            />
-            <UserRelactionItem
-                name="이름"
-                img="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg"
-                relation={true}
-            />
-            <UserRelactionItem
-                name="이름"
-                img="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg"
-                relation={true}
-            />
-            <UserRelactionItem
-                name="이름"
-                img="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg"
-                relation={true}
-            />
+            {
+                props.list?.map((user) => (
+                    <UserRelationItem
+                        key={user.userId}
+                        name={user.name}
+                        img="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg"
+                        relation={true}
+                    />
+                ))
+            }
+
         </ul>
     );
 }
