@@ -1,5 +1,6 @@
 package com.example.demo.Service;
 
+import com.example.demo.Config.BeanConfig;
 import com.example.demo.Config.JpaConfig;
 import com.example.demo.DTO.Follow;
 import com.example.demo.Controller.FollowController.DTO.FollowList;
@@ -15,6 +16,10 @@ import java.util.List;
 
 @Service
 public class FollowService {
+
+    @Autowired
+    private BeanConfig beanConfig;
+
 
     /**
      * 해당 user의 팔로워 목록 호출
@@ -34,7 +39,7 @@ public class FollowService {
 
         // 나와 관계(팔로우, 팔로워 관계)가 있는지 확인
         for (Follow f: followerList) {
-            f.isFollowRelationToMe(myFollowList, FollowEnum.Follower);
+            f.isFollowRelationToMe(myFollowList, FollowEnum.Follower, beanConfig.SERVER_URL + ":" + beanConfig.SERVER_PORT + beanConfig.PROFILE_IMAGE_URL);
         }
 
         FollowList resultFollowerList = new FollowList();
@@ -63,7 +68,7 @@ public class FollowService {
 
         // 나와 관계(팔로우, 팔로워 관계)가 있는지 확인
         for (Follow f: followList) {
-            f.isFollowRelationToMe(myFollowList, FollowEnum.Follow);
+            f.isFollowRelationToMe(myFollowList, FollowEnum.Follow,beanConfig.SERVER_URL + ":" + beanConfig.SERVER_PORT + beanConfig.PROFILE_IMAGE_URL);
         }
 
         FollowList resultFollowList = new FollowList();
