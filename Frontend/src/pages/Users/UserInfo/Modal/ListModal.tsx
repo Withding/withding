@@ -1,13 +1,8 @@
 import Modal from "@/components/common/Modal";
-import UserFollowListResponse from "@/types/UserFollowListResponse";
-import fetchUserFollowList from "@/utils/RequestApis/users/fetchUserFollowList";
-import { css } from "@emotion/react";
 import React from "react";
 import { AiOutlineClose } from "react-icons/ai";
-import { useInfiniteQuery } from "react-query";
-import { useParams } from "react-router-dom";
 import FollowList from "./FollowList";
-
+import { css } from "@emotion/react";
 function ListModal(props:
     {
         isShowing: boolean;
@@ -53,7 +48,7 @@ const style = css`
     height: 25rem;
     background-color: white;
     border-radius: 5px;
-   
+
     header {
         position: relative;
         padding: 1rem;
