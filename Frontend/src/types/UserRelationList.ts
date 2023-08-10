@@ -1,6 +1,6 @@
 
 interface RelationUser {
-    name: number;
+    name: string;
     relation: boolean,
     userId: number,
 }
