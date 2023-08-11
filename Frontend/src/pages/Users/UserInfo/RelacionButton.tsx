@@ -40,7 +40,7 @@ const Button = styled.button<{ isRelation: boolean }>`
 
 
     &::before {
-        content: "${props => props.isRelation ? "팔로우중" : "팔로우 하기"}"
+        content: "${props => props.isRelation ? "팔로우중" : "팔로우"}"
     }
 
     &:hover {
