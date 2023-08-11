@@ -17,7 +17,7 @@ function UserInfoDetail() {
     const { nickname, fundingCount, followerCount, followingCount, isFollowing, onFollow, onUnfollow }
         = userInfo;
 
-    const { isShowing, onClose, onOpen } = useShown(true);
+    const { isShowing, onClose, onOpen } = useShown(false);
     const { userId } = useParams<{ userId: string }>();
 
     const onClickBtn = () => {
@@ -33,7 +33,6 @@ function UserInfoDetail() {
         onOpen();
     }, [onOpen]);
 
-    console.log(isShowing);
     return (
         <section css={style}>
             {isShowing && <ListModal title={modalTitle} isShowing={isShowing} onClose={onClose} />}

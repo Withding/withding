@@ -3,6 +3,9 @@ import React from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import FollowList from "./FollowList";
 import { css } from "@emotion/react";
+import FollowingList from "./FollowingList";
+
+
 function ListModal(props:
     {
         isShowing: boolean;
@@ -32,7 +35,7 @@ function ListModal(props:
                     {isFollowList ?
                         <FollowList />
                         :
-                        <>123</>
+                        <FollowingList />
                     }
                 </main>
             </section>
