@@ -1,8 +1,9 @@
 import { css } from "@emotion/react";
-import React, { useContext, useState } from "react";
+import React from "react";
 import RelationButton from "../RelacionButton";
-import UserInfoContext from "@/store/UserInfoContext";
-import { useQueryClient } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
+import followUser from "@/utils/RequestApis/users/followUser";
+import unfollowUser from "@/utils/RequestApis/users/unfollowUser";
 
 function UserRelationItem(props: {
     name: string;
@@ -11,18 +12,33 @@ function UserRelationItem(props: {
     userId: number;
 }) {
 
-    const { userInfo } = useContext(UserInfoContext);
-    const { onFollow, onUnfollow } = userInfo;
-    const [cliked, setCliked] = useState(false);
+    const queryClient = useQueryClient();
+    const { mutate: onFollow } = useMutation(
+        (userId: number) => followUser(userId),
+        {
+            onSettled: () => {
+                queryClient.invalidateQueries("userFollowList");
+            }
+        }
+    );
+
+    const { mutate: onUnfollow } = useMutation(
+        (userId: number) => unfollowUser(userId),
+        {
+            onSettled: () => {
+                queryClient.invalidateQueries("userFollowList");
+            }
+        }
+    );
+
     const event = () => {
         if (props.relation) {
             onUnfollow(props.userId);
         } else {
             onFollow(props.userId);
         }
-        setCliked(!cliked);
     };
-    console.log(props.userId + " " + props.relation);
+
     return (
         <li css={style}>
             <img src={props.img} alt={props.name} />
@@ -52,7 +68,9 @@ const style = css`
     }
 
     button {
-        max-width: 8rem;
+        max-width: 3em;
+        min-width: 3rem;
+        text-align: center;
     }
 `;
 
