@@ -1,5 +1,6 @@
 package com.example.demo.Controller.ProjectController.DTO;
 
+import com.example.demo.DTO.Funding;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,7 +12,10 @@ import java.util.List;
 public class ResponseProjectList {
     private Long fundingCount;
     private Long lastPage;
-    private List<ProjectSmallForm> fundingList;
+    private List<ProjectSmallForm> smallProjectList;
+
+    private List<Funding> fullProjectList;
+
 
     /**
      * 모든 필드를 null로 초기화 시키는 기본 생성자
@@ -22,6 +26,10 @@ public class ResponseProjectList {
     public ResponseProjectList(){
         this.fundingCount = null;
         this.lastPage = null;
-        this.fundingList = null;
+        this.smallProjectList= null;
+        this.fullProjectList = null;
     }
+
+
+
 }

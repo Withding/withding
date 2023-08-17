@@ -2,23 +2,21 @@ package com.example.demo.Service;
 
 import com.example.demo.Config.BeanConfig;
 import com.example.demo.Config.JpaConfig;
+import com.example.demo.Controller.PageNation;
 import com.example.demo.Controller.ProjectController.DTO.ProjectSmallForm;
 import com.example.demo.DTO.*;
 import com.example.demo.Controller.ProjectController.DTO.GetMyProjects;
 import com.example.demo.Controller.ProjectController.DTO.GetProject_1Level;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.lang.NonNull;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
+import javax.persistence.*;
 import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -35,7 +33,6 @@ public class ProjectService {
 
     @Autowired
     private FileService fileService;
-
 
 
     /**
@@ -702,6 +699,20 @@ public class ProjectService {
         return count;
     }
 
+    /**
+     * 펀딩 글 중에서 특정 상태인 펀딩의 갯수 호출
+     * @param fundingState 호출할 상태값
+     * @return Long 타입의 특정 상태의 프로젝트의 개수
+     */
+    public Long getFundingCountFundingState(final String fundingState) {
+        EntityManager em = JpaConfig.emf.createEntityManager();
+        Long count = (Long) em.createQuery("SELECT COUNT(f.id) FROM Funding f WHERE f.fundingStateCode.state =: fundingState")
+                .setParameter("fundingState", fundingState)
+                .getSingleResult();
+        em.close();
+        return count;
+    }
+
 
     /**
      * User 객체를 넘겨받아 해당 User의 진행중인 펀딩, 종료한 펀딩을 호출함
@@ -712,6 +723,7 @@ public class ProjectService {
      * @return 해당 타겟이 작성한 List<Funding> 타입의 펀딩 목록
      */
     public List<ProjectSmallForm> getFundingListToUserNum(User user, Long page, Long cursor, int count) {
+
         if (1 > count || count > 21){
             count = 5;
         }
@@ -748,7 +760,7 @@ public class ProjectService {
                     .setMaxResults(count)
                     .getResultList());
         }
-        System.out.println(fundingList);
+        //System.out.println(fundingList);
 
         List<ProjectSmallForm> resultList = new ArrayList<>();
         for (int i = 0; i < fundingList.size(); i++){
@@ -769,5 +781,34 @@ public class ProjectService {
     }
 
 
-
+    /**
+     * 모든 펀딩 호출
+     * @param pageNation 페이지네이션에서 사용할 객체(page, count, cursor의 값이 들어있다.)
+     * @return List<Funding> 타입의 객체
+     */
+    public List<Funding> getProjects(PageNation pageNation) {
+        if (1L > pageNation.getCount() || pageNation.getCount() > 21L){
+            pageNation.setCount(5L);
+        }
+        EntityManager em = JpaConfig.emf.createEntityManager();
+        String url = beanConfig.SERVER_URL + ":" + beanConfig.SERVER_PORT + beanConfig.THUMBNAIL_IMAGE_URL;
+        Query query;
+        if (pageNation.getCursor() == 0L) {
+            query = em.createQuery("SELECT new Funding (f.userId.nickName, CONCAT(:url ,f.thumbnail.image), f.title, f.startEnd, f.deadLine, f.maxAmount, f.nowAmount, (f.nowAmount / f.maxAmount * 100), f.deadLine)" +
+                    " FROM Funding f WHERE f.fundingStateCode IN (:state1, :state2)" +
+                    " ORDER BY f.createdAt DESC");
+            query.setFirstResult((pageNation.getPage().intValue() - 1) * pageNation.getCount().intValue());
+        } else {
+            query = em.createQuery("SELECT new Funding (f.userId.nickName, CONCAT(:url ,f.thumbnail.image), f.title, f.startEnd, f.deadLine, f.maxAmount, f.nowAmount, (f.nowAmount / f.maxAmount * 100), f.deadLine)" +
+                    " FROM Funding f WHERE f.fundingStateCode IN (:state1, :state2)" +
+                    " AND f.id <= :cursor ORDER BY f.createdAt DESC");
+            query.setParameter("cursor", pageNation.getCursor());
+        }
+        query.setParameter("state1", new FundingStateCode(0));
+        query.setParameter("state2", new FundingStateCode(1));
+        query.setParameter("url", url);
+        query.setMaxResults(pageNation.getCount().intValue());
+        List<Funding> fundings = query.getResultList();
+        return fundings;
+    }
 }

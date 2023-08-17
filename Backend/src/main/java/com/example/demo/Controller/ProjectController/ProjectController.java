@@ -1,6 +1,7 @@
 package com.example.demo.Controller.ProjectController;
 
 import com.example.demo.Config.BeanConfig;
+import com.example.demo.Controller.PageNation;
 import com.example.demo.Controller.ProjectController.DTO.*;
 import com.example.demo.DTO.*;
 import com.example.demo.Controller.ProjectController.DTO.createProject_2Level;
@@ -445,6 +446,7 @@ public class ProjectController {
         return new ResponseEntity<>(getMyProjectsFinal, HttpStatus.OK);
     }
 
+
     /**
      * 특정 유저의 펀딩 목록 호출
      * @param userNum
@@ -461,10 +463,9 @@ public class ProjectController {
     {
         ResponseProjectList fundingList = new ResponseProjectList();
         User findUser = userService.getUserToUserId(userNum);
-        fundingList.setFundingList(projectService.getFundingListToUserNum(findUser, page, cursor, count));
+        fundingList.setSmallProjectList(projectService.getFundingListToUserNum(findUser, page, cursor, count));
         Long fundingCount;
         fundingCount = projectService.getFundingCountToUserIdAndFundingState(userNum, "진행중") + projectService.getFundingCountToUserIdAndFundingState(userNum, "종료");
-
         if (fundingCount % count == 0){
             fundingList.setLastPage(fundingCount / count);
         } else {
@@ -516,5 +517,34 @@ public class ProjectController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
+
+    /**
+     * 프로젝트 리스트 호출
+     * @return 성공 200 프로젝트 목록
+     */
+    @GetMapping(value = "/projects")
+    public ResponseEntity<Object> getProjects(@RequestParam(value = "page", required = false, defaultValue = "1") final Long page,
+                                              @RequestParam(value = "cursor", required = false, defaultValue = "0") final Long cursor,
+                                              @RequestParam(value = "count", required = false , defaultValue = "5") final Long count,
+                                              @RequestParam(value = "state", defaultValue = "진행중") final String state) {
+        PageNation pageNation = new PageNation(Long.valueOf(page), Long.valueOf(count), Long.valueOf(cursor));
+        List<Funding> projectList = projectService.getProjects(pageNation);
+
+        ResponseProjectList response = new ResponseProjectList();
+        response.setFullProjectList(projectList);
+
+        response.setFundingCount(projectService.getFundingCountFundingState(state));
+
+        if (response.getFundingCount() % count > 0){
+            response.setLastPage(response.getFundingCount() / count + 1);
+        } else {
+            response.setLastPage(response.getFundingCount() / count);
+        }
+
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
 
 }

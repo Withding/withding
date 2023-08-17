@@ -123,7 +123,7 @@ public class FollowService {
      * @param unfollowNum 팔로우 해제할 사람
      * @return 정상 true, 비정상 false
      */
-    public boolean unFollow(User user, Long unfollowNum){
+    public boolean unFollow(User user, Long unfollowNum) {
         EntityManager em = JpaConfig.emf.createEntityManager();
         EntityTransaction tr = em.getTransaction();
 
