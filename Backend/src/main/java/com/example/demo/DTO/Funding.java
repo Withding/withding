@@ -1,18 +1,17 @@
 package com.example.demo.DTO;
 
 
+import com.example.demo.Config.BeanConfig;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -20,7 +19,9 @@ import java.util.Date;
 @DynamicInsert
 @Entity
 @Table(name = "funding")                    // 펀딩
+@org.hibernate.annotations.NamedQueries({
 
+})
 public class Funding {
 
     @Id
@@ -58,7 +59,7 @@ public class Funding {
     private String createdAt;               // 작성시간
 
     @Column(name = "open_at")
-    private String startEnd;                  // 시작시간
+    private String startEnd;                // 시작시간
 
     private String deadLine;                // 마감기간
 
@@ -66,15 +67,19 @@ public class Funding {
     @JoinColumn(name = "funding_category_id")
     private FundingCategory fundingCategory;  // 펀딩 카테고리
 
-
-    //@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    //@PrimaryKeyJoinColumn(name = "article_id")
-    //private Article article_1;
-
-
     @ManyToOne
     @JoinColumn(name = "state_code")
     private FundingStateCode fundingStateCode;  // 글 상태
+
+    @Transient
+    private String imageUrl;            // 썸네일 이미지 호출 url
+
+    @Transient
+    private String completionRate;      // 완료율
+
+    @Transient
+    private String remainingTime;       // 남은 기간
+
 
     /**
      * 특정 사용자 정보 호출에서 사용
@@ -97,12 +102,43 @@ public class Funding {
         this.fundingStateCode.setState(fundingState);
     }
 
+    public Funding(String user, String image, String title, String startEnd, String deadline,Long max_amount, Long now_amount, Long completionRate, String remainingTime) {
+        long endTime = 0L;
+        long nowTime = 0L;
+        long time = 0L;
+        this.userId = new User();
+        this.thumbnail = new Thumbnail();
 
 
+        this.userId.setNickName(user);
+        this.thumbnail.setImage(image);
+        this.title = title;
+        this.startEnd = startEnd;
+        this.deadLine = deadline;
+        this.maxAmount = max_amount;
+        this.nowAmount = now_amount;
+        this.completionRate = completionRate + "%";
 
 
+        try {
+            endTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(remainingTime).getTime();
+            nowTime = System.currentTimeMillis();
+            time = (endTime - nowTime);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
 
-
+        if (time < 1000){   // 시간이 -로 표기될경우
+            this.remainingTime = "종료";
+        } else if (time / (1000 * 60 ) < 60) {                                          // 60분 미만
+            this.remainingTime = time / (1000 * 60) + "분 남음";
+        } else if (time / (1000 * 60 * 60) < 24) {                                      // 24시간 미만
+            this.remainingTime = time / (1000 * 60 * 60) + "시간 남음";
+        } else {                                                                        // 24시간 이상
+            this.remainingTime = time / (1000 * 60 * 60 * 24 ) + "일 남음";
+        }
+    }
 
 
 }

@@ -108,4 +108,11 @@ public class User {
         return res2;
     }
 
+
+
+
+    public User(String nickName){
+        this.nickName = nickName;
+    }
+
 }
