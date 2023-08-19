@@ -1,5 +1,7 @@
-package com.example.demo.Entity;
+package com.example.demo.Entity.PointHistory;
 
+import com.example.demo.Entity.PointType.PointType;
+import com.example.demo.Entity.User.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

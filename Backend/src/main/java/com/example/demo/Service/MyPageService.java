@@ -3,7 +3,7 @@ package com.example.demo.Service;
 import com.example.demo.Config.BeanConfig;
 import com.example.demo.Controller.MyPageController.DTO.MyPageMaker;
 import com.example.demo.Controller.MyPageController.DTO.MyPageSupporter;
-import com.example.demo.Entity.User;
+import com.example.demo.Entity.User.User;
 import com.example.demo.Repository.FollowerRepo;
 import com.example.demo.Repository.VoteRepo;
 import lombok.Data;

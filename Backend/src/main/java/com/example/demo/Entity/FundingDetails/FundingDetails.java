@@ -1,5 +1,7 @@
-package com.example.demo.Entity;
+package com.example.demo.Entity.FundingDetails;
 
+import com.example.demo.Entity.Funding.Funding;
+import com.example.demo.Entity.User.User;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.NoArgsConstructor;

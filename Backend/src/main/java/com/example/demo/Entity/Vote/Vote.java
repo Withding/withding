@@ -1,4 +1,4 @@
-package com.example.demo.Entity;
+package com.example.demo.Entity.Vote;
 
 import com.example.demo.Entity.CompoSitekey.VotePK;
 import lombok.AllArgsConstructor;

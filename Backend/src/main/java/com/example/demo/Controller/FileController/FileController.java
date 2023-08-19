@@ -2,8 +2,8 @@ package com.example.demo.Controller.FileController;
 
 import com.example.demo.Config.BeanConfig;
 import com.example.demo.Controller.ProjectController.DTO.CreateContentImage;
-import com.example.demo.Entity.ProfileImage;
-import com.example.demo.Entity.User;
+import com.example.demo.Entity.ProfileImage.ProfileImage;
+import com.example.demo.Entity.User.User;
 import com.example.demo.Service.FileService;
 import com.example.demo.Service.ProjectService;
 import com.example.demo.Service.UserService;

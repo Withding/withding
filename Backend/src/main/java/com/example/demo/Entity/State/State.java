@@ -1,5 +1,6 @@
-package com.example.demo.Entity;
+package com.example.demo.Entity.State;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -8,21 +9,21 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@NoArgsConstructor
-@Data
 @Entity
-@Table(name = "funding_state_code")
-public class FundingStateCode {
+@Data
+@NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@Table(name = "state")
+public class State {
+
+    public State(int code){
+        this.stateCode = code;
+    }
+
+
     @Id
     @Column(name = "state_code")
     private Integer stateCode;
-
-    @Column(name = "state")
     private String state;
-
-    public FundingStateCode(int stateCode){
-        this.stateCode = stateCode;
-    }
-
 
 }

@@ -1,6 +1,6 @@
 package com.example.demo.Controller.PointController;
 
-import com.example.demo.Entity.User;
+import com.example.demo.Entity.User.User;
 import com.example.demo.Service.PointService;
 import com.example.demo.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

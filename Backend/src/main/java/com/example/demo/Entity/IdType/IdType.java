@@ -1,4 +1,4 @@
-package com.example.demo.Entity;
+package com.example.demo.Entity.IdType;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;

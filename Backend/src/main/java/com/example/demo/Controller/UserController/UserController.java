@@ -2,7 +2,7 @@ package com.example.demo.Controller.UserController;
 
 import com.example.demo.Config.BeanConfig;
 import com.example.demo.Controller.UserController.DTO.UserInfo;
-import com.example.demo.Entity.User;
+import com.example.demo.Entity.User.User;
 import com.example.demo.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

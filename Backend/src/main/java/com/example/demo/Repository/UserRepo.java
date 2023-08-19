@@ -1,7 +1,7 @@
 package com.example.demo.Repository;
 
 import com.example.demo.Config.JpaConfig;
-import com.example.demo.Entity.User;
+import com.example.demo.Entity.User.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Repository;

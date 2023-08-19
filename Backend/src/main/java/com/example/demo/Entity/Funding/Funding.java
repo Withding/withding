@@ -1,6 +1,10 @@
-package com.example.demo.Entity;
+package com.example.demo.Entity.Funding;
 
 
+import com.example.demo.Entity.FundingCategory.FundingCategory;
+import com.example.demo.Entity.FundingStateCode.FundingStateCode;
+import com.example.demo.Entity.Thumbnail.Thumbnail;
+import com.example.demo.Entity.User.User;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.NoArgsConstructor;

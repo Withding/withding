@@ -2,9 +2,9 @@ package com.example.demo.Service;
 
 import com.example.demo.Config.BeanConfig;
 import com.example.demo.Config.JpaConfig;
-import com.example.demo.Entity.Follow;
+import com.example.demo.Entity.Follow.Follow;
 import com.example.demo.Controller.FollowController.DTO.FollowList;
-import com.example.demo.Entity.User;
+import com.example.demo.Entity.User.User;
 import com.example.demo.Enum.FollowEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

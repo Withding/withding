@@ -1,4 +1,4 @@
-package com.example.demo.Entity;
+package com.example.demo.Entity.Thumbnail;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -15,14 +15,17 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
-@Table(name = "profileimage")
-public class ProfileImage {
-
+@Table(name = "thumbnail")
+public class Thumbnail {
 
     @Id
-    @Column(name = "profile_image")
-    private String profileImage;
+    @Column(name = "image")
+    private String image;
 
-    @Column(name = "origin_profile_image")
-    private String originProfileImage;
+    @Column(name = "origin_image")
+    private String origin_image;
+
+    public Thumbnail(String image){
+        this.image = image;
+    }
 }

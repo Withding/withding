@@ -1,7 +1,7 @@
 package com.example.demo.Repository;
 
 import com.example.demo.Config.JpaConfig;
-import com.example.demo.Entity.EmailAuth;
+import com.example.demo.Entity.EmailAuth.EmailAuth;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;

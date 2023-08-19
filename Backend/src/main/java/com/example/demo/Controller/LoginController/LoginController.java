@@ -2,7 +2,7 @@ package com.example.demo.Controller.LoginController;
 
 import com.example.demo.Config.BeanConfig;
 import com.example.demo.Controller.LoginController.DTO.Login;
-import com.example.demo.Entity.User;
+import com.example.demo.Entity.User.User;
 import com.example.demo.Service.JwtService;
 import com.example.demo.Service.LoginService;
 import com.example.demo.Service.UserService;
