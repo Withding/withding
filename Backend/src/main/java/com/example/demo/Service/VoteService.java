@@ -1,9 +1,8 @@
 package com.example.demo.Service;
 
 import com.example.demo.Config.JpaConfig;
-import com.example.demo.DTO.CompoSitekey.VotePK;
-import com.example.demo.DTO.User;
-import com.example.demo.DTO.Vote;
+import com.example.demo.Entity.CompoSitekey.VotePK;
+import com.example.demo.Entity.Vote;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;

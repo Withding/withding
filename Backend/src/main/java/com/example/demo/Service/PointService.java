@@ -2,9 +2,9 @@ package com.example.demo.Service;
 
 import com.example.demo.Config.BeanConfig;
 import com.example.demo.Config.JpaConfig;
-import com.example.demo.DTO.PointHistory;
-import com.example.demo.DTO.PointType;
-import com.example.demo.DTO.User;
+import com.example.demo.Entity.PointHistory;
+import com.example.demo.Entity.PointType;
+import com.example.demo.Entity.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

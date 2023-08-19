@@ -1,6 +1,5 @@
 package com.example.demo.Controller.ProjectController.DTO;
 
-import com.example.demo.DTO.ArticleImage;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

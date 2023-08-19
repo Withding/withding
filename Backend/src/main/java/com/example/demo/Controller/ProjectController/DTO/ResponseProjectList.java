@@ -1,9 +1,8 @@
 package com.example.demo.Controller.ProjectController.DTO;
 
-import com.example.demo.DTO.Funding;
+import com.example.demo.Entity.Funding;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
 

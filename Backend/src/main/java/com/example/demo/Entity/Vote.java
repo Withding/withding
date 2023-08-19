@@ -1,6 +1,6 @@
-package com.example.demo.DTO;
+package com.example.demo.Entity;
 
-import com.example.demo.DTO.CompoSitekey.VotePK;
+import com.example.demo.Entity.CompoSitekey.VotePK;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

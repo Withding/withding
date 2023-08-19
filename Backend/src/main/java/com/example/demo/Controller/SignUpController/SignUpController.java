@@ -2,7 +2,7 @@ package com.example.demo.Controller.SignUpController;
 
 import com.example.demo.Config.AES256;
 import com.example.demo.Config.BeanConfig;
-import com.example.demo.DTO.*;
+import com.example.demo.Entity.*;
 import com.example.demo.Controller.SignUpController.DTO.SignUpRequest;
 import com.example.demo.Repository.EmailAuthRepo;
 import com.example.demo.Repository.UserRepo;

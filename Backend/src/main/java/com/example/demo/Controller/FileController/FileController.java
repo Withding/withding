@@ -2,9 +2,8 @@ package com.example.demo.Controller.FileController;
 
 import com.example.demo.Config.BeanConfig;
 import com.example.demo.Controller.ProjectController.DTO.CreateContentImage;
-import com.example.demo.DTO.Funding;
-import com.example.demo.DTO.ProfileImage;
-import com.example.demo.DTO.User;
+import com.example.demo.Entity.ProfileImage;
+import com.example.demo.Entity.User;
 import com.example.demo.Service.FileService;
 import com.example.demo.Service.ProjectService;
 import com.example.demo.Service.UserService;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;

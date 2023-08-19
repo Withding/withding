@@ -4,17 +4,12 @@ package com.example.demo.Service;
 import com.example.demo.Config.BeanConfig;
 import com.example.demo.Config.JpaConfig;
 import com.example.demo.Controller.UserController.DTO.UserInfo;
-import com.example.demo.DTO.Follow;
-import com.example.demo.DTO.FundingStateCode;
-import com.example.demo.DTO.ProfileImage;
-import com.example.demo.DTO.User;
+import com.example.demo.Entity.ProfileImage;
+import com.example.demo.Entity.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.Synchronized;
-import org.hibernate.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,7 +18,6 @@ import javax.persistence.EntityTransaction;
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 @Service
 @NoArgsConstructor

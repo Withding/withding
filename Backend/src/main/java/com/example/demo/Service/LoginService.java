@@ -3,7 +3,7 @@ package com.example.demo.Service;
 import com.example.demo.Config.AES256;
 import com.example.demo.Config.BeanConfig;
 import com.example.demo.Config.JpaConfig;
-import com.example.demo.DTO.*;
+import com.example.demo.Entity.*;
 
 import com.example.demo.Controller.LoginController.DTO.Login;
 import com.example.demo.Gson.Gson;

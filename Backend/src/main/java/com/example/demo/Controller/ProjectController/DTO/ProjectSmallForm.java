@@ -1,15 +1,7 @@
 package com.example.demo.Controller.ProjectController.DTO;
 
-import com.example.demo.DTO.Thumbnail;
-import com.example.demo.DTO.User;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
-import org.hibernate.annotations.ColumnDefault;
-import org.springframework.lang.Nullable;
-
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import java.text.SimpleDateFormat;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)

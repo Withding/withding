@@ -3,7 +3,7 @@ package com.example.demo.Controller.MyPageController;
 import com.example.demo.Config.BeanConfig;
 import com.example.demo.Controller.MyPageController.DTO.MyPageMaker;
 import com.example.demo.Controller.MyPageController.DTO.MyPageSupporter;
-import com.example.demo.DTO.User;
+import com.example.demo.Entity.User;
 import com.example.demo.Repository.UserRepo;
 import com.example.demo.Service.MyPageService;
 import com.example.demo.Service.ProjectService;

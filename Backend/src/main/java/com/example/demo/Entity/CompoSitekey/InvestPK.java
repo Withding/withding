@@ -1,4 +1,4 @@
-package com.example.demo.DTO.CompoSitekey;
+package com.example.demo.Entity.CompoSitekey;
 
 import lombok.Data;
 

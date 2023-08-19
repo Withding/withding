@@ -1,11 +1,7 @@
 package com.example.demo.Controller.UserController.DTO;
 
-import com.example.demo.DTO.Funding;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @NoArgsConstructor
 @Data

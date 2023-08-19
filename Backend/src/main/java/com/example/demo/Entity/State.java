@@ -1,7 +1,6 @@
-package com.example.demo.DTO;
+package com.example.demo.Entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,19 +9,21 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+@Entity
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Entity
-@Table(name = "profileimage")
-public class ProfileImage {
+@Table(name = "state")
+public class State {
+
+    public State(int code){
+        this.stateCode = code;
+    }
 
 
     @Id
-    @Column(name = "profile_image")
-    private String profileImage;
+    @Column(name = "state_code")
+    private Integer stateCode;
+    private String state;
 
-    @Column(name = "origin_profile_image")
-    private String originProfileImage;
 }

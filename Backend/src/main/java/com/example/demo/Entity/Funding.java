@@ -1,14 +1,12 @@
-package com.example.demo.DTO;
+package com.example.demo.Entity;
 
 
-import com.example.demo.Config.BeanConfig;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.text.SimpleDateFormat;

@@ -3,24 +3,20 @@ package com.example.demo.Service;
 import com.example.demo.Config.BeanConfig;
 import com.example.demo.Config.JpaConfig;
 import com.example.demo.Controller.FileController.DTO.ImageAuth;
-import com.example.demo.DTO.Funding;
-import com.example.demo.DTO.ProfileImage;
-import com.example.demo.DTO.User;
-import com.sun.istack.Nullable;
+import com.example.demo.Entity.Funding;
+import com.example.demo.Entity.ProfileImage;
+import com.example.demo.Entity.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.mail.Multipart;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import java.io.File;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @NoArgsConstructor

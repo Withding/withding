@@ -1,8 +1,7 @@
 package com.example.demo.Service;
 
 import com.example.demo.Config.AES256;
-import com.example.demo.DTO.EmailAuth;
-import com.example.demo.DTO.User;
+import com.example.demo.Entity.EmailAuth;
 import com.example.demo.Repository.EmailAuthRepo;
 import lombok.Data;
 import lombok.NoArgsConstructor;
