@@ -1,6 +1,6 @@
 package com.example.demo.Controller.VoteController.DTO;
 
-import com.example.demo.DTO.Vote;
+import com.example.demo.Entity.Vote.Vote;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

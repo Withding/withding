@@ -1,14 +1,16 @@
-package com.example.demo.DTO;
+package com.example.demo.Entity.Funding;
 
 
-import com.example.demo.Config.BeanConfig;
+import com.example.demo.Entity.FundingCategory.FundingCategory;
+import com.example.demo.Entity.FundingStateCode.FundingStateCode;
+import com.example.demo.Entity.Thumbnail.Thumbnail;
+import com.example.demo.Entity.User.User;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.text.SimpleDateFormat;

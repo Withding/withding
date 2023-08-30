@@ -2,15 +2,14 @@ package com.example.demo.Service;
 
 import com.example.demo.Config.BeanConfig;
 import com.example.demo.Config.JpaConfig;
-import com.example.demo.DTO.Follow;
+import com.example.demo.Entity.Follow.Follow;
 import com.example.demo.Controller.FollowController.DTO.FollowList;
-import com.example.demo.DTO.User;
+import com.example.demo.Entity.User.User;
 import com.example.demo.Enum.FollowEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import java.util.List;
 

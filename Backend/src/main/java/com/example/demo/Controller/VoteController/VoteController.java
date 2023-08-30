@@ -1,9 +1,9 @@
 package com.example.demo.Controller.VoteController;
 
 import com.example.demo.Controller.VoteController.DTO.VoteList;
-import com.example.demo.DTO.CompoSitekey.VotePK;
-import com.example.demo.DTO.User;
-import com.example.demo.DTO.Vote;
+import com.example.demo.Entity.CompoSitekey.VotePK;
+import com.example.demo.Entity.User.User;
+import com.example.demo.Entity.Vote.Vote;
 import com.example.demo.Service.UserService;
 import com.example.demo.Service.VoteService;
 import org.springframework.beans.factory.annotation.Autowired;

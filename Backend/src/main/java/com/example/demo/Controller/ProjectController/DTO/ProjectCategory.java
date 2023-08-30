@@ -1,6 +1,6 @@
 package com.example.demo.Controller.ProjectController.DTO;
 
-import com.example.demo.DTO.FundingCategory;
+import com.example.demo.Entity.FundingCategory.FundingCategory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.NoArgsConstructor;

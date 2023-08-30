@@ -1,14 +1,8 @@
 package com.example.demo.Controller.ProjectController.DTO;
 
-import com.example.demo.DTO.Thumbnail;
-import com.example.demo.DTO.User;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
-import org.hibernate.annotations.ColumnDefault;
-import org.springframework.lang.Nullable;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
 import java.text.SimpleDateFormat;
 
 @Data
@@ -29,7 +23,7 @@ public class ProjectSmallForm {
     private Long max_amount;
     private Long now_amount;
     private String completionRate;
-    private Integer remainingTime;
+    private String remainingTime;
 
 
     /**
@@ -55,15 +49,41 @@ public class ProjectSmallForm {
         this.remainingTime = null;
     }
 
-    public ProjectSmallForm(String nickName, String title , String image, String startEnd, String deadline,Long max_amount, Long now_amount){
-        this.nickName = nickName;
-        this.title = title;
+    public ProjectSmallForm(String user, String image, String title, String startEnd, String deadline,Long max_amount, Long now_amount, Long completionRate, String remainingTime) {
+        long endTime = 0L;
+        long nowTime = 0L;
+        long time = 0L;
+
+        this.nickName = user;
         this.image = image;
+        this.title = title;
         this.startEnd = startEnd;
         this.deadline = deadline;
         this.max_amount = max_amount;
         this.now_amount = now_amount;
+        this.completionRate = completionRate + "%";
+
+
+        try {
+            endTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(remainingTime).getTime();
+            nowTime = System.currentTimeMillis();
+            time = (endTime - nowTime);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
+        if (time < 1000){   // 시간이 -로 표기될경우
+            this.remainingTime = "종료";
+        } else if (time / (1000 * 60 ) < 60) {                                          // 60분 미만
+            this.remainingTime = time / (1000 * 60) + "분 남음";
+        } else if (time / (1000 * 60 * 60) < 24) {                                      // 24시간 미만
+            this.remainingTime = time / (1000 * 60 * 60) + "시간 남음";
+        } else {                                                                        // 24시간 이상
+            this.remainingTime = time / (1000 * 60 * 60 * 24 ) + "일 남음";
+        }
     }
+
 
 
 

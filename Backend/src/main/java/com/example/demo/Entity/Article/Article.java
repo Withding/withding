@@ -1,5 +1,7 @@
-package com.example.demo.DTO;
+package com.example.demo.Entity.Article;
 
+import com.example.demo.Entity.ArticleImage.ArticleImage;
+import com.example.demo.Entity.Funding.Funding;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;

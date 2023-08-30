@@ -1,11 +1,9 @@
 package com.example.demo.Repository;
 
 import com.example.demo.Config.JpaConfig;
-import com.example.demo.DTO.State;
-import com.example.demo.DTO.User;
+import com.example.demo.Entity.User.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;

@@ -1,5 +1,8 @@
-package com.example.demo.DTO;
+package com.example.demo.Entity.User;
 
+import com.example.demo.Entity.IdType.IdType;
+import com.example.demo.Entity.ProfileImage.ProfileImage;
+import com.example.demo.Entity.State.State;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.NoArgsConstructor;

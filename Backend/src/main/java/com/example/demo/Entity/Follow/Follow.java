@@ -1,11 +1,10 @@
-package com.example.demo.DTO;
+package com.example.demo.Entity.Follow;
 
+import com.example.demo.Entity.User.User;
 import com.example.demo.Enum.FollowEnum;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.util.List;

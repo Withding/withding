@@ -4,19 +4,22 @@ import com.example.demo.Config.BeanConfig;
 import com.example.demo.Config.JpaConfig;
 import com.example.demo.Controller.PageNation;
 import com.example.demo.Controller.ProjectController.DTO.ProjectSmallForm;
-import com.example.demo.DTO.*;
 import com.example.demo.Controller.ProjectController.DTO.GetMyProjects;
 import com.example.demo.Controller.ProjectController.DTO.GetProject_1Level;
+import com.example.demo.Entity.Article.Article;
+import com.example.demo.Entity.Funding.Funding;
+import com.example.demo.Entity.FundingCategory.FundingCategory;
+import com.example.demo.Entity.FundingStateCode.FundingStateCode;
+import com.example.demo.Entity.Thumbnail.Thumbnail;
+import com.example.demo.Entity.User.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -717,16 +720,10 @@ public class ProjectService {
     /**
      * User 객체를 넘겨받아 해당 User의 진행중인 펀딩, 종료한 펀딩을 호출함
      * @param user 펀딩 글을 호출할 타겟
-     * @param page 호출할 페이지
-     * @param cursor 마지막을 가리키는 커서
-     * @param count 한 페이지당 출력할 펀딩 갯수
+     * @param pageNation 페이지네이션에서 사용할 객체(page, count, cursor의 값이 들어있다.)
      * @return 해당 타겟이 작성한 List<Funding> 타입의 펀딩 목록
      */
-    public List<ProjectSmallForm> getFundingListToUserNum(User user, Long page, Long cursor, int count) {
-
-        if (1 > count || count > 21){
-            count = 5;
-        }
+    public List<ProjectSmallForm> getFundingListToUserNum(User user, PageNation pageNation) {
         EntityManager em = JpaConfig.emf.createEntityManager();
 
         // 진행중인 펀딩 상태 코드
@@ -740,27 +737,26 @@ public class ProjectService {
                 .getSingleResult());
 
         List<Funding> fundingList;
-        if (cursor == null){
+        if (pageNation.getCursor() == 0L){
             fundingList = (em.createQuery("SELECT new Funding(f.id, f.title, f.thumbnail, f.fundingStateCode) " +
                             "FROM Funding f WHERE f.userId =: user AND f.fundingStateCode IN (:progressFunding, :endFunding)")
                     .setParameter("user", user)
                     .setParameter("progressFunding", progressFunding)
                     .setParameter("endFunding", endFunding)
-                    .setFirstResult((page.intValue() - 1) * count )
-                    .setMaxResults(count)
+                    .setFirstResult((pageNation.getPage().intValue() - 1) * pageNation.getCount().intValue())
+                    .setMaxResults(pageNation.getCount().intValue())
                     .getResultList());
         } else {
             fundingList = (em.createQuery("SELECT new Funding(f.id, f.title, f.thumbnail, f.fundingStateCode) " +
                             "FROM Funding f WHERE f.userId =: user AND f.fundingStateCode IN (:progressFunding, :endFunding) " +
-                            "AND f.id <= :cursor ")
+                            "AND f.id <= :cursor")
                     .setParameter("user", user)
                     .setParameter("progressFunding", progressFunding)
                     .setParameter("endFunding", endFunding)
-                    .setParameter("cursor", cursor)
-                    .setMaxResults(count)
+                    .setParameter("cursor", pageNation.getCursor())
+                    .setMaxResults(pageNation.getCount().intValue())
                     .getResultList());
         }
-        //System.out.println(fundingList);
 
         List<ProjectSmallForm> resultList = new ArrayList<>();
         for (int i = 0; i < fundingList.size(); i++){
@@ -786,20 +782,17 @@ public class ProjectService {
      * @param pageNation 페이지네이션에서 사용할 객체(page, count, cursor의 값이 들어있다.)
      * @return List<Funding> 타입의 객체
      */
-    public List<Funding> getProjects(PageNation pageNation) {
-        if (1L > pageNation.getCount() || pageNation.getCount() > 21L){
-            pageNation.setCount(5L);
-        }
+    public List<ProjectSmallForm> getProjects(PageNation pageNation) {
         EntityManager em = JpaConfig.emf.createEntityManager();
         String url = beanConfig.SERVER_URL + ":" + beanConfig.SERVER_PORT + beanConfig.THUMBNAIL_IMAGE_URL;
         Query query;
         if (pageNation.getCursor() == 0L) {
-            query = em.createQuery("SELECT new Funding (f.userId.nickName, CONCAT(:url ,f.thumbnail.image), f.title, f.startEnd, f.deadLine, f.maxAmount, f.nowAmount, (f.nowAmount / f.maxAmount * 100), f.deadLine)" +
+            query = em.createQuery("SELECT new com.example.demo.Controller.ProjectController.DTO.ProjectSmallForm(f.userId.nickName, CONCAT(:url ,f.thumbnail.image), f.title, f.startEnd, f.deadLine, f.maxAmount, f.nowAmount, (f.nowAmount / f.maxAmount * 100), f.deadLine)" +
                     " FROM Funding f WHERE f.fundingStateCode IN (:state1, :state2)" +
                     " ORDER BY f.createdAt DESC");
             query.setFirstResult((pageNation.getPage().intValue() - 1) * pageNation.getCount().intValue());
         } else {
-            query = em.createQuery("SELECT new Funding (f.userId.nickName, CONCAT(:url ,f.thumbnail.image), f.title, f.startEnd, f.deadLine, f.maxAmount, f.nowAmount, (f.nowAmount / f.maxAmount * 100), f.deadLine)" +
+            query = em.createQuery("SELECT new com.example.demo.Controller.ProjectController.DTO.ProjectSmallForm(f.userId.nickName, CONCAT(:url ,f.thumbnail.image), f.title, f.startEnd, f.deadLine, f.maxAmount, f.nowAmount, (f.nowAmount / f.maxAmount * 100), f.deadLine)" +
                     " FROM Funding f WHERE f.fundingStateCode IN (:state1, :state2)" +
                     " AND f.id <= :cursor ORDER BY f.createdAt DESC");
             query.setParameter("cursor", pageNation.getCursor());
@@ -808,7 +801,7 @@ public class ProjectService {
         query.setParameter("state2", new FundingStateCode(1));
         query.setParameter("url", url);
         query.setMaxResults(pageNation.getCount().intValue());
-        List<Funding> fundings = query.getResultList();
+        List<ProjectSmallForm> fundings = query.getResultList();
         return fundings;
     }
 }

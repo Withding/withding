@@ -1,4 +1,4 @@
-package com.example.demo.DTO;
+package com.example.demo.Entity.State;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
@@ -9,23 +9,21 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+@Entity
 @Data
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Entity
-@Table(name = "id_type")
-public class IdType {
+@Table(name = "state")
+public class State {
 
-    public IdType(int code){
-        this.Code = code;
+    public State(int code){
+        this.stateCode = code;
     }
 
 
     @Id
-    @Column(name = "id_type_code")
-    private Integer Code;
-
-    @Column(name = "id_type")
-    private String Type;
+    @Column(name = "state_code")
+    private Integer stateCode;
+    private String state;
 
 }

@@ -2,20 +2,15 @@ package com.example.demo.Controller.UserController;
 
 import com.example.demo.Config.BeanConfig;
 import com.example.demo.Controller.UserController.DTO.UserInfo;
-import com.example.demo.DTO.ProfileImage;
-import com.example.demo.DTO.User;
+import com.example.demo.Entity.User.User;
 import com.example.demo.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 
 @CrossOrigin("*")
 @Controller

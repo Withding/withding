@@ -1,6 +1,6 @@
 package com.example.demo.Controller.FollowController.DTO;
 
-import com.example.demo.DTO.Follow;
+import com.example.demo.Entity.Follow.Follow;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

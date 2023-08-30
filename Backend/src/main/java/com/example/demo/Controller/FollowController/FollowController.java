@@ -1,6 +1,6 @@
 package com.example.demo.Controller.FollowController;
 
-import com.example.demo.DTO.User;
+import com.example.demo.Entity.User.User;
 import com.example.demo.Service.FollowService;
 import com.example.demo.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 @Controller
 @CrossOrigin("*")

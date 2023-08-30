@@ -1,4 +1,4 @@
-package com.example.demo.DTO;
+package com.example.demo.Entity.PointType;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

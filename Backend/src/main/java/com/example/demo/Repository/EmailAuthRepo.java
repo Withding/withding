@@ -1,13 +1,11 @@
 package com.example.demo.Repository;
 
 import com.example.demo.Config.JpaConfig;
-import com.example.demo.DTO.EmailAuth;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.demo.Entity.EmailAuth.EmailAuth;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
-import javax.persistence.Parameter;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.List;
