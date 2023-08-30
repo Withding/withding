@@ -63,7 +63,7 @@ function UserInfo() {
                 onUnfollow: onUnfollow
             },
             list: {
-                fundingList: fundingList?.pages.map((page) => page.fundingList).flat(),
+                fundingList: fundingList?.pages.map((page) => page.list).flat(),
                 hasNextPage: hasNextPage,
                 fetchNextPage: fetchNextPage,
                 isFetchingNextPage: isFetchingNextPage,

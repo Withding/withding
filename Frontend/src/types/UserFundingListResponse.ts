@@ -1,7 +1,7 @@
 import UserFunding from "./UserFunding";
 
 interface UserFundingListResponse {
-    fundingList: UserFunding[];
+    list: UserFunding[];
     lastPage: number,
     currentPage: number
 }
