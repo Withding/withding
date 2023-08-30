@@ -10,7 +10,6 @@ import java.util.List;
 public class ResponseProjectList {
     private Long fundingCount;
     private Long lastPage;
-    private List<ProjectSmallForm> smallProjectList;
 
     private List<ProjectSmallForm> list;
 
@@ -24,7 +23,6 @@ public class ResponseProjectList {
     public ResponseProjectList(){
         this.fundingCount = null;
         this.lastPage = null;
-        this.smallProjectList= null;
         this.list = null;
     }
 

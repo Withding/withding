@@ -468,7 +468,7 @@ public class ProjectController {
         pageNation.isValidatePageNation();
 
         User findUser = userService.getUserToUserId(userNum);
-        fundingList.setSmallProjectList(projectService.getFundingListToUserNum(findUser, pageNation));
+        fundingList.setList(projectService.getFundingListToUserNum(findUser, pageNation));
 
         Long fundingCount = projectService.getFundingCountToUserIdAndFundingState(userNum, "진행중") + projectService.getFundingCountToUserIdAndFundingState(userNum, "종료");
         System.out.println(fundingCount);
