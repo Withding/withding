@@ -1,6 +1,5 @@
 package com.example.demo.Controller.ProjectController.DTO;
 
-import com.example.demo.Entity.Funding;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
@@ -13,7 +12,7 @@ public class ResponseProjectList {
     private Long lastPage;
     private List<ProjectSmallForm> smallProjectList;
 
-    private List<Funding> fullProjectList;
+    private List<ProjectSmallForm> list;
 
 
     /**
@@ -26,7 +25,7 @@ public class ResponseProjectList {
         this.fundingCount = null;
         this.lastPage = null;
         this.smallProjectList= null;
-        this.fullProjectList = null;
+        this.list = null;
     }
 
 

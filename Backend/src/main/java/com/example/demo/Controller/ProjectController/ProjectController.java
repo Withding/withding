@@ -3,8 +3,12 @@ package com.example.demo.Controller.ProjectController;
 import com.example.demo.Config.BeanConfig;
 import com.example.demo.Controller.PageNation;
 import com.example.demo.Controller.ProjectController.DTO.*;
-import com.example.demo.Entity.*;
 import com.example.demo.Controller.ProjectController.DTO.createProject_2Level;
+import com.example.demo.Entity.Article.Article;
+import com.example.demo.Entity.Funding.Funding;
+import com.example.demo.Entity.FundingCategory.FundingCategory;
+import com.example.demo.Entity.Thumbnail.Thumbnail;
+import com.example.demo.Entity.User.User;
 import com.example.demo.Service.ProjectService;
 import com.example.demo.Service.UserService;
 import lombok.Synchronized;
@@ -428,7 +432,6 @@ public class ProjectController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         // -------------------------------------------------------------------------------------------------------------
-
         Long lastPage = 0L;
 
         Long fundingCount = projectService.getFundingCountToUserId(user.getUserId(), cursor);
@@ -456,19 +459,23 @@ public class ProjectController {
      */
     @GetMapping(value = "/users/{userId}/projects")
     public ResponseEntity<Object> getProjectsToUser(@PathVariable(value = "userId") Long userNum,
-                                                    @RequestParam(value = "page", required = false) Long page,
-                                                    @RequestParam(value = "cursor", required = false) Long cursor,
-                                                    @RequestParam(value = "count") int count)
+                                                    @RequestParam(value = "page", required = false, defaultValue = "1") Long page,
+                                                    @RequestParam(value = "cursor", required = false, defaultValue = "0") Long cursor,
+                                                    @RequestParam(value = "count", required = false, defaultValue = "5") Long count)
     {
         ResponseProjectList fundingList = new ResponseProjectList();
+        PageNation pageNation = new PageNation(page, count, cursor);
+        pageNation.isValidatePageNation();
+
         User findUser = userService.getUserToUserId(userNum);
-        fundingList.setSmallProjectList(projectService.getFundingListToUserNum(findUser, page, cursor, count));
-        Long fundingCount;
-        fundingCount = projectService.getFundingCountToUserIdAndFundingState(userNum, "진행중") + projectService.getFundingCountToUserIdAndFundingState(userNum, "종료");
-        if (fundingCount % count == 0){
-            fundingList.setLastPage(fundingCount / count);
-        } else {
+        fundingList.setSmallProjectList(projectService.getFundingListToUserNum(findUser, pageNation));
+
+        Long fundingCount = projectService.getFundingCountToUserIdAndFundingState(userNum, "진행중") + projectService.getFundingCountToUserIdAndFundingState(userNum, "종료");
+        System.out.println(fundingCount);
+        if (fundingCount % count > 0){
             fundingList.setLastPage((fundingCount / count) + 1);
+        } else {
+            fundingList.setLastPage(fundingCount / count);
         }
 
         return new ResponseEntity<>(fundingList, HttpStatus.OK);
@@ -528,10 +535,12 @@ public class ProjectController {
                                               @RequestParam(value = "count", required = false , defaultValue = "5") final Long count,
                                               @RequestParam(value = "state", defaultValue = "진행중") final String state) {
         PageNation pageNation = new PageNation(Long.valueOf(page), Long.valueOf(count), Long.valueOf(cursor));
-        List<Funding> projectList = projectService.getProjects(pageNation);
+        pageNation.isValidatePageNation();
+
+        List<ProjectSmallForm> projectList = projectService.getProjects(pageNation);
 
         ResponseProjectList response = new ResponseProjectList();
-        response.setFullProjectList(projectList);
+        response.setList(projectList);
 
         response.setFundingCount(projectService.getFundingCountFundingState(state));
 
